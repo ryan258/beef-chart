@@ -4,6 +4,9 @@
   US: USDA AMS weekly grocery-store beef ad report (PDF, needs `pdftotext` from poppler: brew install poppler).
       Advertised prices, store-weighted across conventional fresh items; not shelf-price averages.
   AR: Carrefour Argentina public catalog search (butcher-section items sold by the kg), median per cut.
+  FX rule: INDEC records use BCRA monthly average matched to the price month.
+      Carrefour records use BCRA daily latest. Each AR record stores fx_ars_per_usd,
+      fx_date, and fx_basis so the page can display provenance without mixing bases.
 """
 import argparse, os, math, json, re, statistics, subprocess, sys, tempfile, time, unicodedata, urllib.parse, urllib.request
 from datetime import datetime
@@ -181,7 +184,7 @@ def carrefour_prices(fx, keys=None):
             out[key] = {"label": label, "ars_kg": ars, "usd_lb": round(ars / fx / LB_PER_KG, 2), "prev_usd_lb": None,
                         "period": datetime.now().strftime("%Y-%m-%d"), "products": len(selected), "source": "Carrefour AR",
                         "availability": "in_stock" if any(p["available"] for p in selected) else "out_of_stock",
-                        "listings": selected}
+                        "fx_basis": "BCRA daily latest", "listings": selected}
         else:
             print(f"  Carrefour: no verified per-kg matches for {label}", file=sys.stderr)
     return out
@@ -198,7 +201,7 @@ def main():
     # leaves the last good file intact, including for targeted refreshes.
     ar = carrefour_prices(fx_row[1], args.cuts)
     us = None if args.cuts else usda_prices()
-    data["fx"]["latest"] = {"ars_per_usd": fx_row[1], "date": fx_row[0]}
+    data["fx"]["latest"] = {"ars_per_usd": fx_row[1], "date": fx_row[0], "basis": "BCRA daily latest"}
     if args.cuts:
         for key in args.cuts:
             data["ar"].pop(key, None)
@@ -209,6 +212,7 @@ def main():
     for record in ar.values():
         record["fx_ars_per_usd"] = fx_row[1]
         record["fx_date"] = fx_row[0]
+        record["fx_basis"] = "BCRA daily latest"
     data["ar"].update(ar)
     data["sources"].update(us_ads="USDA AMS Weekly Grocery Store Beef Feature Activity", ar_retail="Carrefour Argentina online catalog")
     with tempfile.NamedTemporaryFile(mode="w", dir=OUT.parent, delete=False) as f:

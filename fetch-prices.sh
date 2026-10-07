@@ -47,15 +47,19 @@ done | jq -s add)
 ar_json=$(echo "$AR" | while IFS='|' read -r k sid label; do
   col=$(echo "$AR" | cut -d'|' -f2 | grep -nxF "$sid" | cut -d: -f1)
   jq -n --argjson r "$ar" --argjson fx "$fx" --arg k "$k" --arg sid "$sid" --arg label "$label" --argjson col "$col" '
-    def usdlb($row): ($fx.data | map(select(.[0]==$row[0]))[0][1]) as $rate
+    def rate_for($row): ($fx.data | map(select(.[0]==$row[0]))[0]);
+    def usdlb($row): rate_for($row)[1] as $rate
       | if $rate then ($row[$col]/$rate/2.2046226) else null end;
-    $r.data as $d | {($k): {label:$label, series:$sid, source:"INDEC", ars_kg:$d[-1][$col], period:($d[-1][0][0:7]),
-      usd_lb:usdlb($d[-1]), prev_usd_lb:(if ($d|length)>1 then usdlb($d[-2]) else null end)}}'
+    $r.data as $d
+    | (rate_for($d[-1]) // [null, null]) as $fxrow
+    | {($k): {label:$label, series:$sid, source:"INDEC", ars_kg:$d[-1][$col], period:($d[-1][0][0:7]),
+      usd_lb:usdlb($d[-1]), prev_usd_lb:(if ($d|length)>1 then usdlb($d[-2]) else null end),
+      fx_ars_per_usd:$fxrow[1], fx_date:$fxrow[0], fx_basis:"BCRA monthly average"}}'
 done | jq -s add)
 
 jq -n --argjson us "$us_json" --argjson ar "$ar_json" --argjson fx "$fx" '
   {fetched:(now|todate), us:$us, ar:$ar,
-   fx:{series:"'"$FX_ID"'", ars_per_usd:($fx.data[-1][1]), period:($fx.data[-1][0][0:7]), source:"BCRA via datos.gob.ar (monthly average)"},
+   fx:{series:"'"$FX_ID"'", ars_per_usd:($fx.data[-1][1]), period:($fx.data[-1][0][0:7]), source:"BCRA via datos.gob.ar (monthly average)", basis:"INDEC conversions use monthly average matched to price month. Carrefour and USDA records use daily latest, stored per record."},
    sources:{us:"US Bureau of Labor Statistics, Average Price Data", ar:"INDEC IPC-GBA average prices via datos.gob.ar"}}' > "$snapshot"
 
 # scrape USDA ad prices + Argentine supermarket prices for the cuts the open APIs lack (needs pdftotext)

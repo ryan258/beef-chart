@@ -38,6 +38,7 @@ class PriceMatching(unittest.TestCase):
         self.assertEqual(row['products'],1)
         self.assertEqual(row['usd_lb'],round(10000/1000/m.LB_PER_KG,2))
         self.assertEqual(row['availability'],'in_stock')
+        self.assertEqual(row['fx_basis'],'BCRA daily latest')
         self.assertEqual(row['listings'][0]['name'],'Mollejas x kg')
 
     def test_chorizo_stays_separate(self):
@@ -57,5 +58,33 @@ class PriceMatching(unittest.TestCase):
     def test_invalid_fx(self):
         for rate in [None,0,-1,float('nan')]:
             with self.assertRaises(ValueError): m.carrefour_prices(rate,['rinon'])
+
+    def test_usda_rows_and_weighted_average(self):
+        rows=[
+            ('Ribeye Steak, Boneless, XYZ',[100,10.0,50,9.0,None,None]),
+            ('Ribeye Steak, Boneless, ABC',[300,20.0,None,None,None,None]),
+            ('Ribeye Steak, Boneless, Lbs XYZ',[1000,1.0,1000,1.0,None,None]),
+        ]
+        fake_text='Weekly report Fri Oct 02, 2026'
+        with patch.object(m,'get',return_value=b'pdf'), \
+             patch.object(m.subprocess,'run') as run, \
+             patch.object(m,'usda_rows',return_value=rows):
+            run.return_value=type('R',(),{'stdout':fake_text})()
+            out=m.usda_prices()
+        row=out['ribeye_bnls']
+        self.assertEqual(row['usd_lb'],round((100*10.0+300*20.0)/400,2))
+        self.assertEqual(row['prev_usd_lb'],9.0)
+        self.assertEqual(row['stores'],400)
+        self.assertEqual(row['period'],'2026-10-02')
+
+    def test_usda_ignores_non_conventional_rows(self):
+        header_item='Item Environment'
+        header_stores='Stores Wtd Avg Stores Wtd Avg Stores Wtd Avg'
+        good='Ribeye Steak, Boneless, Conventional Fresh 10.00'
+        bad='Ribeye Steak, Boneless, Organic Fresh 10.00'
+        text='\n'.join([header_item,header_stores,good,bad])
+        found=list(m.usda_rows(text))
+        self.assertEqual(len(found),1)
+        self.assertTrue(found[0][0].startswith('Ribeye Steak, Boneless,'))
 
 if __name__ == '__main__': unittest.main()

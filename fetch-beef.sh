@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
-# Snapshot BeefAPI v2 cut data into data/us-cuts.json (run once; re-run to refresh).
+# Optional archival fetcher for BeefAPI v2 cut metadata into data/us-cuts.json.
+# Not required by index.html. Run once only if BeefAPI enrichment is needed.
 # Raw responses are cached in data/raw/ so re-runs only fetch what's missing: rm -r data/raw to force.
+# Requires .env with BEEFAPI_APP_ID and BEEFAPI_APP_KEY. Both data/us-cuts.json and data/raw/ are git ignored by design.
 set -euo pipefail
 cd "$(dirname "$0")"
 
