@@ -1,0 +1,303 @@
+{
+ "fetched": "2026-10-07T19:51:30Z",
+ "us": {
+  "ground_beef": {
+   "label": "Ground beef, 100% beef",
+   "series": "APU0000703112",
+   "source": "BLS",
+   "usd_lb": 6.923,
+   "period": "2026-08",
+   "prev_usd_lb": 6.885
+  },
+  "ground_chuck": {
+   "label": "Ground chuck, 100% beef",
+   "series": "APU0000703111",
+   "source": "BLS",
+   "usd_lb": 6.774,
+   "period": "2026-08",
+   "prev_usd_lb": 6.85
+  },
+  "ground_lean": {
+   "label": "Ground beef, lean & extra lean",
+   "series": "APU0000703113",
+   "source": "BLS",
+   "usd_lb": 8.573,
+   "period": "2026-08",
+   "prev_usd_lb": 8.414
+  },
+  "round_roast": {
+   "label": "Round roast, USDA Choice, boneless",
+   "series": "APU0000703311",
+   "source": "BLS",
+   "usd_lb": 8.959,
+   "period": "2026-08",
+   "prev_usd_lb": 9.155
+  },
+  "round_steak": {
+   "label": "Round steak, USDA Choice, boneless",
+   "series": "APU0000703511",
+   "source": "BLS",
+   "usd_lb": 9.692,
+   "period": "2026-08",
+   "prev_usd_lb": 10.036
+  },
+  "sirloin_steak": {
+   "label": "Sirloin steak, USDA Choice, boneless",
+   "series": "APU0000703613",
+   "source": "BLS",
+   "usd_lb": 14.357,
+   "period": "2026-08",
+   "prev_usd_lb": 14.592
+  },
+  "ribeye_bnls": {
+   "label": "Ribeye steak, boneless",
+   "usd_lb": 16.85,
+   "prev_usd_lb": 13.99,
+   "period": "2026-10-02",
+   "stores": 2330,
+   "source": "USDA ad survey"
+  },
+  "strip_bnls": {
+   "label": "Strip steak, boneless",
+   "usd_lb": 14.66,
+   "prev_usd_lb": 14.83,
+   "period": "2026-10-02",
+   "stores": 5034,
+   "source": "USDA ad survey"
+  },
+  "tenderloin": {
+   "label": "Tenderloin",
+   "usd_lb": 12.86,
+   "prev_usd_lb": 15.87,
+   "period": "2026-10-02",
+   "stores": 194,
+   "source": "USDA ad survey"
+  },
+  "brisket_whole": {
+   "label": "Brisket, whole",
+   "usd_lb": 6.16,
+   "prev_usd_lb": 4.79,
+   "period": "2026-10-02",
+   "stores": 1330,
+   "source": "USDA ad survey"
+  },
+  "chuck_roast": {
+   "label": "Chuck roast, boneless",
+   "usd_lb": 6.75,
+   "prev_usd_lb": 7.3,
+   "period": "2026-10-02",
+   "stores": 6001,
+   "source": "USDA ad survey"
+  },
+  "short_ribs": {
+   "label": "Short ribs",
+   "usd_lb": 8.13,
+   "prev_usd_lb": 10.34,
+   "period": "2026-10-02",
+   "stores": 10677,
+   "source": "USDA ad survey"
+  },
+  "skirt": {
+   "label": "Skirt steak",
+   "usd_lb": 10.63,
+   "prev_usd_lb": 11.34,
+   "period": "2026-10-02",
+   "stores": 1303,
+   "source": "USDA ad survey"
+  },
+  "flank": {
+   "label": "Flank steak",
+   "usd_lb": 14.04,
+   "prev_usd_lb": 13.23,
+   "period": "2026-10-02",
+   "stores": 83,
+   "source": "USDA ad survey"
+  },
+  "tri_tip": {
+   "label": "Tri-tip",
+   "usd_lb": 8.32,
+   "prev_usd_lb": 8.02,
+   "period": "2026-10-02",
+   "stores": 912,
+   "source": "USDA ad survey"
+  },
+  "eye_round": {
+   "label": "Eye of round roast",
+   "usd_lb": 6.58,
+   "prev_usd_lb": 7.58,
+   "period": "2026-10-02",
+   "stores": 1114,
+   "source": "USDA ad survey"
+  },
+  "bottom_round": {
+   "label": "Bottom round roast",
+   "usd_lb": 6.91,
+   "prev_usd_lb": 6.92,
+   "period": "2026-10-02",
+   "stores": 3856,
+   "source": "USDA ad survey"
+  }
+ },
+ "ar": {
+  "ground_beef": {
+   "label": "Carne picada común",
+   "series": "105.1_I2CPC_2016_M_27",
+   "source": "INDEC",
+   "ars_kg": 10613.08,
+   "period": "2026-08",
+   "usd_lb": 3.2120971347301452,
+   "prev_usd_lb": 3.2180308218677642
+  },
+  "asado": {
+   "label": "Asado",
+   "series": "105.1_I2A_2016_M_14",
+   "source": "INDEC",
+   "ars_kg": 16736.73,
+   "period": "2026-08",
+   "usd_lb": 5.065447775551683,
+   "prev_usd_lb": 5.094460568408351
+  },
+  "cuadril": {
+   "label": "Cuadril",
+   "series": "105.1_I2C_2016_M_16",
+   "source": "INDEC",
+   "ars_kg": 21102.92,
+   "period": "2026-08",
+   "usd_lb": 6.386895120590768,
+   "prev_usd_lb": 6.404595214876234
+  },
+  "nalga": {
+   "label": "Nalga",
+   "series": "105.1_I2N_2016_M_14",
+   "source": "INDEC",
+   "ars_kg": 21763.38,
+   "period": "2026-08",
+   "usd_lb": 6.586786356085448,
+   "prev_usd_lb": 6.539589853569686
+  },
+  "paleta": {
+   "label": "Paleta",
+   "series": "105.1_I2P_2016_M_15",
+   "source": "INDEC",
+   "ars_kg": 17119.61,
+   "period": "2026-08",
+   "usd_lb": 5.181328156265433,
+   "prev_usd_lb": 5.240215384179755
+  },
+  "bife_ancho": {
+   "label": "Bife ancho",
+   "ars_kg": 16400.0,
+   "usd_lb": 4.93,
+   "prev_usd_lb": null,
+   "period": "2026-10-07",
+   "products": 2,
+   "source": "Carrefour AR"
+  },
+  "bife_angosto": {
+   "label": "Bife de chorizo",
+   "ars_kg": 24500.0,
+   "usd_lb": 7.36,
+   "prev_usd_lb": null,
+   "period": "2026-10-07",
+   "products": 1,
+   "source": "Carrefour AR"
+  },
+  "lomo": {
+   "label": "Lomo",
+   "ars_kg": 27900.0,
+   "usd_lb": 8.38,
+   "prev_usd_lb": null,
+   "period": "2026-10-07",
+   "products": 1,
+   "source": "Carrefour AR"
+  },
+  "vacio": {
+   "label": "Vacío",
+   "ars_kg": 19600.0,
+   "usd_lb": 5.89,
+   "prev_usd_lb": null,
+   "period": "2026-10-07",
+   "products": 3,
+   "source": "Carrefour AR"
+  },
+  "entrana": {
+   "label": "Entraña",
+   "ars_kg": 22900.0,
+   "usd_lb": 6.88,
+   "prev_usd_lb": null,
+   "period": "2026-10-07",
+   "products": 1,
+   "source": "Carrefour AR"
+  },
+  "matambre": {
+   "label": "Matambre",
+   "ars_kg": 13740.0,
+   "usd_lb": 4.13,
+   "prev_usd_lb": null,
+   "period": "2026-10-07",
+   "products": 2,
+   "source": "Carrefour AR"
+  },
+  "tapa": {
+   "label": "Tapa de cuadril",
+   "ars_kg": 20900.0,
+   "usd_lb": 6.28,
+   "prev_usd_lb": null,
+   "period": "2026-10-07",
+   "products": 1,
+   "source": "Carrefour AR"
+  },
+  "colita": {
+   "label": "Colita de cuadril",
+   "ars_kg": 21395.0,
+   "usd_lb": 6.43,
+   "prev_usd_lb": null,
+   "period": "2026-10-07",
+   "products": 2,
+   "source": "Carrefour AR"
+  },
+  "peceto": {
+   "label": "Peceto",
+   "ars_kg": 20945.0,
+   "usd_lb": 6.29,
+   "prev_usd_lb": null,
+   "period": "2026-10-07",
+   "products": 4,
+   "source": "Carrefour AR"
+  },
+  "osobuco": {
+   "label": "Osobuco",
+   "ars_kg": 11200.0,
+   "usd_lb": 3.37,
+   "prev_usd_lb": null,
+   "period": "2026-10-07",
+   "products": 1,
+   "source": "Carrefour AR"
+  },
+  "aguja": {
+   "label": "Aguja",
+   "ars_kg": 15500.0,
+   "usd_lb": 4.66,
+   "prev_usd_lb": null,
+   "period": "2026-10-07",
+   "products": 1,
+   "source": "Carrefour AR"
+  }
+ },
+ "fx": {
+  "series": "92.2_TIPO_CAMBIION_0_0_21_24",
+  "ars_per_usd": 1498.7131322580642,
+  "period": "2026-08",
+  "source": "BCRA via datos.gob.ar (monthly average)",
+  "latest": {
+   "ars_per_usd": 1509.4686,
+   "date": "2026-08-31"
+  }
+ },
+ "sources": {
+  "us": "US Bureau of Labor Statistics, Average Price Data",
+  "ar": "INDEC IPC-GBA average prices via datos.gob.ar",
+  "us_ads": "USDA AMS Weekly Grocery Store Beef Feature Activity",
+  "ar_retail": "Carrefour Argentina online catalog"
+ }
+}
