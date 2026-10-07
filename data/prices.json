@@ -193,15 +193,6 @@
    "products": 2,
    "source": "Carrefour AR"
   },
-  "bife_angosto": {
-   "label": "Bife de chorizo",
-   "ars_kg": 24500.0,
-   "usd_lb": 7.36,
-   "prev_usd_lb": null,
-   "period": "2026-10-07",
-   "products": 1,
-   "source": "Carrefour AR"
-  },
   "lomo": {
    "label": "Lomo",
    "ars_kg": 27900.0,
@@ -282,6 +273,114 @@
    "period": "2026-10-07",
    "products": 1,
    "source": "Carrefour AR"
+  },
+  "molleja": {
+   "label": "Molleja (sweetbreads; organ unspecified by retailer)",
+   "ars_kg": 1830.0,
+   "usd_lb": 0.55,
+   "prev_usd_lb": null,
+   "period": "2026-10-07",
+   "products": 1,
+   "source": "Carrefour AR",
+   "availability": "out_of_stock",
+   "fx_basis": "BCRA daily latest",
+   "listings": [
+    {
+     "ars_kg": 1830.0,
+     "available": false,
+     "product_id": "169296",
+     "sku_id": "20627",
+     "name": "Molleja x kg",
+     "url": "https://www.carrefour.com.ar/molleja-x-kg-169296/p"
+    }
+   ],
+   "fx_ars_per_usd": 1509.4686,
+   "fx_date": "2026-08-31"
+  },
+  "rinon": {
+   "label": "Riñón",
+   "ars_kg": 279.9,
+   "usd_lb": 0.08,
+   "prev_usd_lb": null,
+   "period": "2026-10-07",
+   "products": 1,
+   "source": "Carrefour AR",
+   "availability": "out_of_stock",
+   "fx_basis": "BCRA daily latest",
+   "listings": [
+    {
+     "ars_kg": 279.9,
+     "available": false,
+     "product_id": "169300",
+     "sku_id": "20553",
+     "name": "Riñón x kg.",
+     "url": "https://www.carrefour.com.ar/rinon-x-kg/p"
+    }
+   ],
+   "fx_ars_per_usd": 1509.4686,
+   "fx_date": "2026-08-31"
+  },
+  "lengua": {
+   "label": "Lengua",
+   "ars_kg": 1680.0,
+   "usd_lb": 0.5,
+   "prev_usd_lb": null,
+   "period": "2026-10-07",
+   "products": 3,
+   "source": "Carrefour AR",
+   "availability": "out_of_stock",
+   "fx_basis": "BCRA daily latest",
+   "listings": [
+    {
+     "ars_kg": 655.0,
+     "available": false,
+     "product_id": "169295",
+     "sku_id": "19374",
+     "name": "Lengua x kg.",
+     "url": "https://www.carrefour.com.ar/lengua-x-kg/p"
+    },
+    {
+     "ars_kg": 1680.0,
+     "available": false,
+     "product_id": "709840",
+     "sku_id": "120995",
+     "name": "Lengua vacuna x kg",
+     "url": "https://www.carrefour.com.ar/lengua-vacuna-x-kg-709840/p"
+    },
+    {
+     "ars_kg": 10900.0,
+     "available": false,
+     "product_id": "730438",
+     "sku_id": "186220",
+     "name": "Lengua vacuna x kg",
+     "url": "https://www.carrefour.com.ar/lengua-vacuna-x-kg-730438/p"
+    }
+   ],
+   "fx_ars_per_usd": 1509.4686,
+   "fx_date": "2026-08-31"
+  },
+  "bife_angosto": {
+   "label": "Bife de chorizo",
+   "ars_kg": 24500.0,
+   "usd_lb": 7.36,
+   "prev_usd_lb": null,
+   "period": "2026-10-07",
+   "products": 1,
+   "source": "Carrefour AR",
+   "availability": "in_stock",
+   "fx_basis": "BCRA daily latest",
+   "listings": [
+    {
+     "ars_kg": 24500.0,
+     "available": true,
+     "product_id": "662854",
+     "sku_id": "57228",
+     "name": "Bife de chorizo de Novillito x kg",
+     "url": "https://www.carrefour.com.ar/bife-de-chorizo-de-novillito-x-kg-662854/p"
+    }
+   ],
+   "fx_ars_per_usd": 1509.4686,
+   "fx_date": "2026-08-31"
   }
  },
  "fx": {
@@ -291,7 +390,8 @@
   "source": "BCRA via datos.gob.ar (monthly average)",
   "latest": {
    "ars_per_usd": 1509.4686,
-   "date": "2026-08-31"
+   "date": "2026-08-31",
+   "basis": "BCRA daily latest"
   }
  },
  "sources": {
