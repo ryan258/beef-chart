@@ -29,19 +29,18 @@ This document tracks completed milestones, architectural iterations, and planned
 - [x] Accessible UX enhancements: skip links, keyboard navigation focus indicators, and WCAG AA contrast compliance.
 
 ### Phase 4: Advanced D3 Data Visualizations ✅
-- [x] **D3 Sankey Flow**: Visualizes the anatomical yield progression from whole steer to primal divisions down to retail and specialty cuts.
-- [x] **Tenderness vs. Price Scatter Plot**: Visualizes culinary value quadrant (high tenderness/low cost vs. premium cuts).
-- [x] **Primal Yield Treemap**: Carcass volume and weight distribution across major carcass zones.
-- [x] **Cut Profile Radar Chart**: Interactive radar visualization inside cut detail modals mapping tenderness, fat marbling, cooking speed, and grilling intensity.
+- [x] **D3 Sankey Flow**: Visualizes primal divisions on the left to culinary uses on the right with distinct "Other primals" and "Other uses" nodes and resilient CDN fallbacks.
+- [x] **D3 US vs Argentina Price Comparison**: Lollipop chart comparing retail price per lb across cuts with connecting range lines and store-weighted USDA vs Carrefour dots.
+- [x] **Primal Yield Treemap**: Carcass volume and weight distribution across major carcass zones with fallback messaging.
+- [x] **Sensory Radar Chart**: Six-axis interactive radar visualization inside cut detail modals mapping tenderness, marbling, flavor, cooking speed, sear crust, and gelatin.
 
-### Phase 5: Specialized & Offal Cuts Expansion ✅
-- [x] Introduced the "Beyond the usual cuts" section for traditional Latin American and specialty butcher offerings:
-  - *Bife de costilla* (bone-in steak vs boneless strip/T-bone)
-  - *Mollejas* (sweetbreads / thymus)
-  - *Riñón* (beef kidneys)
-  - *Lengua* (beef tongue)
-- [x] Hardened Carrefour catalog scraper with strict unit multiplier checks, cross-species exclusions (avian/porcine/fish), and per-kg price validation.
-- [x] Added automated test suite (`tests/test_retail_prices.py`) validating scraper parsing, unit enforcement, stock detection, and error preservation.
+### Phase 5: Specialized Cuts, Pipeline Hardening & Accessibility ✅
+- [x] Introduced the "Beyond the usual cuts" section for traditional Latin American and specialty butcher offerings (*bife de costilla*, *mollejas*, *riñón*, *lengua*).
+- [x] Hardened Carrefour catalog scraper with strict unit multiplier checks, cross-species exclusions, per-kg price validation, and explicit daily latest FX basis tracking.
+- [x] Stored explicit FX basis per record: INDEC records use BCRA monthly average matched to the price month; Carrefour records use BCRA daily latest.
+- [x] Enhanced anatomical interactive anatomy with synchronized dual-cow primal highlighting (`highlightPrimal`).
+- [x] Implemented WCAG-compliant accessible modal dialog (`role="dialog"`, `aria-modal="true"`, focus trapping, focus restoration on close, Escape key handler).
+- [x] Expanded test suite (`tests/test_retail_prices.py`) with 8 unit tests covering USDA AMS PDF parsing, store-weighted averages, non-conventional row filtering, stock detection, and FX basis guards.
 
 ---
 

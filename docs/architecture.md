@@ -52,17 +52,17 @@ The project is structured as a zero-build, standards-compliant single-page web a
    - Quick navigational index bar highlighting the three core application pillars.
 
 3. **Dual Anatomical Explorer (`#explore`)**:
-   - Side-by-side synchronized SVG diagrams representing the bovine carcass in Argentine cuts vs American primal cuts.
-   - Live hover bus: hovering over an Argentine cut highlights the corresponding American cut region and updates the shared market card.
-   - Action buttons triggering full inspection modals.
+   - Side-by-side SVG diagrams with retail Argentine cuts on the left and US wholesale primals on the right.
+   - Live hover uses primal keys to add on and dim classes across both cows for anatomical correspondence.
+   - Action buttons open the inspection modal for ribeye and strip reference cuts.
 
 4. **Market Ticker & Search Hub (`.market-box`)**:
-   - Live price overview card displaying selected cut pricing in USD/lb across both US and AR markets, alongside month-over-month price delta indicators.
+   - Ground beef benchmark card in USD per lb with month over month delta and null safe fallback text.
    - Quick-tag search chips for instant selection of staple cuts.
 
 5. **Advanced D3 Data Visualizations (`#data-sankey`, `#data-scatter`)**:
-   - **Sankey Flow (`#sankey-chart-svg`)**: Multi-stage carcass flow diagram illustrating the path from live steer through primals into retail portions.
-   - **Scatter Quadrant (`#scatter-chart-svg`)**: Relational plot comparing tenderness ratings against retail price per pound.
+   - **Sankey Flow (`#sankey-chart-svg`)**: Primal to culinary use flow with distinct Other primals and Other uses nodes.
+   - **Price Lollipop (`#scatter-chart-svg`)**: US versus Argentina USD per lb by cut with connecting range lines.
    - **Yield Treemap (`#treemap-chart-svg`)**: Proportionate area map illustrating carcass percentage yields.
 
 6. **Popular Cuts Gallery (`#popular-cuts`)**:
@@ -72,53 +72,45 @@ The project is structured as a zero-build, standards-compliant single-page web a
    - Grid dedicated to traditional Latin American culinary staples (*bife de costilla*, *mollejas*, *riñón*, *lengua*).
 
 8. **Inspection Modal Dialog (`#cut-modal-overlay`)**:
-   - High-fidelity modal presenting cut terminology, primal origin, cooking recommendations, price history, and a four-axis D3 radar chart.
+   - Dialog with aria modal behavior and focus trap and focus return and Escape to close.
+   - Modal presents cut terminology and primal origin and cooking guidance and per source pricing with FX basis plus a six axis D3 radar chart.
 
 ---
 
 ## 3. Styling & The Contemporary Bauhaus System
 
-The UI design is implemented in `assets/bauhaus.css`, extending the foundational CSS with Bauhaus design principles:
+The UI base lives inline in `index.html` with Bauhaus refinements in `assets/bauhaus.css`:
 
 ### Design Tokens
 
-```css
-:root {
-  --bg: #f1f0e8;          /* Warm parchment background */
-  --ink: #20211e;         /* Pure carbon ink for text and borders */
-  --mut: #5b5d55;         /* Muted editorial secondary grey */
-  --line: #cecec3;        /* Subtle divider borders */
-  --line-dark: #92948b;   /* Emphasized structural borders */
-  --red: #c73524;         /* Primary Bauhaus Red */
-  --gold: #edc445;        /* Primary Bauhaus Gold / Ochre */
-  --navy: #234dba;        /* Primary Bauhaus Ultramarine Navy */
-}
-```
+Shipped base in `index.html` uses canvas `#f5f0e6` and ink `#141414` and red `#a82b2b` and gold `#e5a93c` and navy `#1a3e63`. The Bauhaus override adjusts layout and borders and hero geometry. Single source edits should start from the inline base and mirror intentional changes into `assets/bauhaus.css` until the styles are consolidated.
 
 ### Visual Characteristics
-- **Structural 1px Inking**: Distinct borders frame cards and sections without soft drop-shadows or gradients.
-- **Strict Geometry**: Circular badges, rectangular panels, and triangular accents evoke early 20th-century functionalism.
+- **Structural 1px Inking**: Borders frame cards and sections with Bauhaus overrides removing soft shadows.
+- **Strict Geometry**: Circular cow disc and square accents plus triangular footer motifs.
 - **Typography**:
-  - `Space Grotesk` (weights 500, 600, 700) for high-impact headlines and numeric price callouts.
-  - `Inter` (weights 400, 500, 600) for legible, dense tabular data and prose.
+  - `Space Grotesk` for headlines and price callouts.
+  - `Inter` for body and tabular data.
+  - `Oswald` for labels and chart text.
+  - `Playfair Display` for editorial quotes and modal titles.
 
 ---
 
 ## 4. D3 Visualization Implementations
 
 ### D3 Sankey Diagram
-- **Library**: `d3-sankey` (v0.12.3) via CDN.
-- **Topology**: Steer -> Primal Division -> Subprimal Cuts.
-- **Interactivity**: Path highlighting on link hover with tooltips showing yield percentages.
+- **Library**: `d3-sankey` (v0.12.3) via jsDelivr with unpkg fallback and unavailable messaging.
+- **Topology**: Primals on the left to culinary uses on the right.
+- **Interactivity**: Link hover tooltips showing carcass percent with distinct Other primals and Other uses labels.
 
-### D3 Scatter Plot
-- **Axes**: X-axis (Tenderness Score 1–10), Y-axis (Price USD/lb).
-- **Points**: Sized by culinary demand and colored by country of origin or primal section.
-- **Interactivity**: Cross-highlights connected SVG cuts on the anatomical diagrams.
+### D3 Price Lollipop
+- **Axes**: X-axis USD per lb with banded cut rows on the Y-axis.
+- **Points**: Navy for Argentina and red for United States with range lines where both exist.
+- **Interactivity**: Hover tooltips with source and period and USD per lb values.
 
 ### D3 Sensory Radar Chart
-- **Axes**: 4 radial axes (Tenderness, Marbling/Fat, Cooking Speed, Grilling Intensity).
-- **Rendering**: Closed SVG polygon filled with semi-transparent accent color and interactive vertex handles.
+- **Axes**: 6 radial axes for tenderness and marbling and flavor and speed and sear crust and gelatin.
+- **Rendering**: Closed SVG polygon with semi transparent fill plus web rings and spokes.
 
 ---
 
@@ -127,6 +119,6 @@ The UI design is implemented in `assets/bauhaus.css`, extending the foundational
 - **Fast First Paint**: Core application requires zero npm bundles or transpilation steps.
 - **Accessibility**:
   - Skip link (`.skip-link`) anchors directly to `#explore`.
-  - Full keyboard accessibility for modal dialogs (Escape to close, Tab trapping).
-  - ARIA landmark roles and descriptive labels across interactive SVGs and buttons.
+  - Modal dialog uses role dialog and aria modal and labelled title plus Escape to close and Tab trap and focus return.
+  - Charts show text fallback when D3 is unavailable and tooltips supplement SVG hover.
 - **Reduced Motion**: `@media (prefers-reduced-motion: reduce)` disables smooth scrolling and animations.

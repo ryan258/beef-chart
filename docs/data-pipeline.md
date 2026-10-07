@@ -59,6 +59,7 @@ The ingestion pipeline produces an atomic, consolidated data snapshot at [`data/
 - **Series ID**: `92.2_TIPO_CAMBIION_0_0_21_24` (Tipo de cambio minorista / oficial)
 - **Transformation Formula**:
   $$\text{USD/lb} = \frac{\text{ARS/kg}}{\text{FX Rate}} \times \frac{1}{2.2046226}$$
+- **FX Rule**: INDEC records use the monthly average rate matched to the price month with `fx_basis` set to BCRA monthly average. Carrefour records use the daily latest rate with `fx_basis` set to BCRA daily latest. Every AR record stores `fx_ars_per_usd` plus `fx_date` plus `fx_basis`. Top level `fx` keeps the monthly average while `fx.latest` keeps the daily latest with basis labels.
 
 ### USDA AMS Weekly Grocery Feature Activity (AMS_3228)
 - **Source**: `https://www.ams.usda.gov/mnreports/AMS_3228.pdf`
@@ -95,10 +96,12 @@ The pipeline guarantees that a network glitch, bad API response, or parsing fail
 Unit tests in [`tests/test_retail_prices.py`](../tests/test_retail_prices.py) execute deterministically with zero network calls:
 - **`test_new_names_and_accents`**: Confirms normalization of accented queries (*Riñón*, *Mollejas*, *Bife de costilla*).
 - **`test_wrong_species_prepared_and_ambiguous_units_rejected`**: Ensures non-bovine meats and non-kg packaging are rejected.
-- **`test_alias_dedup_conversion_and_stock`**: Verifies SKU deduplication, currency conversion math, and stock status reporting.
+- **`test_alias_dedup_conversion_and_stock`**: Verifies SKU deduplication, currency conversion math, stock status, and daily latest FX basis.
 - **`test_chorizo_stays_separate`**: Confirms bone-in vs boneless cut discrimination.
 - **`test_failed_refresh_preserves_snapshot`**: Tests atomic rollback on HTTP failure.
 - **`test_invalid_fx`**: Verifies that non-finite or negative exchange rates raise errors.
+- **`test_usda_rows_and_weighted_average`**: Verifies USDA layout parsing and store weighted math and fallback to prior week.
+- **`test_usda_ignores_non_conventional_rows`**: Verifies that non fresh rows and Lbs rows do not pollute the average.
 
 Run tests:
 ```bash
