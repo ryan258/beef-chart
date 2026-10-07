@@ -1,5 +1,6 @@
 .env
 data/raw/
+data/us-cuts.json
 __pycache__/
 *.pyc
 .pytest_cache/

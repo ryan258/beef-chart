@@ -6,9 +6,31 @@
 <title>The Cow, Two Ways — Same Animal. Different Perspective.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,400&display=swap" rel="stylesheet">
-<!-- D3.js v7 and D3-Sankey -->
-<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-<script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
+<!-- D3.js v7 and D3-Sankey with CDN fallback -->
+<script src="https://cdn.jsdelivr.net/npm/d3@7" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js" crossorigin="anonymous"></script>
+<script>
+window.__d3LoadError = !window.d3;
+if (window.__d3LoadError) {
+  document.write('<script src="https://unpkg.com/d3@7"><\/script>');
+  document.write('<script src="https://unpkg.com/d3-sankey@0.12.3/dist/d3-sankey.min.js"><\/script>');
+}
+function d3Available() { return typeof window.d3 !== 'undefined' && typeof window.d3.sankey === 'function'; }
+function showChartFallback(svgId, msg) {
+  var el = document.getElementById(svgId);
+  if (!el) return;
+  el.innerHTML = '';
+  var ns = 'http://www.w3.org/2000/svg';
+  var text = document.createElementNS(ns, 'text');
+  text.setAttribute('x', '50%');
+  text.setAttribute('y', '50%');
+  text.setAttribute('text-anchor', 'middle');
+  text.setAttribute('fill', 'var(--mut)');
+  text.setAttribute('font-size', '13');
+  text.textContent = msg || 'Chart library unavailable. Check network connection.';
+  el.appendChild(text);
+}
+</script>
 
 <style>
 :root{
@@ -1089,10 +1111,10 @@ header.site-header{
 <div id="d3-floating-tooltip"></div>
 
 <!-- Cut Inspector Modal -->
-<div class="modal-overlay" id="cut-modal-overlay">
+<div class="modal-overlay" id="cut-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-cut-title" aria-hidden="true">
   <div class="modal-card" id="cut-modal-card">
-    <button class="modal-close-btn" id="modal-close-btn" aria-label="Close">✕</button>
-    <div id="modal-content"></div>
+    <button class="modal-close-btn" id="modal-close-btn" aria-label="Close cut details">✕</button>
+    <div id="modal-content" role="document"></div>
   </div>
 </div>
 
@@ -1154,12 +1176,26 @@ const BY_ID = Object.fromEntries(ALL_CUTS.map(c=>[c.id, c]));
 
 // 1b. LIVE PRICES: data/prices.json, written by ./fetch-prices.sh (BLS for US, INDEC for Argentina)
 let PRICES = null;
-const usd = n => `$${n.toFixed(2)}`;
-const monthLabel = p => p.length > 7
-  ? new Date(`${p}T12:00`).toLocaleString('en-US', {month:'short', day:'numeric', year:'numeric'})
-  : new Date(`${p}-15`).toLocaleString('en-US', {month:'short', year:'numeric'});
-const priceOf = c => ({ar: PRICES?.ar[c.arSeries], us: PRICES?.us[c.usSeries]});
-const priceLine = (ar, us) => [us && `US ${usd(us.usd_lb)}`, ar && `AR ${usd(ar.usd_lb)}`].filter(Boolean).join(' · ') || '<span class="na">Not available</span>';
+const usd = n => (typeof n === 'number' && isFinite(n) ? `$${n.toFixed(2)}` : 'Not available');
+const monthLabel = p => {
+  try {
+    if (!p || typeof p !== 'string') return 'date unknown';
+    return p.length > 7
+      ? new Date(`${p}T12:00`).toLocaleString('en-US', {month:'short', day:'numeric', year:'numeric'})
+      : new Date(`${p}-15`).toLocaleString('en-US', {month:'short', year:'numeric'});
+  } catch (err) { return 'date unknown'; }
+};
+const validPrice = p => p && typeof p.usd_lb === 'number' && isFinite(p.usd_lb);
+const priceOf = c => {
+  if (!c || !PRICES) return {ar: null, us: null};
+  return {ar: c.arSeries ? PRICES.ar[c.arSeries] || null : null, us: c.usSeries ? PRICES.us[c.usSeries] || null : null};
+};
+const priceLine = (ar, us) => {
+  const parts = [];
+  if (validPrice(us)) parts.push(`US ${usd(us.usd_lb)}`);
+  if (validPrice(ar)) parts.push(`AR ${usd(ar.usd_lb)}`);
+  return parts.join(' · ') || '<span class="na">Not available</span>';
+};
 const PRICE_ROWS = [
   {label:'Ribeye / Bife ancho', ar:'bife_ancho', us:'ribeye_bnls'},
   {label:'Strip / Bife de chorizo', ar:'bife_angosto', us:'strip_bnls'},
@@ -1218,9 +1254,16 @@ retailClippedG.selectAll('path.cut-path')
   .attr('class', 'cut-path')
   .attr('d', d => d.p[0] === 'M' ? d.p : `M ${d.p} Z`)
   .attr('fill', d => d.color)
-  .on('mouseover', (e, d) => showTooltip(e, `<b>${d.n}</b> (${d.eq})<br>${priceLine(priceOf(d).ar, priceOf(d).us)}`))
+  .attr('data-primal', d => d.us || '')
+  .on('mouseover', (e, d) => {
+    showTooltip(e, `<b>${d.n}</b> (${d.eq})<br>${priceLine(priceOf(d).ar, priceOf(d).us)}`);
+    if (typeof highlightPrimal === 'function' && d.us) highlightPrimal(d.us, true);
+  })
   .on('mousemove', moveTooltip)
-  .on('mouseout', hideTooltip)
+  .on('mouseout', (e, d) => {
+    hideTooltip();
+    if (typeof clearCowHighlight === 'function') clearCowHighlight();
+  })
   .on('click', (e, d) => openCutModal(d));
 
 // Overlay outline
@@ -1245,13 +1288,38 @@ wholesaleClippedG.selectAll('path.cut-path')
   .attr('stroke', '#fff')
   .attr('stroke-width', 1.8)
   .attr('stroke-dasharray', '5,3')
-  .on('mouseover', (e, d) => showTooltip(e, `<b>${d.n} Primal</b><br>~${d.share}% of carcass (est.)`))
+  .attr('data-primal', d => d.key)
+  .on('mouseover', (e, d) => {
+    showTooltip(e, `<b>${d.n} Primal</b><br>~${d.share}% of carcass (est.)`);
+    if (typeof highlightPrimal === 'function') highlightPrimal(d.key, true);
+  })
   .on('mousemove', moveTooltip)
-  .on('mouseout', hideTooltip)
+  .on('mouseout', () => {
+    hideTooltip();
+    if (typeof clearCowHighlight === 'function') clearCowHighlight();
+  })
   .on('click', (e, d) => {
     const firstCut = RETAIL_CUTS.find(c => c.us === d.key) || RETAIL_CUTS[0];
     openCutModal(firstCut);
   });
+
+function highlightPrimal(key, active) {
+  if (!key) return;
+  try {
+    wholesaleClippedG.selectAll('path.cut-path')
+      .classed('on', d => active && d.key === key)
+      .classed('dim', d => active && d.key !== key);
+    retailClippedG.selectAll('path.cut-path')
+      .classed('on', d => active && d.us === key)
+      .classed('dim', d => active && d.us !== key);
+  } catch (err) { /* highlight is progressive enhancement */ }
+}
+function clearCowHighlight() {
+  try {
+    wholesaleClippedG.selectAll('path.cut-path').classed('on', false).classed('dim', false);
+    retailClippedG.selectAll('path.cut-path').classed('on', false).classed('dim', false);
+  } catch (err) { /* noop */ }
+}
 
 wholesaleSvg.append('path')
   .attr('d', COW_SILHOUETTE)
@@ -1262,6 +1330,10 @@ wholesaleSvg.append('path')
 
 // 3. D3 SANKEY CHART: "FROM ANIMAL TO TABLE"
 function renderSankey() {
+  if (!d3Available()) {
+    showChartFallback('sankey-chart-svg', 'Flow chart unavailable. D3 library failed to load.');
+    return;
+  }
   const svg = d3.select('#sankey-chart-svg');
   svg.selectAll('*').remove();
 
@@ -1280,13 +1352,13 @@ function renderSankey() {
     {name:'Plate', color:'#df9e35'},
     {name:'Flank', color:'#c46d20'},
     {name:'Shank', color:'#465769'},
-    {name:'Other', color:'#7a7268'},
+    {name:'Other primals', color:'#7a7268'},
     // Right nodes:
     {name:'Steaks', color:'#e5a93c'},
     {name:'Roasts', color:'#234a75'},
     {name:'Ground', color:'#a82b2b'},
     {name:'Short Ribs', color:'#783d26'},
-    {name:'Other', color:'#465769'}
+    {name:'Other uses', color:'#465769'}
   ];
 
   const links = [
@@ -1302,8 +1374,8 @@ function renderSankey() {
     {source:6, target:13, value:5.5}, // Plate -> Short Ribs
     {source:6, target:10, value:3},   // Plate -> Steaks
     {source:7, target:10, value:5},   // Flank -> Steaks
-    {source:8, target:14, value:6},   // Shank -> Other
-    {source:9, target:14, value:4}    // Other -> Other
+    {source:8, target:14, value:6},   // Shank -> Other uses
+    {source:9, target:14, value:4}    // Other primals -> Other uses
   ];
 
   const sankey = d3.sankey()
@@ -1353,6 +1425,10 @@ function renderSankey() {
 
 // 4. D3 PRICE COMPARISON: "CUTS IN CONTEXT" (US retail vs Argentina retail, USD/lb)
 function renderScatter() {
+  if (!d3Available()) {
+    showChartFallback('scatter-chart-svg', 'Price comparison unavailable. D3 library failed to load.');
+    return;
+  }
   const svg = d3.select('#scatter-chart-svg');
   svg.selectAll('*').remove();
 
@@ -1405,6 +1481,10 @@ function renderScatter() {
 
 // 5. D3 TREEMAP: "WHERE VALUE LIVES"
 function renderTreemap() {
+  if (!d3Available()) {
+    showChartFallback('treemap-chart-svg', 'Value map unavailable. D3 library failed to load.');
+    return;
+  }
   const svg = d3.select('#treemap-chart-svg');
   svg.selectAll('*').remove();
 
@@ -1482,19 +1562,44 @@ function hideTooltip() {
 const modalOverlay = $('#cut-modal-overlay');
 const modalContent = $('#modal-content');
 
+function fxLine(p) {
+  if (p == null || p.fx_ars_per_usd == null) return '';
+  const basis = p.fx_basis ? ` · ${p.fx_basis}` : '';
+  const date = p.fx_date ? ` · ${p.fx_date}` : '';
+  return `<br>FX: ${p.fx_ars_per_usd} ARS/USD${basis}${date}`;
+}
 function priceBlock(cut) {
   const {ar, us} = priceOf(cut);
+  const valid = p => p && typeof p.usd_lb === 'number' && isFinite(p.usd_lb);
   const one = (flag, p) => `<div style="margin-bottom:6px"><div style="font-size:.72rem;color:var(--mut);text-transform:uppercase">${flag}</div>
     <div style="font-family:'Oswald';font-size:1.6rem;font-weight:700;color:var(--ink);line-height:1.1">${usd(p.usd_lb)}<span style="font-size:.8rem;font-weight:400;color:var(--mut)"> /lb</span></div>
-    <div style="font-size:.7rem;color:var(--mut)" title="${p.label}">${p.source} · ${monthLabel(p.period)}${p.availability === "out_of_stock" ? " · Out-of-stock catalog price" : ""}${p.fx_date ? `<br>FX: ${p.fx_ars_per_usd} ARS/USD · ${p.fx_date}` : ""}</div></div>`;
-  return (ar ? one('Argentina', ar) : '') + (us ? one('United States', us) : '')
-    || `<div style="font-size:.82rem;color:var(--mut);max-width:120px">No verified price available</div>`;
+    <div style="font-size:.7rem;color:var(--mut)" title="${p.label || flag}">${p.source || 'Unknown source'} · ${p.period ? monthLabel(p.period) : 'date unknown'}${p.availability === "out_of_stock" ? " · Out-of-stock catalog price" : ""}${fxLine(p)}</div></div>`;
+  const arHtml = valid(ar) ? one('Argentina', ar) : '';
+  const usHtml = valid(us) ? one('United States', us) : '';
+  return (arHtml + usHtml)
+    || `<div style="font-size:.82rem;color:var(--mut);max-width:160px">No verified price available in this snapshot</div>`;
 }
 
+let lastFocusedBeforeModal = null;
+function focusModal() {
+  lastFocusedBeforeModal = document.activeElement;
+  modalOverlay.classList.add('open');
+  modalOverlay.setAttribute('aria-hidden', 'false');
+  const closeBtn = $('#modal-close-btn');
+  if (closeBtn) closeBtn.focus();
+}
+function closeCutModal() {
+  modalOverlay.classList.remove('open');
+  modalOverlay.setAttribute('aria-hidden', 'true');
+  if (lastFocusedBeforeModal && typeof lastFocusedBeforeModal.focus === 'function') {
+    lastFocusedBeforeModal.focus();
+  }
+}
 function openCutModal(cut) {
+  if (!cut) return;
   if (EXTRA_CUTS.includes(cut)) {
-    modalContent.innerHTML = `<h2>${cut.n}</h2><p>${cut.eq}</p><p>${cut.info}</p>${priceBlock(cut)}<p>No matching US price source is connected for this entry.</p>`;
-    modalOverlay.classList.add('open');
+    modalContent.innerHTML = `<h2 id="modal-cut-title">${cut.n}</h2><p>${cut.eq}</p><p>${cut.info}</p>${priceBlock(cut)}<p>US price is not connected for this specialty entry. Argentina price shows Carrefour online butcher median in USD per lb with FX basis listed above.</p>`;
+    focusModal();
     return;
   }
   const primal = WHOLESALE_PRIMALS.find(p => p.key === cut.us) || WHOLESALE_PRIMALS[0];
@@ -1534,7 +1639,7 @@ function openCutModal(cut) {
     </a>
   `;
 
-  modalOverlay.classList.add('open');
+  focusModal();
   renderModalRadar(cut);
 }
 
@@ -1600,9 +1705,25 @@ function renderModalRadar(cut) {
     .attr('stroke-width', 2.2);
 }
 
-$('#modal-close-btn').addEventListener('click', () => modalOverlay.classList.remove('open'));
+$('#modal-close-btn').addEventListener('click', () => closeCutModal());
 modalOverlay.addEventListener('click', e => {
-  if (e.target === modalOverlay) modalOverlay.classList.remove('open');
+  if (e.target === modalOverlay) closeCutModal();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && modalOverlay.classList.contains('open')) closeCutModal();
+  if (e.key === 'Tab' && modalOverlay.classList.contains('open')) {
+    const focusable = modalOverlay.querySelectorAll('button, a[href], input, [tabindex]:not([tabindex="-1"])');
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }
 });
 
 // 8. INTERACTIVE ACTIONS & SEARCH
@@ -1667,22 +1788,54 @@ renderScatter();
 renderTreemap();
 
 // 10. LIVE PRICE WIRING
+function safeUsd(p) {
+  return p && typeof p.usd_lb === 'number' && isFinite(p.usd_lb) ? usd(p.usd_lb) : 'Not available';
+}
+function safePeriod(p) {
+  try { return p && p.period ? monthLabel(p.period) : 'date unknown'; }
+  catch (err) { return 'date unknown'; }
+}
 function renderPrices() {
-  if (!PRICES) {
+  if (!PRICES || !PRICES.us || !PRICES.ar) {
     $$('.cut-card-price').forEach(el => el.innerHTML = '<span class="na">Price data unavailable</span>');
-    $('#market-sub').textContent = 'Price data unavailable';
+    $('#market-price').innerHTML = 'Not available <span>/ lb</span>';
+    $('#market-change').textContent = '';
+    $('#market-sub').textContent = 'Price data unavailable in this snapshot';
     return;
   }
-  const us = PRICES.us.ground_beef, ar = PRICES.ar.ground_beef;
-  const chg = (us.usd_lb / us.prev_usd_lb - 1) * 100;
-  $('#market-price').innerHTML = `${usd(us.usd_lb)} <span>/ lb</span>`;
-  $('#market-change').textContent = `${Math.abs(chg).toFixed(1)}% ${chg < 0 ? '↓' : '↑'} vs prior month`;
-  $('#market-sub').textContent = `Argentina ${usd(ar.usd_lb)} / lb · ${monthLabel(us.period)}`;
+  const us = PRICES.us.ground_beef;
+  const ar = PRICES.ar.ground_beef;
+  if (!us || typeof us.usd_lb !== 'number') {
+    $('#market-price').innerHTML = 'Not available <span>/ lb</span>';
+    $('#market-change').textContent = '';
+  } else {
+    $('#market-price').innerHTML = `${usd(us.usd_lb)} <span>/ lb</span>`;
+    if (typeof us.prev_usd_lb === 'number' && us.prev_usd_lb > 0) {
+      const chg = (us.usd_lb / us.prev_usd_lb - 1) * 100;
+      $('#market-change').textContent = `${Math.abs(chg).toFixed(1)}% ${chg < 0 ? '↓' : '↑'} vs prior month`;
+    } else {
+      $('#market-change').textContent = 'Prior month unavailable';
+    }
+  }
+  if (ar && typeof ar.usd_lb === 'number') {
+    $('#market-sub').textContent = `Argentina ${usd(ar.usd_lb)} / lb · ${safePeriod(us)} · INDEC ${safePeriod(ar)}`;
+  } else {
+    $('#market-sub').textContent = `Argentina unavailable · ${safePeriod(us)}`;
+  }
   $$('.cut-card-price').forEach(el => {
-    el.innerHTML = priceLine(PRICES.ar[el.dataset.ar], PRICES.us[el.dataset.us]);
+    const arP = el.dataset.ar ? PRICES.ar[el.dataset.ar] : null;
+    const usP = el.dataset.us ? PRICES.us[el.dataset.us] : null;
+    el.innerHTML = priceLine(arP, usP);
     if (el.dataset.ar === 'paleta') el.title = 'Argentine paleta (shoulder clod)';
   });
-  $('#data-note').textContent = `Prices in USD per lb, snapshot ${PRICES.fetched.slice(0, 10)}. US: BLS monthly average retail prices (${monthLabel(PRICES.us.ground_beef.period)}) and USDA's weekly grocery ad survey (advertised prices, store-weighted; ${monthLabel(PRICES.us.ribeye_bnls.period)}). Argentina: INDEC Greater Buenos Aires averages (${monthLabel(PRICES.ar.asado.period)}) and the median of Carrefour Argentina's online butcher listings (${monthLabel(PRICES.ar.bife_ancho.period)}). Pesos converted at ${Math.round(PRICES.fx.latest.ars_per_usd).toLocaleString()} ARS/USD (BCRA, ${PRICES.fx.latest.date}). Sources differ in method and date, so compare cuts loosely. Cuts are matched to the closest published item; "Not available" means no verified price is present in this snapshot. Carcass yields and value shares are illustrative estimates.`;
+  const fxUs = PRICES.fx && PRICES.fx.latest ? `${Math.round(PRICES.fx.latest.ars_per_usd).toLocaleString()} ARS/USD daily latest (BCRA, ${PRICES.fx.latest.date})` : 'FX unavailable';
+  const fxAvg = PRICES.fx && PRICES.fx.ars_per_usd ? `${Math.round(PRICES.fx.ars_per_usd).toLocaleString()} ARS/USD monthly average (BCRA, ${PRICES.fx.period || 'unknown'})` : 'monthly FX unavailable';
+  const snap = PRICES.fetched ? PRICES.fetched.slice(0, 10) : 'unknown date';
+  const usGb = PRICES.us.ground_beef ? safePeriod(PRICES.us.ground_beef) : 'unknown';
+  const usAd = PRICES.us.ribeye_bnls ? safePeriod(PRICES.us.ribeye_bnls) : 'unknown';
+  const arIndec = PRICES.ar.asado ? safePeriod(PRICES.ar.asado) : 'unknown';
+  const arRetail = PRICES.ar.bife_ancho ? safePeriod(PRICES.ar.bife_ancho) : 'unknown';
+  $('#data-note').textContent = `Prices in USD per lb, snapshot ${snap}. US: BLS monthly average retail (${usGb}) and USDA weekly ad survey store-weighted (${usAd}). Argentina: INDEC GBA average (${arIndec}, converted at ${fxAvg}) and Carrefour online butcher median (${arRetail}, converted at ${fxUs}). Each Argentine record lists its FX basis. Sources differ in method and date, so compare cuts loosely. Not available means no verified listing in this snapshot. Yields and value shares are illustrative estimates.`;
   renderScatter();
 }
 fetch('data/prices.json').then(r => r.ok ? r.json() : null).catch(() => null).then(p => { PRICES = p; renderPrices(); });
