@@ -1,0 +1,1691 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Cow, Two Ways — Same Animal. Different Perspective.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,400&display=swap" rel="stylesheet">
+<!-- D3.js v7 and D3-Sankey -->
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
+
+<style>
+:root{
+  --bg:#f5f0e6;
+  --bg-card:#fbf8f1;
+  --bg-card-blue:#dce8f2;
+  --ink:#141414;
+  --mut:#6e665e;
+  --mut-light:#9e9488;
+  --line:#e3dac9;
+  --line-dark:#cfc4af;
+  --red:#a82b2b;
+  --red-bright:#c22e2e;
+  --red-deep:#8a2522;
+  --gold:#e5a93c;
+  --gold-warm:#f0af3c;
+  --brown:#783d26;
+  --navy:#1a3e63;
+  --blue:#234a75;
+  --slate:#465769;
+  --shadow-sm:0 2px 8px rgba(30,20,15,0.04);
+  --shadow-md:0 6px 20px rgba(30,20,15,0.06);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  color:var(--ink);
+  font:15px/1.5 "Inter",-apple-system,BlinkMacSystemFont,sans-serif;
+  background:var(--bg);
+  overflow-x:hidden;
+}
+.wrap{max-width:1320px;margin:0 auto;padding:0 24px}
+button{font:inherit;color:inherit;cursor:pointer}
+.sans{font-family:"Oswald","Inter",sans-serif}
+
+/* 1. Header & Navigation */
+header.site-header{
+  position:sticky;
+  top:0;
+  z-index:90;
+  background:rgba(245, 240, 230, 0.96);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+}
+.nav-wrap{
+  max-width:1320px;
+  margin:0 auto;
+  padding:0 24px;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+  gap:24px;
+  height:68px;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-family:"Oswald",sans-serif;
+  font-size:1.32rem;
+  font-weight:700;
+  letter-spacing:-0.01em;
+  color:var(--ink);
+  text-decoration:none;
+  text-transform:none;
+}
+.brand svg{width:36px;height:24px;flex:none}
+.nav-links{
+  display:flex;
+  justify-content:center;
+  gap:28px;
+}
+.nav-links a{
+  font-family:"Oswald",sans-serif;
+  font-size:.88rem;
+  font-weight:600;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--ink);
+  text-decoration:none;
+  transition:color .15s;
+}
+.nav-links a:hover{color:var(--red)}
+.nav-search{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  width:260px;
+  height:38px;
+  padding:0 14px;
+  background:#fff;
+  border:1px solid var(--line-dark);
+  border-radius:20px;
+}
+.nav-search input{
+  flex:1;
+  min-width:0;
+  border:0;
+  background:none;
+  font-size:.82rem;
+  color:var(--ink);
+  outline:none;
+}
+.nav-search svg{width:16px;height:16px;flex:none;color:var(--mut)}
+@media(max-width:960px){
+  .nav-links{display:none}
+  .nav-wrap{grid-template-columns:auto 1fr}
+  .nav-search{margin-left:auto}
+}
+
+/* 2. Hero Section */
+.hero{
+  padding:36px 0 24px;
+}
+.hero-grid{
+  display:grid;
+  grid-template-columns:minmax(0, 1.05fr) minmax(0, 1fr);
+  gap:32px;
+  align-items:stretch;
+}
+@media(max-width:960px){
+  .hero-grid{grid-template-columns:1fr}
+}
+.hero-content{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding-right:12px;
+}
+.hero-title{
+  margin:0 0 16px;
+  font-family:"Oswald",sans-serif;
+  font-size:clamp(3.8rem, 7vw, 6.4rem);
+  font-weight:700;
+  line-height:0.92;
+  letter-spacing:-0.03em;
+  color:var(--ink);
+}
+.hero-title .accent-two{
+  color:var(--red);
+}
+.hero-kicker-bar{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:18px;
+}
+.hero-kicker-bar::before{
+  content:"";
+  display:block;
+  width:24px;
+  height:4px;
+  background:var(--red);
+}
+.hero-kicker{
+  margin:0;
+  font-family:"Oswald",sans-serif;
+  font-size:.85rem;
+  font-weight:700;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--ink);
+}
+.hero-desc{
+  margin:0 0 26px;
+  font-size:1.05rem;
+  line-height:1.55;
+  color:#3a342f;
+  max-width:44ch;
+}
+.btn-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  align-self:flex-start;
+  padding:12px 24px;
+  background:var(--ink);
+  color:#fff;
+  border-radius:30px;
+  font-family:"Oswald",sans-serif;
+  font-size:.86rem;
+  font-weight:600;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  text-decoration:none;
+  transition:background .2s, transform .2s;
+}
+.btn-pill:hover{background:var(--red);transform:translateY(-1px)}
+
+/* Hero Right Collage */
+.hero-collage{
+  display:grid;
+  grid-template-columns:1fr 140px;
+  grid-template-rows:280px 110px;
+  gap:0;
+  position:relative;
+  border-radius:12px;
+  overflow:hidden;
+}
+.collage-cow{
+  position:relative;
+  background:#f0ebe0;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.collage-circle{
+  position:absolute;
+  width:290px;
+  height:290px;
+  border-radius:50%;
+  background:#bd2624;
+  left:50%;
+  top:50%;
+  transform:translate(-50%, -50%);
+}
+.collage-cow img{
+  position:relative;
+  z-index:2;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  filter:contrast(1.15) grayscale(0.2);
+}
+.collage-gold{
+  background:var(--gold);
+  padding:24px 16px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  font-family:"Oswald",sans-serif;
+  color:var(--ink);
+}
+.gold-tags{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  font-size:.84rem;
+  font-weight:700;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.gold-rule{
+  width:32px;
+  height:2px;
+  background:var(--ink);
+  margin:10px 0;
+}
+.gold-sub{
+  font-size:.86rem;
+  font-weight:700;
+  line-height:1.2;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+.collage-black{
+  background:var(--ink);
+}
+.collage-barn{
+  position:relative;
+  overflow:hidden;
+}
+.collage-barn img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  filter:grayscale(1) contrast(1.1);
+}
+
+/* 3. Section Headers */
+.section-tag{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:4px;
+}
+.section-tag::before{
+  content:"";
+  display:block;
+  width:6px;
+  height:22px;
+  background:var(--red);
+  border-radius:1px;
+}
+.section-tag.blue::before{background:var(--navy)}
+.section-tag.ochre::before{background:var(--gold)}
+.section-title{
+  margin:0;
+  font-family:"Oswald",sans-serif;
+  font-size:1.32rem;
+  font-weight:700;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  color:var(--ink);
+}
+.section-sub{
+  margin:0 0 16px;
+  font-family:"Oswald",sans-serif;
+  font-size:.76rem;
+  font-weight:600;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--mut);
+  padding-left:16px;
+}
+
+/* 4. Common Card Styles */
+.card-box{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:22px 24px;
+  box-shadow:var(--shadow-sm);
+  position:relative;
+}
+.card-box.blue-tint{
+  background:var(--bg-card-blue);
+  border-color:#c8d9e6;
+}
+
+/* Row Grids */
+.grid-2col-main{
+  display:grid;
+  grid-template-columns:minmax(0, 1fr) 320px;
+  gap:24px;
+  margin-bottom:24px;
+}
+.grid-2col-split{
+  display:grid;
+  grid-template-columns:minmax(0, 1.35fr) minmax(0, 1fr);
+  gap:24px;
+  margin-bottom:24px;
+}
+@media(max-width:980px){
+  .grid-2col-main, .grid-2col-split{
+    grid-template-columns:1fr;
+  }
+}
+
+/* 5. Explore The Cow (Two Cows Side by Side) */
+.cows-compare-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:28px;
+  align-items:end;
+}
+@media(max-width:680px){
+  .cows-compare-grid{grid-template-columns:1fr;gap:36px}
+}
+.cow-column{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+.cow-stage-svg{
+  width:100%;
+  height:auto;
+  max-height:220px;
+  display:block;
+}
+.cow-col-footer{
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:14px;
+  padding-top:10px;
+  border-top:1px dashed var(--line);
+}
+.cow-col-info h4{
+  margin:0 0 2px;
+  font-family:"Oswald",sans-serif;
+  font-size:1.1rem;
+  font-weight:700;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  color:var(--ink);
+}
+.cow-col-info p{
+  margin:0;
+  font-size:.82rem;
+  color:var(--mut);
+}
+.cow-btn-action{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  border:0;
+  background:var(--red);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.1rem;
+  transition:background .2s, transform .2s;
+  flex:none;
+}
+.cow-btn-action.blue{background:var(--navy)}
+.cow-btn-action:hover{transform:scale(1.08)}
+
+/* Cut zones inside cow SVGs */
+.cut-path{
+  cursor:pointer;
+  stroke:#fff;
+  stroke-width:1.6;
+  stroke-linejoin:round;
+  transition:filter .15s, opacity .2s;
+}
+.cut-path:hover{
+  filter:brightness(1.18);
+  stroke-width:2.4;
+}
+.cut-path.on{
+  stroke:#fff;
+  stroke-width:3;
+  filter:brightness(1.25) drop-shadow(0 0 6px rgba(255,255,255,0.9));
+}
+.cut-path.dim{opacity:0.25}
+
+/* Red tab overhang on Explore Card */
+.red-tab-overhang{
+  position:absolute;
+  left:-10px;
+  top:40px;
+  width:10px;
+  height:48px;
+  background:var(--red);
+  border-radius:4px 0 0 4px;
+}
+
+/* 6. Today's Market Card */
+.market-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+}
+.market-header h4{
+  margin:0;
+  font-family:"Oswald",sans-serif;
+  font-size:1.15rem;
+  font-weight:700;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--ink);
+}
+.market-header svg{width:26px;height:18px;color:var(--red)}
+.market-body{
+  display:grid;
+  grid-template-columns:1fr 100px;
+  align-items:center;
+  gap:12px;
+  margin-bottom:14px;
+}
+.market-name{
+  font-size:.86rem;
+  color:var(--mut);
+  margin-bottom:2px;
+}
+.market-price{
+  font-family:"Oswald",sans-serif;
+  font-size:1.75rem;
+  font-weight:700;
+  color:var(--ink);
+  line-height:1;
+}
+.market-price span{
+  font-size:.88rem;
+  font-weight:400;
+  color:var(--mut);
+}
+.market-change{
+  font-size:.86rem;
+  font-weight:700;
+  color:var(--red);
+  margin-top:4px;
+}
+.market-steak-img{
+  width:94px;
+  height:76px;
+  object-fit:contain;
+}
+.card-bottom-link{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-family:"Oswald",sans-serif;
+  font-size:.82rem;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--red);
+  text-decoration:none;
+  transition:color .15s;
+}
+.card-bottom-link:hover{color:var(--ink)}
+
+/* 7. Explore A Cut Card (Blue) */
+.cut-search-box{
+  display:flex;
+  align-items:center;
+  background:#fff;
+  border-radius:20px;
+  padding:4px 6px 4px 14px;
+  border:1px solid #c2d5e4;
+  margin-bottom:14px;
+}
+.cut-search-box input{
+  flex:1;
+  min-width:0;
+  border:0;
+  background:none;
+  font-size:.82rem;
+  color:var(--ink);
+  outline:none;
+}
+.cut-search-box button{
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  border:0;
+  background:var(--ink);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+}
+.cut-chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+.cut-chip{
+  padding:5px 12px;
+  border-radius:16px;
+  border:1px solid #cad8e4;
+  background:#fff;
+  font-size:.76rem;
+  color:var(--ink);
+  transition:all .15s;
+}
+.cut-chip:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+/* 8. Sankey Flow Visualization */
+#sankey-chart-svg{
+  width:100%;
+  height:260px;
+  display:block;
+  margin-bottom:10px;
+}
+.sankey-node rect{
+  cursor:pointer;
+  transition:filter .15s;
+}
+.sankey-node rect:hover{filter:brightness(1.15)}
+.sankey-node text{
+  font-family:"Oswald",sans-serif;
+  font-size:11.5px;
+  fill:var(--ink);
+  pointer-events:none;
+}
+.sankey-link{
+  fill:none;
+  stroke-opacity:0.42;
+  transition:stroke-opacity .2s;
+}
+.sankey-link:hover{stroke-opacity:0.85}
+
+/* 9. Cuts In Context Scatterplot */
+#scatter-chart-svg{
+  width:100%;
+  height:260px;
+  display:block;
+  margin-bottom:10px;
+}
+
+/* 10. Treemap Visualization */
+#treemap-chart-svg{
+  width:100%;
+  height:240px;
+  display:block;
+  margin-bottom:10px;
+}
+.treemap-node-rect{
+  cursor:pointer;
+  stroke:#fff;
+  stroke-width:1.5px;
+  transition:filter .15s;
+}
+.treemap-node-rect:hover{filter:brightness(1.15)}
+.treemap-label{
+  font-family:"Oswald",sans-serif;
+  font-size:12px;
+  font-weight:600;
+  fill:#fff;
+  pointer-events:none;
+}
+
+/* 11. Editorial Quote Card */
+.quote-card{
+  background:var(--gold-warm);
+  border-radius:10px;
+  padding:24px 26px 0;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  position:relative;
+  overflow:hidden;
+}
+.quote-mark{
+  font-family:"Playfair Display",serif;
+  font-size:4rem;
+  line-height:0.8;
+  color:var(--red);
+  margin-bottom:8px;
+}
+.quote-text{
+  font-family:"Playfair Display",serif;
+  font-size:1.6rem;
+  font-weight:700;
+  line-height:1.2;
+  color:var(--ink);
+  margin:0 0 14px;
+}
+.quote-rule{
+  width:40px;
+  height:3px;
+  background:var(--red);
+  margin-bottom:18px;
+}
+.quote-graphic-bottom{
+  position:relative;
+  margin:0 -26px;
+  height:130px;
+  overflow:hidden;
+}
+.quote-graphic-bottom img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:50% 50% 0 0 / 25% 25% 0 0;
+  filter:grayscale(1) contrast(1.1);
+}
+
+/* 12. Popular Cuts Row */
+.popular-cuts-grid{
+  display:grid;
+  grid-template-columns:repeat(6, 1fr);
+  gap:14px;
+}
+@media(max-width:1100px){
+  .popular-cuts-grid{grid-template-columns:repeat(3, 1fr)}
+}
+@media(max-width:640px){
+  .popular-cuts-grid{grid-template-columns:repeat(2, 1fr)}
+}
+.cut-card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:12px 10px;
+  text-align:left;
+  cursor:pointer;
+  transition:transform .18s, box-shadow .18s, border-color .18s;
+}
+.cut-card:hover{
+  transform:translateY(-2px);
+  box-shadow:var(--shadow-md);
+  border-color:var(--red);
+}
+.cut-card img{
+  width:100%;
+  height:72px;
+  object-fit:contain;
+  margin-bottom:8px;
+}
+.cut-card-name{
+  font-family:"Oswald",sans-serif;
+  font-size:.88rem;
+  font-weight:700;
+  color:var(--ink);
+  margin-bottom:2px;
+}
+.cut-card-price{
+  font-size:.82rem;
+  color:var(--mut);
+}
+
+/* 13. Better Data Brand Card */
+.brand-callout-card{
+  background:var(--red-deep);
+  color:#fff;
+  border-radius:10px;
+  padding:24px 22px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+.brand-cow-icon{
+  width:64px;
+  height:44px;
+  margin-bottom:14px;
+}
+.brand-cow-icon path{
+  stroke:#fff;
+  stroke-width:2.2;
+  fill:none;
+}
+.brand-callout-title{
+  font-family:"Oswald",sans-serif;
+  font-size:1.15rem;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  line-height:1.25;
+  margin:0 0 18px;
+}
+.btn-about{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 18px;
+  background:var(--ink);
+  color:#fff;
+  border-radius:24px;
+  font-family:"Oswald",sans-serif;
+  font-size:.8rem;
+  font-weight:600;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  text-decoration:none;
+  align-self:flex-start;
+  transition:background .2s;
+}
+.btn-about:hover{background:#000}
+
+/* 14. Floating Tooltip & Modal Inspector */
+#d3-floating-tooltip{
+  position:fixed;
+  z-index:1000;
+  pointer-events:none;
+  padding:10px 14px;
+  background:rgba(20,20,20,0.92);
+  color:#fff;
+  border-radius:8px;
+  font-size:.82rem;
+  box-shadow:0 8px 24px rgba(0,0,0,0.3);
+  backdrop-filter:blur(6px);
+  opacity:0;
+  transform:translate(-50%, -115%);
+  transition:opacity .15s;
+}
+
+/* Cut Inspector Modal */
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  z-index:2000;
+  background:rgba(20,18,16,0.65);
+  backdrop-filter:blur(4px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .25s ease;
+}
+.modal-overlay.open{
+  opacity:1;
+  pointer-events:auto;
+}
+.modal-card{
+  background:var(--bg-card);
+  border:1px solid var(--line-dark);
+  border-radius:14px;
+  max-width:680px;
+  width:100%;
+  max-height:90vh;
+  overflow-y:auto;
+  padding:28px 32px;
+  box-shadow:0 18px 48px rgba(0,0,0,0.25);
+  position:relative;
+}
+.modal-close-btn{
+  position:absolute;
+  right:20px;
+  top:20px;
+  border:0;
+  background:none;
+  font-size:1.4rem;
+  color:var(--mut);
+  cursor:pointer;
+}
+.market-sub{font-size:.78rem;color:var(--mut);margin:-4px 0 10px}
+.cut-card-price .na{color:var(--mut-light);font-size:.8em}
+.data-note{font-size:.76rem;line-height:1.5;color:var(--mut);margin:-24px 0 40px;max-width:900px}
+.chart-empty{display:flex;align-items:center;justify-content:center;height:240px;color:var(--mut);font-size:.9rem;text-align:center}
+.legend{display:flex;gap:16px;font-family:'Oswald',sans-serif;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin:-4px 0 4px}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
+</style>
+<link rel="stylesheet" href="assets/bauhaus.css">
+</head>
+<body>
+<a class="skip-link" href="#explore">Skip to the cut explorer</a>
+
+<!-- Header Navigation -->
+<header class="site-header">
+  <div class="nav-wrap">
+    <a class="brand" href="#explore">
+      <svg viewBox="40 130 830 425" aria-hidden="true">
+        <path d="M 40,268 C 36,254 40,240 56,226 C 76,208 100,186 126,168 C 138,158 146,150 156,154 C 164,158 166,168 168,174 C 178,164 192,148 214,140 C 245,136 290,136 335,136 C 430,136 520,136 610,136 C 680,136 735,138 780,142 C 812,146 836,155 848,168 C 858,182 862,212 862,250 C 862,295 856,342 850,382 C 844,408 846,432 844,455 C 841,482 838,512 836,538 L 778,538 C 782,510 785,478 784,446 C 782,420 766,402 746,386 C 726,395 706,400 682,402 C 612,408 532,408 462,405 C 432,402 414,398 402,392 L 398,432 C 399,466 397,506 398,538 L 346,538 C 347,506 346,466 344,432 C 338,404 326,386 312,366 C 286,375 260,368 240,354 C 216,338 186,318 160,302 C 130,284 98,272 74,272 C 55,272 44,274 40,268 Z" fill="#141414"/>
+      </svg>
+      The Cow, Two Ways
+    </a>
+    <nav class="nav-links">
+      <a href="#explore">Explore</a>
+      <a href="#explore">Compare</a>
+      <a href="#data-sankey">Data</a>
+      <a href="#data-scatter">Insights</a>
+      <a href="#about">About</a>
+    </nav>
+    <div class="nav-search">
+      <input id="nav-search-input" type="search" placeholder="Search cuts, terms, or charts..." aria-label="Search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="10" cy="10" r="6.5"/><path d="M15 15l6 6"/></svg>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero" id="hero" aria-labelledby="hero-heading">
+    <div class="hero-meta"><span>An atlas of beef</span><span>From the whole animal to your table</span><span>US ↔ Argentina</span></div>
+    <div class="hero-grid">
+      <div class="hero-content">
+        <p class="hero-kicker">One animal. A world of difference.</p>
+        <h1 class="hero-title" id="hero-heading">The cow.<br><span class="accent-two">Two ways.</span></h1>
+        <div class="hero-bottom"><p class="hero-desc">Every cut tells a story.<br>Explore the anatomy, follow the value, and see beef from a different perspective.</p>
+        <a class="hero-go" href="#explore" aria-label="Explore the cuts">↘</a></div>
+      </div>
+      <div class="hero-art">
+        <div class="art-stripes" aria-hidden="true"></div>
+        <div class="cow-disc"><img src="assets/hero_cow.webp" alt="Close portrait of a Hereford steer" fetchpriority="high"></div>
+        <span class="art-caption">Fig. 01 / The starting point</span>
+        <span class="art-plus" aria-hidden="true">+</span>
+        <div class="art-square" aria-hidden="true"><span>↗</span></div>
+      </div>
+    </div>
+    <div class="hero-index"><a href="#explore"><span>01 / Anatomy</span>Meet the cuts <b>↗</b></a><a href="#data-sankey"><span>02 / Connection</span>Follow the animal <b>↗</b></a><a href="#data-scatter"><span>03 / Perspective</span>Compare the markets <b>↗</b></a></div>
+  </section>
+  <div class="chapter-heading"><span class="eyebrow">The whole picture</span><h2>Start with the animal.</h2><p>Two ways to divide it.<br>A better way to understand it.</p></div>
+
+  <!-- 2. ROW 1: EXPLORE THE COW + SIDEBAR -->
+  <div class="grid-2col-main" id="explore">
+    <!-- Left: Explore The Cow Card -->
+    <div class="card-box">
+      <div class="red-tab-overhang"></div>
+      <div class="section-tag">
+        <h3 class="section-title">One cow. Two maps.</h3>
+      </div>
+      <p class="section-sub">Select a cut to explore its character</p>
+
+      <div class="cows-compare-grid">
+        <!-- Retail Cuts Cow -->
+        <div class="cow-column">
+          <svg class="cow-stage-svg" id="retail-cow-svg" viewBox="40 130 830 425"></svg>
+          <div class="cow-col-footer">
+            <div class="cow-col-info">
+              <h4>Retail Cuts</h4>
+              <p>What you buy at the counter.</p>
+            </div>
+            <button class="cow-btn-action" id="btn-retail-cow" title="Inspect Retail Cuts">→</button>
+          </div>
+        </div>
+
+        <!-- Wholesale Cuts Cow -->
+        <div class="cow-column">
+          <svg class="cow-stage-svg" id="wholesale-cow-svg" viewBox="40 130 830 425"></svg>
+          <div class="cow-col-footer">
+            <div class="cow-col-info">
+              <h4>Wholesale Cuts</h4>
+              <p>How the industry sees it.</p>
+            </div>
+            <button class="cow-btn-action blue" id="btn-wholesale-cow" title="Inspect Wholesale Cuts">→</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Sidebar Stacked Cards -->
+    <div style="display:flex;flex-direction:column;gap:24px">
+      <!-- Card A: Today's Market -->
+      <div class="card-box">
+        <div class="market-header">
+          <h4>Latest Market</h4>
+          <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="1 13 8 7 14 11 23 2"/>
+          </svg>
+        </div>
+        <div class="market-body">
+          <div>
+            <div class="market-name">Ground beef, US retail</div>
+            <div class="market-price" id="market-price">— <span>/ lb</span></div>
+            <div class="market-change" id="market-change"></div>
+          </div>
+          <img class="market-steak-img" src="assets/cut_chuck.webp" alt="Ground chuck">
+        </div>
+        <div class="market-sub" id="market-sub"></div>
+        <a class="card-bottom-link" href="#data-scatter">View Market Data →</a>
+      </div>
+
+      <!-- Card B: Explore A Cut (Light Blue Card) -->
+      <div class="card-box blue-tint">
+        <div class="section-tag blue" style="margin-bottom:12px">
+          <h4 style="margin:0;font-family:'Oswald',sans-serif;font-size:1.15rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase">
+            Explore A Cut
+          </h4>
+        </div>
+        <div class="cut-search-box">
+          <input id="quick-cut-input" type="search" placeholder="e.g. Ribeye, Brisket, Chuck..." aria-label="Explore a cut">
+          <button id="quick-cut-btn" aria-label="Search cut">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="10" cy="10" r="6"/><path d="M15 15l5 5"/></svg>
+          </button>
+        </div>
+        <div class="cut-chips">
+          <button class="cut-chip" data-cut="bife-ancho">Ribeye</button>
+          <button class="cut-chip" data-cut="pecho">Brisket</button>
+          <button class="cut-chip" data-cut="lomo">Tenderloin</button>
+          <button class="cut-chip" data-cut="aguja">Chuck</button>
+          <button class="cut-chip" data-cut="cuadril">Sirloin</button>
+          <button class="cut-chip" data-cut="costillar">Short Rib</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. ROW 2: FROM ANIMAL TO TABLE + CUTS IN CONTEXT -->
+  <div class="chapter-heading"><span class="eyebrow">Beyond the butcher’s counter</span><h2>Follow the bigger story.</h2><p>Where it comes from.<br>What it becomes. What it’s worth.</p></div>
+  <div class="grid-2col-split" id="data-sankey">
+    <!-- Left Card: From Animal To Table (D3 Sankey) -->
+    <div class="card-box">
+      <div class="section-tag blue">
+        <h3 class="section-title">From Animal To Table</h3>
+      </div>
+      <p class="section-sub">See how each part connects · illustrative yields</p>
+
+      <svg id="sankey-chart-svg"></svg>
+
+      <a class="card-bottom-link" href="#data-sankey">Explore The Flow →</a>
+    </div>
+
+    <!-- Right Card: Cuts In Context (D3 Scatterplot) -->
+    <div class="card-box" id="data-scatter">
+      <div class="section-tag ochre">
+        <h3 class="section-title">Cuts In Context</h3>
+      </div>
+      <p class="section-sub">Retail price per lb · US vs. Argentina</p>
+
+      <div class="legend"><span><i style="background:var(--navy)"></i>Argentina</span><span><i style="background:var(--red)"></i>United States</span></div>
+      <svg id="scatter-chart-svg"></svg>
+
+      <a class="card-bottom-link" href="#data-scatter">See The Data →</a>
+    </div>
+  </div>
+
+  <!-- 4. ROW 3: WHERE VALUE LIVES + EDITORIAL QUOTE -->
+  <div class="grid-2col-split">
+    <!-- Left Card: Where Value Lives (D3 Treemap) -->
+    <div class="card-box">
+      <div class="section-tag blue">
+        <h3 class="section-title">Where Value Lives</h3>
+      </div>
+      <p class="section-sub">Total value by primal · illustrative estimate</p>
+
+      <svg id="treemap-chart-svg"></svg>
+
+      <a class="card-bottom-link" href="#explore">Explore Value →</a>
+    </div>
+
+    <!-- Right Card: Editorial Quote Card -->
+    <div class="quote-card">
+      <div>
+        <div class="quote-mark">“</div>
+        <h3 class="quote-text">
+          Same cow.<br>
+          Different stories.<br>
+          More understanding.
+        </h3>
+        <div class="quote-rule"></div>
+      </div>
+      <div class="quote-graphic-bottom">
+        <img src="assets/pasture_fence.webp" alt="Pasture fence at sunset">
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. ROW 4: POPULAR CUTS CAROUSEL + BETTER DATA CALLOUT -->
+  <div class="grid-2col-main" id="popular-cuts" style="margin-bottom:48px">
+    <!-- Left: Popular Cuts Carousel -->
+    <div class="card-box">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px">
+        <div class="section-tag blue">
+          <h3 class="section-title">Popular Cuts</h3>
+        </div>
+        <div style="display:flex;gap:6px">
+          <button style="width:28px;height:28px;border-radius:50%;border:1px solid var(--line-dark);background:#fff;display:flex;align-items:center;justify-content:center;font-size:.8rem" aria-label="Inspect previous cut" id="btn-prev-cut">‹</button>
+          <button style="width:28px;height:28px;border-radius:50%;border:1px solid var(--line-dark);background:#fff;display:flex;align-items:center;justify-content:center;font-size:.8rem" aria-label="Inspect next cut" id="btn-next-cut">›</button>
+        </div>
+      </div>
+      <p class="section-sub">Featured cuts · retail price per lb</p>
+
+      <div class="popular-cuts-grid" id="popular-cuts-container">
+        <!-- 6 Popular Cut Cards -->
+        <div class="cut-card" role="button" tabindex="0" data-cut="bife-ancho">
+          <img src="assets/cut_ribeye.webp" alt="Ribeye">
+          <div class="cut-card-name">Ribeye</div>
+          <div class="cut-card-price" data-us="ribeye_bnls" data-ar="bife_ancho"></div>
+        </div>
+        <div class="cut-card" role="button" tabindex="0" data-cut="lomo">
+          <img src="assets/cut_tenderloin.webp" alt="Tenderloin">
+          <div class="cut-card-name">Tenderloin</div>
+          <div class="cut-card-price" data-us="tenderloin" data-ar="lomo"></div>
+        </div>
+        <div class="cut-card" role="button" tabindex="0" data-cut="bife-angosto">
+          <img src="assets/cut_nystrip.webp" alt="New York Strip">
+          <div class="cut-card-name">New York Strip</div>
+          <div class="cut-card-price" data-us="strip_bnls" data-ar="bife_angosto"></div>
+        </div>
+        <div class="cut-card" role="button" tabindex="0" data-cut="aguja">
+          <img src="assets/cut_chuck.webp" alt="Chuck Roast">
+          <div class="cut-card-name">Chuck Roast</div>
+          <div class="cut-card-price" data-us="chuck_roast" data-ar="aguja"></div>
+        </div>
+        <div class="cut-card" role="button" tabindex="0" data-cut="pecho">
+          <img src="assets/cut_brisket.webp" alt="Brisket">
+          <div class="cut-card-name">Brisket</div>
+          <div class="cut-card-price" data-us="brisket_whole"></div>
+        </div>
+        <div class="cut-card" role="button" tabindex="0" data-cut="cuadril">
+          <img src="assets/cut_sirloin.webp" alt="Sirloin">
+          <div class="cut-card-name">Sirloin</div>
+          <div class="cut-card-price" data-us="sirloin_steak" data-ar="cuadril"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Better Data Callout Card -->
+    <div class="brand-callout-card" id="about">
+      <svg class="brand-cow-icon" viewBox="40 130 830 425">
+        <path d="M 40,268 C 36,254 40,240 56,226 C 76,208 100,186 126,168 C 138,158 146,150 156,154 C 164,158 166,168 168,174 C 178,164 192,148 214,140 C 245,136 290,136 335,136 C 430,136 520,136 610,136 C 680,136 735,138 780,142 C 812,146 836,155 848,168 C 858,182 862,212 862,250 C 862,295 856,342 850,382 C 844,408 846,432 844,455 C 841,482 838,512 836,538 L 778,538 C 782,510 785,478 784,446 C 782,420 766,402 746,386 C 726,395 706,400 682,402 C 612,408 532,408 462,405 C 432,402 414,398 402,392 L 398,432 C 399,466 397,506 398,538 L 346,538 C 347,506 346,466 344,432 C 338,404 326,386 312,366 C 286,375 260,368 240,354 C 216,338 186,318 160,302 C 130,284 98,272 74,272 C 55,272 44,274 40,268 Z"/>
+      </svg>
+      <div>
+        <h4 class="brand-callout-title">Better data.<br>A richer story.</h4>
+        <a class="btn-about" href="#explore">Back to the explorer &nbsp;↗</a>
+      </div>
+    </div>
+  </div>
+
+  <section class="card-box extra-cuts" aria-labelledby="extra-heading">
+    <h2 id="extra-heading" class="section-title">Beyond the usual cuts</h2>
+    <p>Bone-in steak, sweetbreads, kidney, and tongue. Argentine retail listings; US prices are not yet connected.</p>
+    <div class="extra-price-grid">
+      <button class="extra-cut" data-cut="bife-costilla"><b>Bife de costilla</b><span>Bone-in steak</span><span class="cut-card-price" data-ar="bife_costilla">Not available</span></button>
+      <button class="extra-cut" data-cut="molleja"><b>Mollejas</b><span>Sweetbreads · gland unverified</span><span class="cut-card-price" data-ar="molleja">Not available</span></button>
+      <button class="extra-cut" data-cut="rinon"><b>Riñón</b><span>Beef kidney</span><span class="cut-card-price" data-ar="rinon">Not available</span></button>
+      <button class="extra-cut" data-cut="lengua"><b>Lengua</b><span>Beef tongue</span><span class="cut-card-price" data-ar="lengua">Not available</span></button>
+    </div>
+    <p class="extra-price-note">Prices shown in USD/lb. Open an entry for the source date. Missing prices mean no verified listing was collected; they are never borrowed from another cut.</p>
+  </section>
+  <p class="data-note" id="data-note"></p>
+</main>
+<footer class="site-footer"><a href="#hero">The cow.<br>Two ways.</a><p>Same animal.<br>Different perspective.</p><div class="footer-shapes" aria-hidden="true"><i></i><i></i><i></i></div><a class="back-top" href="#hero">Back to top ↑</a></footer>
+
+<!-- Floating D3 Tooltip -->
+<div id="d3-floating-tooltip"></div>
+
+<!-- Cut Inspector Modal -->
+<div class="modal-overlay" id="cut-modal-overlay">
+  <div class="modal-card" id="cut-modal-card">
+    <button class="modal-close-btn" id="modal-close-btn" aria-label="Close">✕</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.cut-card').forEach(card => card.addEventListener('keydown', event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); card.click(); } }));
+document.addEventListener('keydown', event => { if (event.key === 'Escape') document.querySelector('#cut-modal-overlay').classList.remove('open'); });
+</script>
+<!-- Visualization Logic & D3 Engine -->
+<script>
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+// 1. DATASETS
+const COW_SILHOUETTE = "M 40,268 C 36,254 40,240 56,226 C 76,208 100,186 126,168 C 138,158 146,150 156,154 C 164,158 166,168 168,174 C 178,164 192,148 214,140 C 245,136 290,136 335,136 C 430,136 520,136 610,136 C 680,136 735,138 780,142 C 812,146 836,155 848,168 C 858,182 862,212 862,250 C 862,295 856,342 850,382 C 844,408 846,432 844,455 C 841,482 838,512 836,538 L 778,538 C 782,510 785,478 784,446 C 782,420 766,402 746,386 C 726,395 706,400 682,402 C 612,408 532,408 462,405 C 432,402 414,398 402,392 L 398,432 C 399,466 397,506 398,538 L 346,538 C 347,506 346,466 344,432 C 338,404 326,386 312,366 C 286,375 260,368 240,354 C 216,338 186,318 160,302 C 130,284 98,272 74,272 C 55,272 44,274 40,268 Z";
+
+const RETAIL_CUTS = [
+  {id:'cogote',n:'Cogote',eq:'Neck',us:'chuck',color:'#783d26',p:'196,140 300,140 294,325 214,325',how:'braise',tenderness:2.0,marbling:2.5,info:'Connective-tissue rich neck. Hearty stews, puchero, and flavorful ground chuck.'},
+  {id:'aguja',arSeries:'aguja',usSeries:'chuck_roast',n:'Aguja',eq:'Chuck roll',us:'chuck',color:'#a82b2b',p:'300,140 472,140 451,230 297,230',how:'braise',tenderness:4.5,marbling:4.0,info:'Shoulder rib-end. Heavily marbled, flavorful roasts, and the chuck-eye steak.'},
+  {id:'paleta',arSeries:'paleta',n:'Paleta',eq:'Shoulder clod',us:'chuck',color:'#8c3426',p:'297,230 451,230 429,325 294,325',how:'braise',tenderness:4.2,marbling:2.5,info:'Shoulder clod & top blade. Yields the prized flat iron steak.'},
+  {id:'pecho',usSeries:'brisket_whole',n:'Pecho',eq:'Brisket',us:'brisket',color:'#783d26',p:'214,325 429,325 411,395 214,395',how:'braise',tenderness:2.8,marbling:4.5,info:'Chest meat (flat and point). Barbecue smokehouse staple and corned beef.'},
+  {id:'brazuelo',arSeries:'osobuco',n:'Brazuelo',eq:'Fore shank',us:'shank',color:'#c46d20',p:'318,395 412,395 412,545 318,545',how:'braise',tenderness:1.8,marbling:2.0,info:'Front leg cross-cut osso buco with marrow.'},
+  {id:'bife-ancho',arSeries:'bife_ancho',usSeries:'ribeye_bnls',n:'Bife ancho',eq:'Ribeye',us:'rib',color:'#c22e2e',p:'472,140 610,140 607,235 450,235',how:'grill',tenderness:9.0,marbling:5.0,info:'The king of steaks. Generous marbling, ribeye eye (ojo de bife) and spinalis cap.'},
+  {id:'costillar',usSeries:'short_ribs',arSeries:'asado',n:'Asado de tira',eq:'Short ribs',us:'plate',color:'#df9e35',p:'450,235 607,235 601,338 427,338',how:'grill',tenderness:6.5,marbling:4.5,info:'Cross-cut short ribs sawn across bone into long strips. The asado signature.'},
+  {id:'matambre',arSeries:'matambre',n:'Matambre',eq:'Rose meat / Flank flap',us:'plate',color:'#e5a93c',p:'427,338 601,338 598,405 411,405',how:'grill',tenderness:5.5,marbling:3.5,info:'Thin subcutaneous muscle over ribs. Grilled crispy flat or rolled.'},
+  {id:'bife-angosto',arSeries:'bife_angosto',usSeries:'strip_bnls',n:'Bife de chorizo',eq:'NY Strip / Bife angosto',us:'shortloin',color:'#b82e2e',p:'610,140 692,140 692,250 605,250',how:'grill',tenderness:8.5,marbling:3.8,info:'Strip loin, known as bife de chorizo. Firm bite, rich fat ribbon.'},
+  {id:'vacio',arSeries:'vacio',usSeries:'flank',n:'Vacío',eq:'Flank / Bavette',us:'flank',color:'#bd3a2b',p:'605,250 692,250 700,305 712,405 598,405',how:'grill',tenderness:7.2,marbling:2.8,info:'Abdominal flank with outer crispy skin and tender juicy interior.'},
+  {id:'tapa',arSeries:'tapa',n:'Tapa de cuadril',eq:'Picanha / Coulotte',us:'sirloin',color:'#e5a93c',p:'745,140 850,140 850,212 748,205',how:'grill',tenderness:8.2,marbling:3.6,info:'Rump cap with thick fat layer. Brazilian picanha favorite.'},
+  {id:'cuadril',arSeries:'cuadril',usSeries:'sirloin_steak',n:'Cuadril',eq:'Top sirloin',us:'sirloin',color:'#d99028',p:'692,140 745,140 748,205 850,212 850,268 692,268',how:'grill',tenderness:6.8,marbling:2.2,info:'Upper rump. Lean, beefy, excellent for everyday grilling and roasts.'},
+  {id:'colita',arSeries:'colita',usSeries:'tri_tip',n:'Colita de cuadril',eq:'Tri-tip',us:'sirloin',color:'#e09b30',p:'694,268 790,268 722,332',how:'grill',tenderness:7.6,marbling:2.6,info:'Triangular muscle at the bottom of the sirloin. Santa Maria BBQ star.'},
+  {id:'bola',usSeries:'round_roast',n:'Bola de lomo',eq:'Sirloin tip',us:'round',color:'#b84232',p:'692,268 772,268 772,428 712,405 700,305',how:'roast',tenderness:5.0,marbling:1.4,info:'Front of thigh. Lean everyday steaks, milanesa, and stir-fry.'},
+  {id:'nalga',arSeries:'nalga',usSeries:'round_steak',n:'Nalga',eq:'Top round',us:'round',color:'#a23024',p:'772,268 850,268 850,336 772,336',how:'roast',tenderness:4.8,marbling:1.2,info:'Inner thigh. The gold standard cut for authentic Argentine milanesas.'},
+  {id:'cuadrada',usSeries:'bottom_round',n:'Cuadrada',eq:'Bottom round',us:'round',color:'#942820',p:'772,336 850,336 850,428 772,428',how:'roast',tenderness:3.6,marbling:1.2,info:'Outer rear thigh. Lean, suited for pot roasts or deli roast beef.'},
+  {id:'garron',n:'Garrón',eq:'Hind shank',us:'shank',color:'#c46d20',p:'772,428 850,428 850,545 772,545',how:'braise',tenderness:1.5,marbling:2.0,info:'Hind leg shank, rich in gelatin for locro and winter stews.'},
+  {id:'lomo',arSeries:'lomo',usSeries:'tenderloin',n:'Lomo',eq:'Tenderloin (filet mignon)',us:'shortloin',color:'#c22e2e',p:'M600,252 C640,244 690,246 735,256 C690,276 640,278 600,272 Z',how:'grill',tenderness:10.0,marbling:1.8,info:'The tenderest muscle in the animal. Melt-in-mouth filet mignon.'},
+  {id:'entrana',arSeries:'entrana',usSeries:'skirt',n:'Entraña',eq:'Outside skirt',us:'plate',color:'#c22e2e',p:'M492,343 a50,10 0 1,0 100,0 a50,10 0 1,0 -100,0Z',how:'grill',tenderness:7.8,marbling:3.2,info:'Diaphragm steak. Intensely beefy, grilled blazing hot over embers.'},
+  {id:'peceto',arSeries:'peceto',usSeries:'eye_round',n:'Peceto',eq:'Eye of round',us:'round',color:'#b2382c',p:'M745,345 C752,328 774,328 782,345 C788,372 782,396 770,404 C758,398 743,374 745,345 Z',how:'roast',tenderness:5.5,marbling:1.1,info:'Very lean cylindrical muscle. Sliced paper-thin for vitel toné.'}
+];
+
+const WHOLESALE_PRIMALS = [
+  {key:'chuck',n:'Chuck',color:'#234a75',share:26,ps:['196,140 472,140 429,325 214,325'],desc:'Shoulder & neck. Roasts, ground chuck, flat iron.'},
+  {key:'rib',n:'Rib',color:'#1a3e63',share:9.5,ps:['472,140 610,140 604,300 435,300'],desc:'Ribs 6–12. Prime rib and ribeye steaks.'},
+  {key:'shortloin',n:'Short Loin',color:'#2b5585',share:8,ps:['610,140 692,140 692,270 604,270'],desc:'T-bone, porterhouse, strip loin and tenderloin.'},
+  {key:'sirloin',n:'Sirloin',color:'#20436b',share:9,ps:['692,140 850,140 850,268 790,268 722,332 694,268'],desc:'Top sirloin, tri-tip, and coulotte.'},
+  {key:'round',n:'Round',color:'#1f3752',share:22,ps:['692,262 850,262 850,428 692,428'],desc:'Rear leg muscles. Lean roasts, deli beef, milanesas.'},
+  {key:'plate',n:'Plate',color:'#365f8a',share:8.5,ps:['435,300 604,300 598,405 411,405'],desc:'Short ribs and skirt steak.'},
+  {key:'flank',n:'Flank',color:'#4a749d',share:5,ps:['604,270 692,270 700,305 712,405 598,405'],desc:'Flank steak and bavette.'},
+  {key:'brisket',n:'Brisket',color:'#2c4c6e',share:6,ps:['214,325 429,325 411,395 214,395'],desc:'Breast muscle for barbecue smoking.'},
+  {key:'shank',n:'Shank',color:'#50779e',share:6,ps:['318,395 412,395 412,545 318,545','772,428 850,428 850,545 772,545'],desc:'Legs for osso buco, soups, and gelatin stocks.'}
+];
+
+const EXTRA_CUTS = [
+  {id:'bife-costilla', arSeries:'bife_costilla', n:'Bife de costilla', eq:'Bone-in strip / Costeleta / Chuleta', info:'Bone-in steak; regional cutting styles vary. Kept separate from boneless bife de chorizo and T-bone with tenderloin.'},
+  {id:'molleja', arSeries:'molleja', n:'Mollejas', eq:'Sweetbreads / Thymus / Timo', info:'Argentine molleja refers to thymus, but a generic retailer listing may not identify the gland. These are sweetbread listing prices, not verified thymus-only prices.'},
+  {id:'rinon', arSeries:'rinon', n:'Riñón', eq:'Beef kidney / Riñones', info:'Beef kidney, tracked separately from muscle cuts. Only raw per-kilogram butcher listings qualify.'},
+  {id:'lengua', arSeries:'lengua', n:'Lengua', eq:'Beef tongue', info:'Whole raw beef tongue. Prepared tongue, escabeche, and fixed-weight packs are excluded from this price series.'}
+];
+const ALL_CUTS = [...RETAIL_CUTS, ...EXTRA_CUTS];
+const BY_ID = Object.fromEntries(ALL_CUTS.map(c=>[c.id, c]));
+
+// 1b. LIVE PRICES: data/prices.json, written by ./fetch-prices.sh (BLS for US, INDEC for Argentina)
+let PRICES = null;
+const usd = n => `$${n.toFixed(2)}`;
+const monthLabel = p => p.length > 7
+  ? new Date(`${p}T12:00`).toLocaleString('en-US', {month:'short', day:'numeric', year:'numeric'})
+  : new Date(`${p}-15`).toLocaleString('en-US', {month:'short', year:'numeric'});
+const priceOf = c => ({ar: PRICES?.ar[c.arSeries], us: PRICES?.us[c.usSeries]});
+const priceLine = (ar, us) => [us && `US ${usd(us.usd_lb)}`, ar && `AR ${usd(ar.usd_lb)}`].filter(Boolean).join(' · ') || '<span class="na">Not available</span>';
+const PRICE_ROWS = [
+  {label:'Ribeye / Bife ancho', ar:'bife_ancho', us:'ribeye_bnls'},
+  {label:'Strip / Bife de chorizo', ar:'bife_angosto', us:'strip_bnls'},
+  {label:'Tenderloin / Lomo', ar:'lomo', us:'tenderloin'},
+  {label:'Sirloin / Cuadril', ar:'cuadril', us:'sirloin_steak'},
+  {label:'Skirt / Entraña', ar:'entrana', us:'skirt'},
+  {label:'Flank / Vacío', ar:'vacio', us:'flank'},
+  {label:'Tri-tip / Colita', ar:'colita', us:'tri_tip'},
+  {label:'Round steak / Nalga', ar:'nalga', us:'round_steak'},
+  {label:'Eye round / Peceto', ar:'peceto', us:'eye_round'},
+  {label:'Short rib / Asado', ar:'asado', us:'short_ribs'},
+  {label:'Chuck roast / Aguja', ar:'aguja', us:'chuck_roast'},
+  {label:'Ground beef', ar:'ground_beef', us:'ground_beef'}
+];
+
+// 2. COW VISUALIZATIONS RENDERER
+function renderCowSilhouette(svgSelection, clipId) {
+  const defs = svgSelection.append('defs');
+  defs.append('clipPath')
+    .attr('id', clipId)
+    .append('path')
+    .attr('d', COW_SILHOUETTE);
+
+  // Background shadow off-legs
+  svgSelection.append('path')
+    .attr('d', 'M 382,385 L 424,385 L 418,460 L 422,512 L 428,538 L 388,538 L 394,512 L 396,460 Z M 700,385 L 755,385 L 748,435 L 746,512 L 752,538 L 718,538 L 722,512 L 726,440 Z')
+    .attr('fill', '#38332e');
+
+  // Slender tail
+  svgSelection.append('path')
+    .attr('d', 'M 848,168 C 864,225 866,325 856,408')
+    .attr('fill', 'none')
+    .attr('stroke', '#4a443e')
+    .attr('stroke-width', 4)
+    .attr('stroke-linecap', 'round');
+  svgSelection.append('ellipse')
+    .attr('cx', 856).attr('cy', 424).attr('rx', 7).attr('ry', 16)
+    .attr('fill', '#4a443e');
+
+  // Main Steer Body (Dark Gray Architectural Silhouette)
+  svgSelection.append('path')
+    .attr('d', COW_SILHOUETTE)
+    .attr('fill', '#46403a')
+    .attr('stroke', '#221c17')
+    .attr('stroke-width', 2);
+}
+
+// Render Retail Cuts Cow
+const retailSvg = d3.select('#retail-cow-svg');
+renderCowSilhouette(retailSvg, 'clip-retail-cow');
+
+const retailClippedG = retailSvg.append('g').attr('clip-path', 'url(#clip-retail-cow)');
+retailClippedG.selectAll('path.cut-path')
+  .data(RETAIL_CUTS)
+  .join('path')
+  .attr('class', 'cut-path')
+  .attr('d', d => d.p[0] === 'M' ? d.p : `M ${d.p} Z`)
+  .attr('fill', d => d.color)
+  .on('mouseover', (e, d) => showTooltip(e, `<b>${d.n}</b> (${d.eq})<br>${priceLine(priceOf(d).ar, priceOf(d).us)}`))
+  .on('mousemove', moveTooltip)
+  .on('mouseout', hideTooltip)
+  .on('click', (e, d) => openCutModal(d));
+
+// Overlay outline
+retailSvg.append('path')
+  .attr('d', COW_SILHOUETTE)
+  .attr('fill', 'none')
+  .attr('stroke', '#221c17')
+  .attr('stroke-width', 2.4)
+  .attr('pointer-events', 'none');
+
+// Render Wholesale Cuts Cow
+const wholesaleSvg = d3.select('#wholesale-cow-svg');
+renderCowSilhouette(wholesaleSvg, 'clip-wholesale-cow');
+
+const wholesaleClippedG = wholesaleSvg.append('g').attr('clip-path', 'url(#clip-wholesale-cow)');
+wholesaleClippedG.selectAll('path.cut-path')
+  .data(WHOLESALE_PRIMALS)
+  .join('path')
+  .attr('class', 'cut-path')
+  .attr('d', d => d.ps.map(p => p[0] === 'M' ? p : `M ${p} Z`).join(' '))
+  .attr('fill', d => d.color)
+  .attr('stroke', '#fff')
+  .attr('stroke-width', 1.8)
+  .attr('stroke-dasharray', '5,3')
+  .on('mouseover', (e, d) => showTooltip(e, `<b>${d.n} Primal</b><br>~${d.share}% of carcass (est.)`))
+  .on('mousemove', moveTooltip)
+  .on('mouseout', hideTooltip)
+  .on('click', (e, d) => {
+    const firstCut = RETAIL_CUTS.find(c => c.us === d.key) || RETAIL_CUTS[0];
+    openCutModal(firstCut);
+  });
+
+wholesaleSvg.append('path')
+  .attr('d', COW_SILHOUETTE)
+  .attr('fill', 'none')
+  .attr('stroke', '#221c17')
+  .attr('stroke-width', 2.4)
+  .attr('pointer-events', 'none');
+
+// 3. D3 SANKEY CHART: "FROM ANIMAL TO TABLE"
+function renderSankey() {
+  const svg = d3.select('#sankey-chart-svg');
+  svg.selectAll('*').remove();
+
+  const width = $('#sankey-chart-svg').clientWidth || 680;
+  const height = 260;
+  svg.attr('viewBox', `0 0 ${width} ${height}`);
+
+  // Primals on Left -> Culinary Category on Right
+  const nodes = [
+    {name:'Chuck', color:'#234a75'},
+    {name:'Rib', color:'#a82b2b'},
+    {name:'Loin', color:'#8a2522'},
+    {name:'Sirloin', color:'#e5a93c'},
+    {name:'Round', color:'#365f8a'},
+    {name:'Brisket', color:'#783d26'},
+    {name:'Plate', color:'#df9e35'},
+    {name:'Flank', color:'#c46d20'},
+    {name:'Shank', color:'#465769'},
+    {name:'Other', color:'#7a7268'},
+    // Right nodes:
+    {name:'Steaks', color:'#e5a93c'},
+    {name:'Roasts', color:'#234a75'},
+    {name:'Ground', color:'#a82b2b'},
+    {name:'Short Ribs', color:'#783d26'},
+    {name:'Other', color:'#465769'}
+  ];
+
+  const links = [
+    {source:0, target:11, value:12}, // Chuck -> Roasts
+    {source:0, target:12, value:14}, // Chuck -> Ground
+    {source:1, target:10, value:9.5}, // Rib -> Steaks
+    {source:2, target:10, value:8},   // Loin -> Steaks
+    {source:3, target:10, value:5},   // Sirloin -> Steaks
+    {source:3, target:11, value:4},   // Sirloin -> Roasts
+    {source:4, target:11, value:15},  // Round -> Roasts
+    {source:4, target:12, value:7},   // Round -> Ground
+    {source:5, target:11, value:6},   // Brisket -> Roasts
+    {source:6, target:13, value:5.5}, // Plate -> Short Ribs
+    {source:6, target:10, value:3},   // Plate -> Steaks
+    {source:7, target:10, value:5},   // Flank -> Steaks
+    {source:8, target:14, value:6},   // Shank -> Other
+    {source:9, target:14, value:4}    // Other -> Other
+  ];
+
+  const sankey = d3.sankey()
+    .nodeWidth(14)
+    .nodePadding(10)
+    .extent([[60, 10], [width - 70, height - 15]]);
+
+  const graph = sankey({
+    nodes: nodes.map(d => ({...d})),
+    links: links.map(d => ({...d}))
+  });
+
+  // Flow links
+  svg.append('g')
+    .selectAll('path')
+    .data(graph.links)
+    .join('path')
+    .attr('class', 'sankey-link')
+    .attr('d', d3.sankeyLinkHorizontal())
+    .attr('stroke', d => d.source.color)
+    .attr('stroke-width', d => Math.max(1.8, d.width))
+    .on('mouseover', (e, d) => showTooltip(e, `<b>${d.source.name} → ${d.target.name}</b><br>${d.value}% of carcass`))
+    .on('mousemove', moveTooltip)
+    .on('mouseout', hideTooltip);
+
+  // Nodes
+  const nodeG = svg.append('g')
+    .selectAll('g')
+    .data(graph.nodes)
+    .join('g')
+    .attr('class', 'sankey-node')
+    .attr('transform', d => `translate(${d.x0}, ${d.y0})`);
+
+  nodeG.append('rect')
+    .attr('height', d => Math.max(4, d.y1 - d.y0))
+    .attr('width', d => d.x1 - d.x0)
+    .attr('fill', d => d.color)
+    .attr('rx', 2);
+
+  nodeG.append('text')
+    .attr('x', d => d.x0 < width / 2 ? -8 : (d.x1 - d.x0) + 8)
+    .attr('y', d => (d.y1 - d.y0) / 2)
+    .attr('dy', '0.35em')
+    .attr('text-anchor', d => d.x0 < width / 2 ? 'end' : 'start')
+    .text(d => d.name);
+}
+
+// 4. D3 PRICE COMPARISON: "CUTS IN CONTEXT" (US retail vs Argentina retail, USD/lb)
+function renderScatter() {
+  const svg = d3.select('#scatter-chart-svg');
+  svg.selectAll('*').remove();
+
+  const width = $('#scatter-chart-svg').clientWidth || 460;
+  const height = PRICES ? PRICE_ROWS.length * 27 + 34 : 260;
+  svg.attr('viewBox', `0 0 ${width} ${height}`).style('height', `${height}px`);
+
+  if (!PRICES) {
+    svg.append('text').attr('x', width / 2).attr('y', height / 2).attr('text-anchor', 'middle')
+      .attr('fill', 'var(--mut)').attr('font-size', 13).text('Price data unavailable');
+    return;
+  }
+
+  const rows = PRICE_ROWS.map(r => ({...r, ar: PRICES.ar[r.ar], us: PRICES.us[r.us]})).filter(r => r.ar || r.us);
+  const m = {top: 14, right: 30, bottom: 26, left: 128};
+  const x = d3.scaleLinear()
+    .domain([0, d3.max(rows, r => Math.max(r.ar?.usd_lb ?? 0, r.us?.usd_lb ?? 0)) * 1.1])
+    .nice().range([m.left, width - m.right]);
+  const y = d3.scaleBand().domain(rows.map(r => r.label)).range([m.top, height - m.bottom]).padding(0.3);
+
+  svg.append('g').attr('transform', `translate(0, ${height - m.bottom})`)
+    .call(d3.axisBottom(x).ticks(5).tickSize(-(height - m.bottom - m.top)).tickFormat(d => `$${d}`))
+    .call(a => a.select('.domain').remove())
+    .call(a => a.selectAll('.tick line').attr('stroke', '#e4dcd0'))
+    .call(a => a.selectAll('text').attr('font-family', 'Oswald').attr('fill', 'var(--mut)').attr('font-size', '10px'));
+
+  const row = svg.selectAll('g.price-row').data(rows).join('g')
+    .attr('class', 'price-row')
+    .attr('transform', d => `translate(0, ${y(d.label) + y.bandwidth() / 2})`);
+
+  row.append('text').attr('x', m.left - 12).attr('dy', '0.35em').attr('text-anchor', 'end')
+    .attr('font-family', 'Oswald').attr('font-size', '11px').attr('fill', 'var(--ink)').text(d => d.label);
+
+  row.filter(d => d.ar && d.us).append('line')
+    .attr('x1', d => x(Math.min(d.ar.usd_lb, d.us.usd_lb))).attr('x2', d => x(Math.max(d.ar.usd_lb, d.us.usd_lb)))
+    .attr('stroke', '#cfc4af').attr('stroke-width', 3).attr('stroke-linecap', 'round');
+
+  [['ar', 'var(--navy)', 'Argentina'], ['us', 'var(--red)', 'United States']].forEach(([k, color, name]) => {
+    const pts = row.filter(d => d[k]);
+    pts.append('circle').attr('cx', d => x(d[k].usd_lb)).attr('r', 5.5)
+      .attr('fill', color).attr('stroke', '#fff').attr('stroke-width', 1.5)
+      .on('mouseover', (e, d) => showTooltip(e, `<b>${name}</b>: ${d[k].label}<br>${usd(d[k].usd_lb)}/lb · ${d[k].source}, ${monthLabel(d[k].period)}`))
+      .on('mousemove', moveTooltip)
+      .on('mouseout', hideTooltip);
+    const close = d => k === 'ar' && d.us && Math.abs(d.us.usd_lb - d.ar.usd_lb) < 1.2; // sit left of the dot so labels don't collide
+    pts.append('text').attr('x', d => x(d[k].usd_lb) - (close(d) ? 10 : 0)).attr('y', d => close(d) ? 3 : -9).attr('text-anchor', d => close(d) ? 'end' : 'middle')
+      .attr('font-family', 'Oswald').attr('font-size', '10px').attr('fill', color).text(d => usd(d[k].usd_lb));
+  });
+}
+
+// 5. D3 TREEMAP: "WHERE VALUE LIVES"
+function renderTreemap() {
+  const svg = d3.select('#treemap-chart-svg');
+  svg.selectAll('*').remove();
+
+  const width = $('#treemap-chart-svg').clientWidth || 680;
+  const height = 240;
+  svg.attr('viewBox', `0 0 ${width} ${height}`);
+
+  const data = {
+    name: 'Value',
+    children: [
+      {name:'Rib', value:24, color:'#1a3e63', key:'rib'},
+      {name:'Loin', value:22, color:'#a82b2b', key:'shortloin'},
+      {name:'Chuck', value:20, color:'#234a75', key:'chuck'},
+      {name:'Round', value:16, color:'#2f435a', key:'round'},
+      {name:'Brisket', value:7, color:'#783d26', key:'brisket'},
+      {name:'Plate', value:5.5, color:'#df9e35', key:'plate'},
+      {name:'Flank', value:3.5, color:'#465769', key:'flank'},
+      {name:'Other', value:2, color:'#7a7268', key:'shank'}
+    ]
+  };
+
+  const root = d3.hierarchy(data).sum(d => d.value);
+  d3.treemap().size([width, height]).padding(2).round(true)(root);
+
+  const leafG = svg.selectAll('g.treemap-node')
+    .data(root.leaves())
+    .join('g')
+    .attr('class', 'treemap-node')
+    .attr('transform', d => `translate(${d.x0}, ${d.y0})`)
+    .on('mouseover', (e, d) => showTooltip(e, `<b>${d.data.name}</b><br>${d.data.value}% of Carcass Retail Value`))
+    .on('mousemove', moveTooltip)
+    .on('mouseout', hideTooltip)
+    .on('click', (e, d) => {
+      const cut = RETAIL_CUTS.find(c => c.us === d.data.key) || RETAIL_CUTS[0];
+      openCutModal(cut);
+    });
+
+  leafG.append('rect')
+    .attr('class', 'treemap-node-rect')
+    .attr('width', d => Math.max(0, d.x1 - d.x0))
+    .attr('height', d => Math.max(0, d.y1 - d.y0))
+    .attr('fill', d => d.data.color);
+
+  leafG.append('text')
+    .attr('class', 'treemap-label')
+    .attr('x', 8)
+    .attr('y', 20)
+    .text(d => d.data.name);
+
+  leafG.filter(d => d.x1 - d.x0 > 50 && d.y1 - d.y0 > 44)
+    .append('text')
+    .attr('x', 8).attr('y', 38)
+    .attr('fill', '#fff').attr('fill-opacity', .8)
+    .attr('font-family', 'Oswald').attr('font-size', '13px')
+    .attr('pointer-events', 'none')
+    .text(d => `${d.data.value}%`);
+}
+
+// 6. FLOATING TOOLTIP
+const tooltip = $('#d3-floating-tooltip');
+function showTooltip(e, html) {
+  tooltip.innerHTML = html;
+  tooltip.style.opacity = 1;
+  moveTooltip(e);
+}
+function moveTooltip(e) {
+  tooltip.style.left = `${e.clientX}px`;
+  tooltip.style.top = `${e.clientY - 12}px`;
+}
+function hideTooltip() {
+  tooltip.style.opacity = 0;
+}
+
+// 7. CUT MODAL INSPECTOR
+const modalOverlay = $('#cut-modal-overlay');
+const modalContent = $('#modal-content');
+
+function priceBlock(cut) {
+  const {ar, us} = priceOf(cut);
+  const one = (flag, p) => `<div style="margin-bottom:6px"><div style="font-size:.72rem;color:var(--mut);text-transform:uppercase">${flag}</div>
+    <div style="font-family:'Oswald';font-size:1.6rem;font-weight:700;color:var(--ink);line-height:1.1">${usd(p.usd_lb)}<span style="font-size:.8rem;font-weight:400;color:var(--mut)"> /lb</span></div>
+    <div style="font-size:.7rem;color:var(--mut)" title="${p.label}">${p.source} · ${monthLabel(p.period)}${p.availability === "out_of_stock" ? " · Out-of-stock catalog price" : ""}${p.fx_date ? `<br>FX: ${p.fx_ars_per_usd} ARS/USD · ${p.fx_date}` : ""}</div></div>`;
+  return (ar ? one('Argentina', ar) : '') + (us ? one('United States', us) : '')
+    || `<div style="font-size:.82rem;color:var(--mut);max-width:120px">No verified price available</div>`;
+}
+
+function openCutModal(cut) {
+  if (EXTRA_CUTS.includes(cut)) {
+    modalContent.innerHTML = `<h2>${cut.n}</h2><p>${cut.eq}</p><p>${cut.info}</p>${priceBlock(cut)}<p>No matching US price source is connected for this entry.</p>`;
+    modalOverlay.classList.add('open');
+    return;
+  }
+  const primal = WHOLESALE_PRIMALS.find(p => p.key === cut.us) || WHOLESALE_PRIMALS[0];
+  modalContent.innerHTML = `
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
+      <span style="font-family:'Oswald';font-size:.84rem;letter-spacing:.1em;text-transform:uppercase;color:var(--red);font-weight:700">Retail Cut Dossier</span>
+      <span style="font-size:.8rem;color:var(--mut)">• US ${primal.n} Primal</span>
+    </div>
+    <h2 style="font-family:'Playfair Display',serif;font-size:2.4rem;margin:0 0 4px;color:var(--ink)">${cut.n}</h2>
+    <div style="font-size:1.05rem;color:var(--navy);margin-bottom:16px">
+      Also known as: <b>${cut.eq}</b>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 140px;gap:20px;align-items:center;background:#fff;padding:16px;border-radius:10px;border:1px solid var(--line);margin-bottom:20px">
+      <div>
+        <p style="margin:0 0 8px;font-size:.92rem;line-height:1.5">${cut.info}</p>
+        <div style="display:flex;gap:16px;font-size:.85rem;margin-top:10px">
+          <div><b>Cooking:</b> <span style="color:var(--red);text-transform:capitalize">${cut.how}</span></div>
+          <div><b>Tenderness:</b> <span>${cut.tenderness}/10</span></div>
+          <div><b>Marbling:</b> <span>${cut.marbling}/5</span></div>
+        </div>
+      </div>
+      <div style="text-align:right">${priceBlock(cut)}</div>
+    </div>
+
+    <!-- D3 Radar Sensory Spider Chart inside Modal -->
+    <div style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:20px">
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:.82rem;font-family:'Oswald';text-transform:uppercase;margin-bottom:8px">
+        <b>Sensory Radar Profile</b>
+        <span style="color:var(--red)">■ ${cut.n}</span>
+      </div>
+      <svg id="modal-radar-svg" style="display:block;margin:0 auto;width:260px;height:200px"></svg>
+    </div>
+
+    <a href="https://www.google.com/search?q=${encodeURIComponent(cut.n + ' ' + cut.eq + ' beef recipe')}" target="_blank" rel="noopener" style="display:block;text-align:center;padding:12px;background:var(--ink);color:#fff;border-radius:30px;font-family:'Oswald';font-size:.88rem;letter-spacing:.08em;text-transform:uppercase;text-decoration:none">
+      View Authentic Recipes for ${cut.n} →
+    </a>
+  `;
+
+  modalOverlay.classList.add('open');
+  renderModalRadar(cut);
+}
+
+function renderModalRadar(cut) {
+  const container = d3.select('#modal-radar-svg');
+  container.selectAll('*').remove();
+
+  const width = 260, height = 200, radius = 70;
+  const svg = container.append('g').attr('transform', `translate(${width/2}, ${height/2 + 6})`);
+
+  const axes = [
+    {label:'Tenderness', value:cut.tenderness},
+    {label:'Marbling', value:cut.marbling * 2},
+    {label:'Flavor', value:cut.how==='grill'?9:7.5},
+    {label:'Speed', value:cut.how==='grill'?8.5:3.5},
+    {label:'Sear Crust', value:cut.how==='grill'?9.5:5.5},
+    {label:'Gelatin', value:cut.how==='braise'?9:2}
+  ];
+
+  const total = axes.length;
+  const angleSlice = (Math.PI * 2) / total;
+  const rScale = d3.scaleLinear().domain([0, 10]).range([0, radius]);
+
+  // Web rings
+  [3.3, 6.6, 10].forEach(level => {
+    svg.append('circle')
+      .attr('r', rScale(level))
+      .attr('fill', 'none')
+      .attr('stroke', '#cfc4af')
+      .attr('stroke-dasharray', '2,3');
+  });
+
+  // Spokes & labels
+  axes.forEach((a, i) => {
+    const angle = angleSlice * i - Math.PI / 2;
+    svg.append('line')
+      .attr('x1', 0).attr('y1', 0)
+      .attr('x2', Math.cos(angle)*radius).attr('y2', Math.sin(angle)*radius)
+      .attr('stroke', '#cfc4af');
+
+    svg.append('text')
+      .attr('x', Math.cos(angle)*(radius + 14))
+      .attr('y', Math.sin(angle)*(radius + 10))
+      .attr('font-size', '9.5px')
+      .attr('font-family', 'Oswald')
+      .attr('text-anchor', 'middle')
+      .attr('dominant-baseline', 'middle')
+      .attr('fill', '#4a443e')
+      .text(a.label);
+  });
+
+  const radarLine = d3.lineRadial()
+    .radius(d => rScale(d.value))
+    .angle((d, i) => i * angleSlice)
+    .curve(d3.curveLinearClosed);
+
+  svg.append('path')
+    .datum(axes)
+    .attr('d', radarLine)
+    .attr('fill', 'var(--red)')
+    .attr('fill-opacity', 0.45)
+    .attr('stroke', 'var(--red)')
+    .attr('stroke-width', 2.2);
+}
+
+$('#modal-close-btn').addEventListener('click', () => modalOverlay.classList.remove('open'));
+modalOverlay.addEventListener('click', e => {
+  if (e.target === modalOverlay) modalOverlay.classList.remove('open');
+});
+
+// 8. INTERACTIVE ACTIONS & SEARCH
+function filterAndOpenCut(query) {
+  const normalize = value => value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const q = normalize(query.trim());
+  if (!q) return;
+  const match = ALL_CUTS.find(c => normalize(c.n).includes(q) || normalize(c.eq).includes(q) || c.id.includes(q));
+  if (match) {
+    openCutModal(match);
+  }
+}
+
+$('#quick-cut-btn').addEventListener('click', () => filterAndOpenCut($('#quick-cut-input').value));
+$('#quick-cut-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') filterAndOpenCut(e.target.value);
+});
+$('#nav-search-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') filterAndOpenCut(e.target.value);
+});
+
+$$('.extra-cut').forEach(button => button.addEventListener('click', () => openCutModal(BY_ID[button.dataset.cut])));
+
+// Chips click
+$$('.cut-chip').forEach(btn => btn.addEventListener('click', e => {
+  const cid = e.target.dataset.cut;
+  const cut = BY_ID[cid] || RETAIL_CUTS[0];
+  openCutModal(cut);
+}));
+
+// Popular cuts cards click
+$$('.cut-card').forEach(card => card.addEventListener('click', e => {
+  const cid = e.currentTarget.dataset.cut;
+  const cut = BY_ID[cid] || RETAIL_CUTS[0];
+  openCutModal(cut);
+}));
+
+$('#btn-retail-cow').addEventListener('click', () => openCutModal(RETAIL_CUTS[5])); // Ribeye
+$('#btn-wholesale-cow').addEventListener('click', () => openCutModal(RETAIL_CUTS[8])); // Strip
+
+// Carousel buttons
+let cutIndex = 0;
+const cutList = ['bife-ancho','lomo','bife-angosto','aguja','pecho','cuadril'];
+$('#btn-next-cut').addEventListener('click', () => {
+  cutIndex = (cutIndex + 1) % cutList.length;
+  openCutModal(BY_ID[cutList[cutIndex]]);
+});
+$('#btn-prev-cut').addEventListener('click', () => {
+  cutIndex = (cutIndex - 1 + cutList.length) % cutList.length;
+  openCutModal(BY_ID[cutList[cutIndex]]);
+});
+
+// 9. WINDOW RESIZE & BOOTSTRAP
+window.addEventListener('resize', () => {
+  renderSankey();
+  renderScatter();
+  renderTreemap();
+});
+
+renderSankey();
+renderScatter();
+renderTreemap();
+
+// 10. LIVE PRICE WIRING
+function renderPrices() {
+  if (!PRICES) {
+    $$('.cut-card-price').forEach(el => el.innerHTML = '<span class="na">Price data unavailable</span>');
+    $('#market-sub').textContent = 'Price data unavailable';
+    return;
+  }
+  const us = PRICES.us.ground_beef, ar = PRICES.ar.ground_beef;
+  const chg = (us.usd_lb / us.prev_usd_lb - 1) * 100;
+  $('#market-price').innerHTML = `${usd(us.usd_lb)} <span>/ lb</span>`;
+  $('#market-change').textContent = `${Math.abs(chg).toFixed(1)}% ${chg < 0 ? '↓' : '↑'} vs prior month`;
+  $('#market-sub').textContent = `Argentina ${usd(ar.usd_lb)} / lb · ${monthLabel(us.period)}`;
+  $$('.cut-card-price').forEach(el => {
+    el.innerHTML = priceLine(PRICES.ar[el.dataset.ar], PRICES.us[el.dataset.us]);
+    if (el.dataset.ar === 'paleta') el.title = 'Argentine paleta (shoulder clod)';
+  });
+  $('#data-note').textContent = `Prices in USD per lb, snapshot ${PRICES.fetched.slice(0, 10)}. US: BLS monthly average retail prices (${monthLabel(PRICES.us.ground_beef.period)}) and USDA's weekly grocery ad survey (advertised prices, store-weighted; ${monthLabel(PRICES.us.ribeye_bnls.period)}). Argentina: INDEC Greater Buenos Aires averages (${monthLabel(PRICES.ar.asado.period)}) and the median of Carrefour Argentina's online butcher listings (${monthLabel(PRICES.ar.bife_ancho.period)}). Pesos converted at ${Math.round(PRICES.fx.latest.ars_per_usd).toLocaleString()} ARS/USD (BCRA, ${PRICES.fx.latest.date}). Sources differ in method and date, so compare cuts loosely. Cuts are matched to the closest published item; "Not available" means no verified price is present in this snapshot. Carcass yields and value shares are illustrative estimates.`;
+  renderScatter();
+}
+fetch('data/prices.json').then(r => r.ok ? r.json() : null).catch(() => null).then(p => { PRICES = p; renderPrices(); });
+</script>
+</body>
+</html>

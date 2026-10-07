@@ -1,0 +1,8 @@
+.env
+data/raw/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.orig
+*.swp
+.DS_Store
