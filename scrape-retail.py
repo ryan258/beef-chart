@@ -5,12 +5,13 @@
       Advertised prices, store-weighted across conventional fresh items; not shelf-price averages.
   AR: Carrefour Argentina public catalog search (butcher-section items sold by the kg), median per cut.
   FX rule: INDEC records use BCRA monthly average matched to the price month.
-      Carrefour records use BCRA daily latest. Each AR record stores fx_ars_per_usd,
+      Carrefour records use the latest returned BCRA observation, which can lag. Each AR record stores fx_ars_per_usd,
       fx_date, and fx_basis so the page can display provenance without mixing bases.
 """
 import argparse, os, math, json, re, statistics, subprocess, sys, tempfile, time, unicodedata, urllib.parse, urllib.request
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from price_contract import positive, valid_period, qualify_snapshot, merge_records, write_snapshot, timestamp
 
 OUT = Path(os.environ.get("BEEF_PRICES_OUT", Path(__file__).parent / "data" / "prices.json"))
 USDA_PDF = "https://www.ams.usda.gov/mnreports/AMS_3228.pdf"
@@ -69,42 +70,48 @@ EXCLUDE_NEW = re.compile(r"cerdo|porcin|pollo|aviar|cordero|ovin|caprin|lenguado
 
 
 def catalog_matches(products, key, words):
-    """Return auditable per-kg offers; never interpret a pack price as a kg price."""
+    """Uniform conservative unit/species/form rules for all catalog keys."""
     listed = []
     aliases = AR_ALIASES.get(key, (unaccent(words),))
+    excluded = re.compile(r"cerdo|porcin|pollo|aviar|cordero|ovin|caprin|cabra|conejo|rabbit|pavo|pescad|lenguado|vinagreta|cocid|cocinad|escabeche|preparad|empanad|marinad|rebozad|ahumad|curad|salam|vegetal|soja|pancreas")
     for product in products:
-        name = unaccent(product.get("productName", ""))
+        if not isinstance(product, dict):
+            continue
+        name = unaccent(str(product.get("productName", "")))
         if not any(re.match(re.escape(alias) + r"\b", name) for alias in aliases):
             continue
-        if product.get("EC_Sección") != ["CARNICERIA"] or SKIP.search(name):
+        if product.get("EC_Sección") != ["CARNICERIA"] or SKIP.search(name) or excluded.search(name):
             continue
-        if key in NEW_AR_KEYS and EXCLUDE_NEW.search(name):
+        # Require structured species evidence; counter location/name alone does not prove beef.
+        species = unaccent(" ".join(str(product.get(k, "")) for k in ("Especie", "Tipo de carne", "Categoría", "categoryName")) + " " + name)
+        if excluded.search(species) or not re.search(r"\b(?:vacun[ao]|bovin[ao]|novillito|novillo|ternera|ternero|beef)\b", species):
             continue
-        # Carrefour's x kg names explicitly declare the price basis. Reject
-        # fixed-weight packs and ambiguous unit listings for the new entries.
-        if key in NEW_AR_KEYS:
-            if not re.search(r"(?:x|por)\s*(?:1\s*)?kg\b", name):
-                continue
-        elif "kg" not in name:
+        form = unaccent(" ".join(str(product.get(k, "")) for k in ("product_form", "Preparación", "Estado")))
+        if excluded.search(form) or not re.search(r"\b(?:raw|crud[ao])\b", form + " " + name):
+            continue
+        if key == "bife_costilla" and re.search(r"con lomo|t[ -]?bone|sin hueso", name):
+            continue
+        if not re.search(r"(?:x|por)\s*(?:1\s*)?kg\b", name):
             continue
         for item in product.get("items", []):
-            if key in NEW_AR_KEYS and (item.get("measurementUnit") not in (None, "kg")
-                                      or item.get("unitMultiplier", 1) != 1):
+            if item.get("measurementUnit") != "kg" or (item.get("unitMultiplier") != 1 or isinstance(item.get("unitMultiplier"), bool)):
                 continue
             for seller in item.get("sellers", [])[:1]:
                 offer = seller.get("commertialOffer", {})
                 price = offer.get("Price")
-                if not isinstance(price, (int, float)) or isinstance(price, bool) or not math.isfinite(price) or price <= 0:
+                if not positive(price):
                     continue
-                listed.append({"ars_kg": price, "available": offer.get("IsAvailable") is True,
-                               "product_id": product.get("productId"), "sku_id": item.get("itemId"),
-                               "name": product.get("productName"), "url": product.get("link")})
+                listed.append({"ars_kg":price, "available":offer.get("IsAvailable") is True,
+                               "product_id":product.get("productId"), "sku_id":item.get("itemId"),
+                               "name":product.get("productName"), "url":product.get("link"),
+                               "measurement_unit":"kg", "unit_multiplier":1, "species":"bovine", "product_form":"raw",
+                               "species_evidence":species, "form_evidence":form, "seller_id":seller.get("sellerId")})
     return listed
 
 
 def get(url):
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (compatible; beef-chart price snapshot)"})
-    return urllib.request.urlopen(req, timeout=60).read()
+    return urllib.request.urlopen(req, timeout=20).read()
 
 
 def unaccent(s):
@@ -131,38 +138,66 @@ def usda_rows(text):
             end = m.end() + t.end()
             i = min(range(6), key=lambda j: abs(cols[j] - end))
             if abs(cols[i] - end) <= 5:
+                if vals[i] is not None:
+                    raise ValueError('USDA numeric columns collide; layout unresolved')
                 vals[i] = float(t.group().replace(",", ""))
         yield item, vals
+
+
+def usda_intervals(text):
+    """Only explicit feature ranges establish current/prior dates; never report-date arithmetic."""
+    ranges = {}
+    pattern = r"(This Week|Current Week|Prior Week|Previous Week)\s*:?\s*(\d{2}/\d{2}/\d{4})\s*(?:-|to)\s*(\d{2}/\d{2}/\d{4})"
+    for label, start, end in re.findall(pattern, text, re.I):
+        begin = datetime.strptime(start, '%m/%d/%Y').strftime('%Y-%m-%d')
+        finish = datetime.strptime(end, '%m/%d/%Y').strftime('%Y-%m-%d')
+        if begin > finish:
+            raise ValueError('Reversed USDA feature interval')
+        ranges['prior' if label.lower().startswith(('prior', 'previous')) else 'current'] = (begin, finish)
+    if 'current' not in ranges or 'prior' not in ranges:
+        raise ValueError('USDA adapter unresolved: explicit current/prior feature intervals not recognized; retain old evidence')
+    if ranges['prior'][1] >= ranges['current'][0]:
+        raise ValueError('Overlapping USDA feature intervals')
+    return ranges
 
 
 def usda_prices():
     with tempfile.NamedTemporaryFile(suffix=".pdf") as f:
         f.write(get(USDA_PDF)); f.flush()
-        text = subprocess.run(["pdftotext", "-layout", f.name, "-"], capture_output=True, text=True, check=True).stdout
+        text = subprocess.run(["pdftotext", "-layout", f.name, "-"], capture_output=True, text=True, check=True, timeout=20).stdout
     d = re.search(r"(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun) (\w{3}) (\d+), (\d{4})", text)
-    period = datetime.strptime(" ".join(d.groups()), "%b %d %Y").strftime("%Y-%m-%d")
+    if not d:
+        raise ValueError('USDA report publication date missing')
+    publication = datetime.strptime(" ".join(d.groups()), "%b %d %Y").strftime("%Y-%m-%d")
+    intervals = usda_intervals(text)
     rows = list(usda_rows(text))
-
-    def wavg(prefix, si, ai):  # store-weighted average over matching rows
-        pts = [(v[si], v[ai]) for item, v in rows if item.startswith(prefix) and "Lbs" not in item and v[si] and v[ai]]
+    def wavg(prefix, si, ai):
+        pts = [(v[si], v[ai]) for item, v in rows if item.startswith(prefix) and "Lbs" not in item and positive(v[si]) and positive(v[ai])]
         n = sum(s for s, _ in pts)
         return (sum(s * a for s, a in pts) / n, n) if n else (None, 0)
-
     out = {}
     for key, (label, prefix) in US_ITEMS.items():
         cur, n = wavg(prefix, 0, 1)
-        prev, _ = wavg(prefix, 2, 3)
-        if cur is None:  # not advertised this week: fall back to last week's figure
-            cur, n, prev = prev, wavg(prefix, 2, 3)[1], None
+        prev, pn = wavg(prefix, 2, 3)
+        fallback = cur is None
+        if fallback:
+            cur, n = prev, pn
         if cur is None:
-            print(f"  USDA: no rows for {label}", file=sys.stderr); continue
-        out[key] = {"label": label, "usd_lb": round(cur, 2), "prev_usd_lb": round(prev, 2) if prev else None,
-                    "period": period, "stores": int(n), "source": "USDA ad survey"}
+            continue
+        start, end = intervals['prior' if fallback else 'current']
+        out[key] = {"label":label, "usd_lb":round(cur,2), "prev_usd_lb":round(prev,2) if prev and not fallback else None,
+                    "prev_period":intervals['prior'][1] if prev and not fallback else None,
+                    "period":end, "effective_start":start, "effective_end":end, "publication_date":publication,
+                    "fallback_reason":"not_advertised_current_interval" if fallback else None,
+                    "stores":int(n), "source":"USDA ad survey", "adapter_status":"unresolved_real_layout",
+                    "provenance_status":"parsed_unverified", "observation_status":"unverified_layout"}
+    if not out:
+        raise ValueError('No verified USDA numeric rows; adapter unresolved')
     return out
 
 
 def carrefour_prices(fx, keys=None):
-    if not isinstance(fx, (int, float)) or not math.isfinite(fx) or fx <= 0:
+    if not positive(fx):
         raise ValueError("Exchange rate must be a positive finite number")
     out = {}
     for key, (label, words) in AR_ITEMS.items():
@@ -182,9 +217,10 @@ def carrefour_prices(fx, keys=None):
         if selected:
             ars = statistics.median(p["ars_kg"] for p in selected)
             out[key] = {"label": label, "ars_kg": ars, "usd_lb": round(ars / fx / LB_PER_KG, 2), "prev_usd_lb": None,
-                        "period": datetime.now().strftime("%Y-%m-%d"), "products": len(selected), "source": "Carrefour AR",
+                        "period": datetime.now(timezone.utc).strftime("%Y-%m-%d"), "products": len(selected), "source": "Carrefour AR",
                         "availability": "in_stock" if any(p["available"] for p in selected) else "out_of_stock",
-                        "fx_basis": "BCRA daily latest", "listings": selected}
+                        "fx_basis": "Latest returned daily observation (BCRA via datos.gob.ar)", "listings": selected,
+                        "sampling_note":"At most 20 products/query, first seller; deduplicated SKU sample", "availability_as_of":timestamp()}
         else:
             print(f"  Carrefour: no verified per-kg matches for {label}", file=sys.stderr)
     return out
@@ -192,34 +228,60 @@ def carrefour_prices(fx, keys=None):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--cuts", nargs="+", choices=sorted(AR_ITEMS),
-                        help="Refresh only these Argentine cuts; retain all other series")
+    parser.add_argument("--cuts", nargs="+", choices=sorted(AR_ITEMS))
+    parser.add_argument("--official-snapshot", type=Path, help="Merge staged BLS/INDEC records without deleting catalog history")
     args = parser.parse_args()
-    data = json.loads(OUT.read_text())
-    fx_row = json.loads(get(FX_URL))["data"][0]
-    # Fetch everything before modifying the snapshot. Any network/parsing error
-    # leaves the last good file intact, including for targeted refreshes.
-    ar = carrefour_prices(fx_row[1], args.cuts)
-    us = None if args.cuts else usda_prices()
-    data["fx"]["latest"] = {"ars_per_usd": fx_row[1], "date": fx_row[0], "basis": "BCRA daily latest"}
-    if args.cuts:
-        for key in args.cuts:
-            data["ar"].pop(key, None)
-    else:
-        for group in ("us", "ar"):
-            data[group] = {k: v for k, v in data[group].items() if v.get("source") in ("BLS", "INDEC")}
-        data["us"].update(us)
-    for record in ar.values():
-        record["fx_ars_per_usd"] = fx_row[1]
-        record["fx_date"] = fx_row[0]
-        record["fx_basis"] = "BCRA daily latest"
-    data["ar"].update(ar)
-    data["sources"].update(us_ads="USDA AMS Weekly Grocery Store Beef Feature Activity", ar_retail="Carrefour Argentina online catalog")
-    with tempfile.NamedTemporaryFile(mode="w", dir=OUT.parent, delete=False) as f:
-        json.dump(data, f, indent=1, ensure_ascii=False)
-        temp = Path(f.name)
-    temp.replace(OUT)
-    print(f"merged scraped prices: {len(data['us'])} US, {len(data['ar'])} AR series")
+    data = qualify_snapshot(json.loads(OUT.read_text()))
+    attempted = timestamp()
+    if args.official_snapshot:
+        official = qualify_snapshot(json.loads(args.official_snapshot.read_text()))
+        for region, source in (("us", "BLS"), ("ar", "INDEC")):
+            merge_records(data, region, source, official[region], list(official[region]), attempted)
+        data['fx'].update(official['fx'])
+    errors = []
+    fx_row = None
+    try:
+        fx_row = json.loads(get(FX_URL))["data"][0]
+        if not positive(fx_row[1]) or not valid_period(fx_row[0]) or fx_row[0] > attempted[:10]:
+            raise ValueError("Invalid/future FX observation")
+        data["fx"]["latest"] = {"ars_per_usd":fx_row[1], "date":fx_row[0], "basis":"Latest returned daily observation (BCRA via datos.gob.ar)"}
+        data['source_status']['FX daily'] = {'status':'ok', 'attempted_at':attempted, 'observation_date':fx_row[0]}
+    except (OSError, ValueError, KeyError, IndexError, TypeError) as error:
+        fx_row = None
+        errors.append('FX daily')
+        data['source_status']['FX daily'] = {'status':'error', 'attempted_at':attempted, 'error_type':type(error).__name__}
+    keys = args.cuts or list(AR_ITEMS)
+    # Each cut is independent: one blocked request cannot erase or block other observations.
+    for key in keys:
+        try:
+            if fx_row is None:
+                raise ValueError('FX unavailable; retaining original native and converted observations')
+            records = carrefour_prices(fx_row[1], [key])
+            for record in records.values():
+                record.update(fx_ars_per_usd=fx_row[1], fx_date=fx_row[0], fx_provenance='recorded', fx_basis='Latest returned daily observation (BCRA via datos.gob.ar)')
+            merge_records(data, 'ar', 'Carrefour AR', records, [key], attempted)
+            data.setdefault('catalog_attempts', {})[key] = data['source_status']['Carrefour AR']
+        except (OSError, ValueError, KeyError, TypeError) as error:
+            errors.append('Carrefour ' + key)
+            data.setdefault('catalog_attempts', {})[key] = {'status':'error', 'attempted_at':attempted, 'error_type':type(error).__name__}
+            if key in data['ar']:
+                data['ar'][key]['observation_status'] = 'retained_after_error'
+    data['source_status']['Carrefour AR'] = {'status':'partial_error' if any(e.startswith('Carrefour') for e in errors) else 'ok', 'attempted_at':attempted, 'coverage':{k:data['catalog_attempts'][k]['status'] for k in keys}}
+    if not args.cuts:
+        try:
+            us = usda_prices()
+            merge_records(data, 'us', 'USDA ad survey', us, list(US_ITEMS), attempted)
+        except (OSError, ValueError, subprocess.SubprocessError, KeyError, TypeError) as error:
+            errors.append('USDA')
+            data['source_status']['USDA ad survey'] = {'status':'error', 'attempted_at':attempted, 'error_type':type(error).__name__}
+            for record in data['us'].values():
+                if record.get('source') == 'USDA ad survey':
+                    record['observation_status'] = 'retained_after_error'
+    data['sources'].update(us_ads='USDA AMS Weekly Grocery Store Beef Feature Activity', ar_retail='Carrefour Argentina online catalog')
+    write_snapshot(OUT, data)
+    print(f"Stored snapshot; {len(errors)} source failures, original observation dates retained")
+    if errors:
+        raise RuntimeError('Partial refresh: ' + ', '.join(errors))
 
 
 if __name__ == "__main__":

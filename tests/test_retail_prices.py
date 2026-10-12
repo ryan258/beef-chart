@@ -11,7 +11,7 @@ spec.loader.exec_module(m)
 
 
 def product(name, price=10000, unit='kg', multiplier=1, available=True):
-    return {'productId':'1', 'productName':name, 'EC_Sección':['CARNICERIA'], 'link':'https://www.carrefour.com.ar/rinon-x-kg/p',
+    return {'productId':'1', 'productName':name, 'EC_Sección':['CARNICERIA'], 'Especie':['Vacuna'], 'product_form':'raw', 'link':'https://www.carrefour.com.ar/rinon-x-kg/p',
             'items':[{'itemId':'1','measurementUnit':unit,'unitMultiplier':multiplier,
                       'sellers':[{'commertialOffer':{'Price':price,'IsAvailable':available}}]}]}
 
@@ -38,7 +38,7 @@ class PriceMatching(unittest.TestCase):
         self.assertEqual(row['products'],1)
         self.assertEqual(row['usd_lb'],round(10000/1000/m.LB_PER_KG,2))
         self.assertEqual(row['availability'],'in_stock')
-        self.assertEqual(row['fx_basis'],'BCRA daily latest')
+        self.assertEqual(row['fx_basis'],'Latest returned daily observation (BCRA via datos.gob.ar)')
         self.assertEqual(row['listings'][0]['name'],'Mollejas x kg')
 
     def test_chorizo_stays_separate(self):
@@ -49,11 +49,14 @@ class PriceMatching(unittest.TestCase):
     def test_failed_refresh_preserves_snapshot(self):
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory) / 'prices.json'
-            original = '{"us": {}, "ar": {"existing": {"usd_lb": 7}}, "fx": {}}'
+            original = json.dumps({'us':{},'ar':{'existing':{'usd_lb':7,'ars_kg':10000,'period':'2026-08','source':'INDEC'}},'fx':{}})
             output.write_text(original)
             with patch.object(m, 'OUT', output), patch.object(m.sys, 'argv', ['scraper', '--cuts', 'rinon']), patch.object(m, 'get', side_effect=[b'{"data":[["2026-08-31",1500]]}', OSError('HTTP 403')]):
-                with self.assertRaises(OSError): m.main()
-            self.assertEqual(output.read_text(), original)
+                with self.assertRaises(RuntimeError): m.main()
+            saved=json.loads(output.read_text())
+            self.assertEqual(saved['ar']['existing']['usd_lb'],7)
+            self.assertEqual(saved['ar']['existing']['period'],'2026-08')
+            self.assertEqual(saved['catalog_attempts']['rinon']['status'],'error')
 
     def test_invalid_fx(self):
         for rate in [None,0,-1,float('nan')]:
@@ -65,7 +68,7 @@ class PriceMatching(unittest.TestCase):
             ('Ribeye Steak, Boneless, ABC',[300,20.0,None,None,None,None]),
             ('Ribeye Steak, Boneless, Lbs XYZ',[1000,1.0,1000,1.0,None,None]),
         ]
-        fake_text='Weekly report Fri Oct 02, 2026'
+        fake_text='Weekly report Fri Oct 02, 2026\nThis Week: 09/26/2026 - 10/02/2026\nPrior Week: 09/19/2026 - 09/25/2026'
         with patch.object(m,'get',return_value=b'pdf'), \
              patch.object(m.subprocess,'run') as run, \
              patch.object(m,'usda_rows',return_value=rows):

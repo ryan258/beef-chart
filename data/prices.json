@@ -7,7 +7,15 @@
    "source": "BLS",
    "usd_lb": 6.923,
    "period": "2026-08",
-   "prev_usd_lb": 6.885
+   "prev_usd_lb": 6.885,
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "United States",
+   "method": "Monthly consumer-price average",
+   "observation_status": "legacy_unverified"
   },
   "ground_chuck": {
    "label": "Ground chuck, 100% beef",
@@ -15,7 +23,15 @@
    "source": "BLS",
    "usd_lb": 6.774,
    "period": "2026-08",
-   "prev_usd_lb": 6.85
+   "prev_usd_lb": 6.85,
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "United States",
+   "method": "Monthly consumer-price average",
+   "observation_status": "legacy_unverified"
   },
   "ground_lean": {
    "label": "Ground beef, lean & extra lean",
@@ -23,7 +39,15 @@
    "source": "BLS",
    "usd_lb": 8.573,
    "period": "2026-08",
-   "prev_usd_lb": 8.414
+   "prev_usd_lb": 8.414,
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "United States",
+   "method": "Monthly consumer-price average",
+   "observation_status": "legacy_unverified"
   },
   "round_roast": {
    "label": "Round roast, USDA Choice, boneless",
@@ -31,7 +55,15 @@
    "source": "BLS",
    "usd_lb": 8.959,
    "period": "2026-08",
-   "prev_usd_lb": 9.155
+   "prev_usd_lb": 9.155,
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "United States",
+   "method": "Monthly consumer-price average",
+   "observation_status": "legacy_unverified"
   },
   "round_steak": {
    "label": "Round steak, USDA Choice, boneless",
@@ -39,7 +71,15 @@
    "source": "BLS",
    "usd_lb": 9.692,
    "period": "2026-08",
-   "prev_usd_lb": 10.036
+   "prev_usd_lb": 10.036,
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "United States",
+   "method": "Monthly consumer-price average",
+   "observation_status": "legacy_unverified"
   },
   "sirloin_steak": {
    "label": "Sirloin steak, USDA Choice, boneless",
@@ -47,7 +87,15 @@
    "source": "BLS",
    "usd_lb": 14.357,
    "period": "2026-08",
-   "prev_usd_lb": 14.592
+   "prev_usd_lb": 14.592,
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "United States",
+   "method": "Monthly consumer-price average",
+   "observation_status": "legacy_unverified"
   },
   "ribeye_bnls": {
    "label": "Ribeye steak, boneless",
@@ -55,7 +103,17 @@
    "prev_usd_lb": 13.99,
    "period": "2026-10-02",
    "stores": 2330,
-   "source": "USDA ad survey"
+   "source": "USDA ad survey",
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "United States",
+   "method": "Store-weighted advertised features",
+   "observation_status": "legacy_unverified",
+   "effective_period_status": "unverified_report_date",
+   "adapter_status": "unresolved_real_layout"
   },
   "strip_bnls": {
    "label": "Strip steak, boneless",
@@ -63,7 +121,17 @@
    "prev_usd_lb": 14.83,
    "period": "2026-10-02",
    "stores": 5034,
-   "source": "USDA ad survey"
+   "source": "USDA ad survey",
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "United States",
+   "method": "Store-weighted advertised features",
+   "observation_status": "legacy_unverified",
+   "effective_period_status": "unverified_report_date",
+   "adapter_status": "unresolved_real_layout"
   },
   "tenderloin": {
    "label": "Tenderloin",
@@ -71,7 +139,17 @@
    "prev_usd_lb": 15.87,
    "period": "2026-10-02",
    "stores": 194,
-   "source": "USDA ad survey"
+   "source": "USDA ad survey",
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "United States",
+   "method": "Store-weighted advertised features",
+   "observation_status": "legacy_unverified",
+   "effective_period_status": "unverified_report_date",
+   "adapter_status": "unresolved_real_layout"
   },
   "brisket_whole": {
    "label": "Brisket, whole",
@@ -79,7 +157,17 @@
    "prev_usd_lb": 4.79,
    "period": "2026-10-02",
    "stores": 1330,
-   "source": "USDA ad survey"
+   "source": "USDA ad survey",
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "United States",
+   "method": "Store-weighted advertised features",
+   "observation_status": "legacy_unverified",
+   "effective_period_status": "unverified_report_date",
+   "adapter_status": "unresolved_real_layout"
   },
   "chuck_roast": {
    "label": "Chuck roast, boneless",
@@ -87,7 +175,17 @@
    "prev_usd_lb": 7.3,
    "period": "2026-10-02",
    "stores": 6001,
-   "source": "USDA ad survey"
+   "source": "USDA ad survey",
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "United States",
+   "method": "Store-weighted advertised features",
+   "observation_status": "legacy_unverified",
+   "effective_period_status": "unverified_report_date",
+   "adapter_status": "unresolved_real_layout"
   },
   "short_ribs": {
    "label": "Short ribs",
@@ -95,7 +193,17 @@
    "prev_usd_lb": 10.34,
    "period": "2026-10-02",
    "stores": 10677,
-   "source": "USDA ad survey"
+   "source": "USDA ad survey",
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "United States",
+   "method": "Store-weighted advertised features",
+   "observation_status": "legacy_unverified",
+   "effective_period_status": "unverified_report_date",
+   "adapter_status": "unresolved_real_layout"
   },
   "skirt": {
    "label": "Skirt steak",
@@ -103,7 +211,17 @@
    "prev_usd_lb": 11.34,
    "period": "2026-10-02",
    "stores": 1303,
-   "source": "USDA ad survey"
+   "source": "USDA ad survey",
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "United States",
+   "method": "Store-weighted advertised features",
+   "observation_status": "legacy_unverified",
+   "effective_period_status": "unverified_report_date",
+   "adapter_status": "unresolved_real_layout"
   },
   "flank": {
    "label": "Flank steak",
@@ -111,7 +229,17 @@
    "prev_usd_lb": 13.23,
    "period": "2026-10-02",
    "stores": 83,
-   "source": "USDA ad survey"
+   "source": "USDA ad survey",
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "United States",
+   "method": "Store-weighted advertised features",
+   "observation_status": "legacy_unverified",
+   "effective_period_status": "unverified_report_date",
+   "adapter_status": "unresolved_real_layout"
   },
   "tri_tip": {
    "label": "Tri-tip",
@@ -119,7 +247,17 @@
    "prev_usd_lb": 8.02,
    "period": "2026-10-02",
    "stores": 912,
-   "source": "USDA ad survey"
+   "source": "USDA ad survey",
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "United States",
+   "method": "Store-weighted advertised features",
+   "observation_status": "legacy_unverified",
+   "effective_period_status": "unverified_report_date",
+   "adapter_status": "unresolved_real_layout"
   },
   "eye_round": {
    "label": "Eye of round roast",
@@ -127,7 +265,17 @@
    "prev_usd_lb": 7.58,
    "period": "2026-10-02",
    "stores": 1114,
-   "source": "USDA ad survey"
+   "source": "USDA ad survey",
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "United States",
+   "method": "Store-weighted advertised features",
+   "observation_status": "legacy_unverified",
+   "effective_period_status": "unverified_report_date",
+   "adapter_status": "unresolved_real_layout"
   },
   "bottom_round": {
    "label": "Bottom round roast",
@@ -135,7 +283,17 @@
    "prev_usd_lb": 6.92,
    "period": "2026-10-02",
    "stores": 3856,
-   "source": "USDA ad survey"
+   "source": "USDA ad survey",
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "United States",
+   "method": "Store-weighted advertised features",
+   "observation_status": "legacy_unverified",
+   "effective_period_status": "unverified_report_date",
+   "adapter_status": "unresolved_real_layout"
   }
  },
  "ar": {
@@ -146,7 +304,19 @@
    "ars_kg": 10613.08,
    "period": "2026-08",
    "usd_lb": 3.2120971347301452,
-   "prev_usd_lb": 3.2180308218677642
+   "prev_usd_lb": 3.2180308218677642,
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "Greater Buenos Aires",
+   "method": "Monthly selected-item average",
+   "observation_status": "legacy_unverified",
+   "fx_provenance": "inferred_from_legacy_snapshot",
+   "fx_ars_per_usd": 1498.7131322580642,
+   "fx_date": "2026-08",
+   "fx_basis": "BCRA monthly average"
   },
   "asado": {
    "label": "Asado",
@@ -155,7 +325,19 @@
    "ars_kg": 16736.73,
    "period": "2026-08",
    "usd_lb": 5.065447775551683,
-   "prev_usd_lb": 5.094460568408351
+   "prev_usd_lb": 5.094460568408351,
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "Greater Buenos Aires",
+   "method": "Monthly selected-item average",
+   "observation_status": "legacy_unverified",
+   "fx_provenance": "inferred_from_legacy_snapshot",
+   "fx_ars_per_usd": 1498.7131322580642,
+   "fx_date": "2026-08",
+   "fx_basis": "BCRA monthly average"
   },
   "cuadril": {
    "label": "Cuadril",
@@ -164,7 +346,19 @@
    "ars_kg": 21102.92,
    "period": "2026-08",
    "usd_lb": 6.386895120590768,
-   "prev_usd_lb": 6.404595214876234
+   "prev_usd_lb": 6.404595214876234,
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "Greater Buenos Aires",
+   "method": "Monthly selected-item average",
+   "observation_status": "legacy_unverified",
+   "fx_provenance": "inferred_from_legacy_snapshot",
+   "fx_ars_per_usd": 1498.7131322580642,
+   "fx_date": "2026-08",
+   "fx_basis": "BCRA monthly average"
   },
   "nalga": {
    "label": "Nalga",
@@ -173,7 +367,19 @@
    "ars_kg": 21763.38,
    "period": "2026-08",
    "usd_lb": 6.586786356085448,
-   "prev_usd_lb": 6.539589853569686
+   "prev_usd_lb": 6.539589853569686,
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "Greater Buenos Aires",
+   "method": "Monthly selected-item average",
+   "observation_status": "legacy_unverified",
+   "fx_provenance": "inferred_from_legacy_snapshot",
+   "fx_ars_per_usd": 1498.7131322580642,
+   "fx_date": "2026-08",
+   "fx_basis": "BCRA monthly average"
   },
   "paleta": {
    "label": "Paleta",
@@ -182,7 +388,19 @@
    "ars_kg": 17119.61,
    "period": "2026-08",
    "usd_lb": 5.181328156265433,
-   "prev_usd_lb": 5.240215384179755
+   "prev_usd_lb": 5.240215384179755,
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "Greater Buenos Aires",
+   "method": "Monthly selected-item average",
+   "observation_status": "legacy_unverified",
+   "fx_provenance": "inferred_from_legacy_snapshot",
+   "fx_ars_per_usd": 1498.7131322580642,
+   "fx_date": "2026-08",
+   "fx_basis": "BCRA monthly average"
   },
   "bife_ancho": {
    "label": "Bife ancho",
@@ -191,7 +409,21 @@
    "prev_usd_lb": null,
    "period": "2026-10-07",
    "products": 2,
-   "source": "Carrefour AR"
+   "source": "Carrefour AR",
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "Carrefour Argentina catalog; delivery region unknown",
+   "method": "Sampled catalog median",
+   "observation_status": "legacy_unverified",
+   "availability": "unknown",
+   "sampling_note": "At most 20 catalog products per query, first seller; original unit/category receipt not retained",
+   "fx_provenance": "inferred_from_legacy_snapshot",
+   "fx_ars_per_usd": 1509.4686,
+   "fx_date": "2026-08-31",
+   "fx_basis": "Latest returned daily observation (BCRA via datos.gob.ar)"
   },
   "lomo": {
    "label": "Lomo",
@@ -200,7 +432,21 @@
    "prev_usd_lb": null,
    "period": "2026-10-07",
    "products": 1,
-   "source": "Carrefour AR"
+   "source": "Carrefour AR",
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "Carrefour Argentina catalog; delivery region unknown",
+   "method": "Sampled catalog median",
+   "observation_status": "legacy_unverified",
+   "availability": "unknown",
+   "sampling_note": "At most 20 catalog products per query, first seller; original unit/category receipt not retained",
+   "fx_provenance": "inferred_from_legacy_snapshot",
+   "fx_ars_per_usd": 1509.4686,
+   "fx_date": "2026-08-31",
+   "fx_basis": "Latest returned daily observation (BCRA via datos.gob.ar)"
   },
   "vacio": {
    "label": "Vacío",
@@ -209,7 +455,21 @@
    "prev_usd_lb": null,
    "period": "2026-10-07",
    "products": 3,
-   "source": "Carrefour AR"
+   "source": "Carrefour AR",
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "Carrefour Argentina catalog; delivery region unknown",
+   "method": "Sampled catalog median",
+   "observation_status": "legacy_unverified",
+   "availability": "unknown",
+   "sampling_note": "At most 20 catalog products per query, first seller; original unit/category receipt not retained",
+   "fx_provenance": "inferred_from_legacy_snapshot",
+   "fx_ars_per_usd": 1509.4686,
+   "fx_date": "2026-08-31",
+   "fx_basis": "Latest returned daily observation (BCRA via datos.gob.ar)"
   },
   "entrana": {
    "label": "Entraña",
@@ -218,7 +478,21 @@
    "prev_usd_lb": null,
    "period": "2026-10-07",
    "products": 1,
-   "source": "Carrefour AR"
+   "source": "Carrefour AR",
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "Carrefour Argentina catalog; delivery region unknown",
+   "method": "Sampled catalog median",
+   "observation_status": "legacy_unverified",
+   "availability": "unknown",
+   "sampling_note": "At most 20 catalog products per query, first seller; original unit/category receipt not retained",
+   "fx_provenance": "inferred_from_legacy_snapshot",
+   "fx_ars_per_usd": 1509.4686,
+   "fx_date": "2026-08-31",
+   "fx_basis": "Latest returned daily observation (BCRA via datos.gob.ar)"
   },
   "matambre": {
    "label": "Matambre",
@@ -227,7 +501,21 @@
    "prev_usd_lb": null,
    "period": "2026-10-07",
    "products": 2,
-   "source": "Carrefour AR"
+   "source": "Carrefour AR",
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "Carrefour Argentina catalog; delivery region unknown",
+   "method": "Sampled catalog median",
+   "observation_status": "legacy_unverified",
+   "availability": "unknown",
+   "sampling_note": "At most 20 catalog products per query, first seller; original unit/category receipt not retained",
+   "fx_provenance": "inferred_from_legacy_snapshot",
+   "fx_ars_per_usd": 1509.4686,
+   "fx_date": "2026-08-31",
+   "fx_basis": "Latest returned daily observation (BCRA via datos.gob.ar)"
   },
   "tapa": {
    "label": "Tapa de cuadril",
@@ -236,7 +524,21 @@
    "prev_usd_lb": null,
    "period": "2026-10-07",
    "products": 1,
-   "source": "Carrefour AR"
+   "source": "Carrefour AR",
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "Carrefour Argentina catalog; delivery region unknown",
+   "method": "Sampled catalog median",
+   "observation_status": "legacy_unverified",
+   "availability": "unknown",
+   "sampling_note": "At most 20 catalog products per query, first seller; original unit/category receipt not retained",
+   "fx_provenance": "inferred_from_legacy_snapshot",
+   "fx_ars_per_usd": 1509.4686,
+   "fx_date": "2026-08-31",
+   "fx_basis": "Latest returned daily observation (BCRA via datos.gob.ar)"
   },
   "colita": {
    "label": "Colita de cuadril",
@@ -245,7 +547,21 @@
    "prev_usd_lb": null,
    "period": "2026-10-07",
    "products": 2,
-   "source": "Carrefour AR"
+   "source": "Carrefour AR",
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "Carrefour Argentina catalog; delivery region unknown",
+   "method": "Sampled catalog median",
+   "observation_status": "legacy_unverified",
+   "availability": "unknown",
+   "sampling_note": "At most 20 catalog products per query, first seller; original unit/category receipt not retained",
+   "fx_provenance": "inferred_from_legacy_snapshot",
+   "fx_ars_per_usd": 1509.4686,
+   "fx_date": "2026-08-31",
+   "fx_basis": "Latest returned daily observation (BCRA via datos.gob.ar)"
   },
   "peceto": {
    "label": "Peceto",
@@ -254,7 +570,21 @@
    "prev_usd_lb": null,
    "period": "2026-10-07",
    "products": 4,
-   "source": "Carrefour AR"
+   "source": "Carrefour AR",
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "Carrefour Argentina catalog; delivery region unknown",
+   "method": "Sampled catalog median",
+   "observation_status": "legacy_unverified",
+   "availability": "unknown",
+   "sampling_note": "At most 20 catalog products per query, first seller; original unit/category receipt not retained",
+   "fx_provenance": "inferred_from_legacy_snapshot",
+   "fx_ars_per_usd": 1509.4686,
+   "fx_date": "2026-08-31",
+   "fx_basis": "Latest returned daily observation (BCRA via datos.gob.ar)"
   },
   "osobuco": {
    "label": "Osobuco",
@@ -263,7 +593,21 @@
    "prev_usd_lb": null,
    "period": "2026-10-07",
    "products": 1,
-   "source": "Carrefour AR"
+   "source": "Carrefour AR",
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "Carrefour Argentina catalog; delivery region unknown",
+   "method": "Sampled catalog median",
+   "observation_status": "legacy_unverified",
+   "availability": "unknown",
+   "sampling_note": "At most 20 catalog products per query, first seller; original unit/category receipt not retained",
+   "fx_provenance": "inferred_from_legacy_snapshot",
+   "fx_ars_per_usd": 1509.4686,
+   "fx_date": "2026-08-31",
+   "fx_basis": "Latest returned daily observation (BCRA via datos.gob.ar)"
   },
   "aguja": {
    "label": "Aguja",
@@ -272,9 +616,24 @@
    "prev_usd_lb": null,
    "period": "2026-10-07",
    "products": 1,
-   "source": "Carrefour AR"
+   "source": "Carrefour AR",
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "Carrefour Argentina catalog; delivery region unknown",
+   "method": "Sampled catalog median",
+   "observation_status": "legacy_unverified",
+   "availability": "unknown",
+   "sampling_note": "At most 20 catalog products per query, first seller; original unit/category receipt not retained",
+   "fx_provenance": "inferred_from_legacy_snapshot",
+   "fx_ars_per_usd": 1509.4686,
+   "fx_date": "2026-08-31",
+   "fx_basis": "Latest returned daily observation (BCRA via datos.gob.ar)"
   },
   "molleja": {
+   "unit_scale_unverified": true,
    "label": "Molleja (sweetbreads; organ unspecified by retailer)",
    "ars_kg": 1830.0,
    "usd_lb": 0.55,
@@ -283,7 +642,7 @@
    "products": 1,
    "source": "Carrefour AR",
    "availability": "out_of_stock",
-   "fx_basis": "BCRA daily latest",
+   "fx_basis": "Latest returned daily observation (BCRA via datos.gob.ar)",
    "listings": [
     {
      "ars_kg": 1830.0,
@@ -295,9 +654,20 @@
     }
    ],
    "fx_ars_per_usd": 1509.4686,
-   "fx_date": "2026-08-31"
+   "fx_date": "2026-08-31",
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "Carrefour Argentina catalog; delivery region unknown",
+   "method": "Sampled catalog median",
+   "observation_status": "reference_only",
+   "sampling_note": "At most 20 catalog products per query, first seller; original unit/category receipt not retained",
+   "fx_provenance": "recorded"
   },
   "rinon": {
+   "unit_scale_unverified": true,
    "label": "Riñón",
    "ars_kg": 279.9,
    "usd_lb": 0.08,
@@ -306,7 +676,7 @@
    "products": 1,
    "source": "Carrefour AR",
    "availability": "out_of_stock",
-   "fx_basis": "BCRA daily latest",
+   "fx_basis": "Latest returned daily observation (BCRA via datos.gob.ar)",
    "listings": [
     {
      "ars_kg": 279.9,
@@ -318,9 +688,20 @@
     }
    ],
    "fx_ars_per_usd": 1509.4686,
-   "fx_date": "2026-08-31"
+   "fx_date": "2026-08-31",
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "Carrefour Argentina catalog; delivery region unknown",
+   "method": "Sampled catalog median",
+   "observation_status": "reference_only",
+   "sampling_note": "At most 20 catalog products per query, first seller; original unit/category receipt not retained",
+   "fx_provenance": "recorded"
   },
   "lengua": {
+   "unit_scale_unverified": true,
    "label": "Lengua",
    "ars_kg": 1680.0,
    "usd_lb": 0.5,
@@ -329,7 +710,7 @@
    "products": 3,
    "source": "Carrefour AR",
    "availability": "out_of_stock",
-   "fx_basis": "BCRA daily latest",
+   "fx_basis": "Latest returned daily observation (BCRA via datos.gob.ar)",
    "listings": [
     {
      "ars_kg": 655.0,
@@ -357,7 +738,17 @@
     }
    ],
    "fx_ars_per_usd": 1509.4686,
-   "fx_date": "2026-08-31"
+   "fx_date": "2026-08-31",
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "Carrefour Argentina catalog; delivery region unknown",
+   "method": "Sampled catalog median",
+   "observation_status": "reference_only",
+   "sampling_note": "At most 20 catalog products per query, first seller; original unit/category receipt not retained",
+   "fx_provenance": "recorded"
   },
   "bife_angosto": {
    "label": "Bife de chorizo",
@@ -368,7 +759,7 @@
    "products": 1,
    "source": "Carrefour AR",
    "availability": "in_stock",
-   "fx_basis": "BCRA daily latest",
+   "fx_basis": "Latest returned daily observation (BCRA via datos.gob.ar)",
    "listings": [
     {
      "ars_kg": 24500.0,
@@ -380,7 +771,17 @@
     }
    ],
    "fx_ars_per_usd": 1509.4686,
-   "fx_date": "2026-08-31"
+   "fx_date": "2026-08-31",
+   "retrieved_at": null,
+   "publication_date": null,
+   "prev_period": null,
+   "provenance_status": "legacy_unverified",
+   "market_stage": "retail",
+   "geography": "Carrefour Argentina catalog; delivery region unknown",
+   "method": "Sampled catalog median",
+   "observation_status": "legacy_unverified",
+   "sampling_note": "At most 20 catalog products per query, first seller; original unit/category receipt not retained",
+   "fx_provenance": "recorded"
   }
  },
  "fx": {
@@ -391,7 +792,7 @@
   "latest": {
    "ars_per_usd": 1509.4686,
    "date": "2026-08-31",
-   "basis": "BCRA daily latest"
+   "basis": "Latest returned daily observation (BCRA via datos.gob.ar)"
   }
  },
  "sources": {
@@ -399,5 +800,30 @@
   "ar": "INDEC IPC-GBA average prices via datos.gob.ar",
   "us_ads": "USDA AMS Weekly Grocery Store Beef Feature Activity",
   "ar_retail": "Carrefour Argentina online catalog"
+ },
+ "schema_version": 2,
+ "generated_at": "2026-10-12T17:26:02Z",
+ "qualification_note": "Metadata-only qualification of bundled legacy observations; no provider refresh or original receipt verification. fetched remains the legacy snapshot timestamp.",
+ "source_status": {
+  "BLS": {
+   "status": "legacy_unverified",
+   "attempted_at": null,
+   "note": "No provider refresh performed during qualification"
+  },
+  "INDEC": {
+   "status": "legacy_unverified",
+   "attempted_at": null,
+   "note": "No provider refresh performed during qualification"
+  },
+  "USDA ad survey": {
+   "status": "legacy_unverified",
+   "attempted_at": null,
+   "note": "No provider refresh performed during qualification"
+  },
+  "Carrefour AR": {
+   "status": "legacy_unverified",
+   "attempted_at": null,
+   "note": "No provider refresh performed during qualification"
+  }
  }
 }

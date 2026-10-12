@@ -27,21 +27,21 @@ FX_ID="92.2_TIPO_CAMBIION_0_0_21_24"
 
 year=$(date +%Y)
 ids=$(echo "$US" | cut -d'|' -f2 | jq -R . | jq -sc .)
-bls=$(curl -fsS -X POST https://api.bls.gov/publicAPI/v2/timeseries/data/ -H 'Content-type: application/json' \
+bls=$(curl --connect-timeout 5 --max-time 20 -fsS -X POST https://api.bls.gov/publicAPI/v2/timeseries/data/ -H 'Content-type: application/json' \
   -d "{\"seriesid\":$ids,\"startyear\":\"$((year-1))\",\"endyear\":\"$year\"}")
 [ "$(echo "$bls" | jq -r .status)" = REQUEST_SUCCEEDED ] || { echo "BLS error: $(echo "$bls" | jq -c .message)" >&2; exit 1; }
 
 arids=$(echo "$AR" | cut -d'|' -f2 | paste -sd, -)
-ar=$(curl -fsS "https://apis.datos.gob.ar/series/api/series/?ids=$arids&last=2&format=json")
-fx=$(curl -fsS "https://apis.datos.gob.ar/series/api/series/?ids=$FX_ID&collapse=month&collapse_aggregation=avg&last=12&format=json")
+ar=$(curl --connect-timeout 5 --max-time 20 -fsS "https://apis.datos.gob.ar/series/api/series/?ids=$arids&last=2&format=json")
+fx=$(curl --connect-timeout 5 --max-time 20 -fsS "https://apis.datos.gob.ar/series/api/series/?ids=$FX_ID&collapse=month&collapse_aggregation=avg&last=12&format=json")
 
 # ponytail: BLS skips months (e.g. Oct 2025 lapse), so "prev" is the previous *available* month, not strictly last month
 us_json=$(echo "$US" | while IFS='|' read -r k sid label; do
   echo "$bls" | jq --arg k "$k" --arg sid "$sid" --arg label "$label" '
-    [.Results.series[] | select(.seriesID==$sid) | .data[] | select(.value!="-" and (.period|startswith("M")))] as $d
+    ([.Results.series[] | select(.seriesID==$sid) | .data[] | select((.period|test("^M(0[1-9]|1[0-2])$")) and (.value|tonumber? // 0)>0)] | sort_by(.year + .period) | reverse) as $d
     | if ($d|length)<1 then empty else
       {($k): {label:$label, series:$sid, source:"BLS", usd_lb:($d[0].value|tonumber), period:"\($d[0].year)-\($d[0].period[1:])",
-              prev_usd_lb:(if ($d|length)>1 then ($d[1].value|tonumber) else null end)}} end'
+              prev_usd_lb:(if ($d|length)>1 then ($d[1].value|tonumber) else null end), prev_period:(if ($d|length)>1 then "\($d[1].year)-\($d[1].period[1:])" else null end), provenance_status:"parsed_unverified", observation_status:"observed"}} end'
 done | jq -s add)
 
 ar_json=$(echo "$AR" | while IFS='|' read -r k sid label; do
@@ -49,20 +49,19 @@ ar_json=$(echo "$AR" | while IFS='|' read -r k sid label; do
   jq -n --argjson r "$ar" --argjson fx "$fx" --arg k "$k" --arg sid "$sid" --arg label "$label" --argjson col "$col" '
     def rate_for($row): ($fx.data | map(select(.[0]==$row[0]))[0]);
     def usdlb($row): rate_for($row)[1] as $rate
-      | if $rate then ($row[$col]/$rate/2.2046226) else null end;
-    $r.data as $d
+      | if ($rate|type)=="number" and $rate>0 and ($row[$col]|type)=="number" and $row[$col]>0 then ($row[$col]/$rate/2.2046226) else null end;
+    $r.data | sort_by(.[0]) as $d
     | (rate_for($d[-1]) // [null, null]) as $fxrow
     | {($k): {label:$label, series:$sid, source:"INDEC", ars_kg:$d[-1][$col], period:($d[-1][0][0:7]),
       usd_lb:usdlb($d[-1]), prev_usd_lb:(if ($d|length)>1 then usdlb($d[-2]) else null end),
-      fx_ars_per_usd:$fxrow[1], fx_date:$fxrow[0], fx_basis:"BCRA monthly average"}}'
+      fx_ars_per_usd:$fxrow[1], fx_date:$fxrow[0], fx_basis:"BCRA monthly average", fx_provenance:"recorded", prev_period:(if ($d|length)>1 then $d[-2][0][0:7] else null end), provenance_status:"parsed_unverified", observation_status:"observed"}}'
 done | jq -s add)
 
 jq -n --argjson us "$us_json" --argjson ar "$ar_json" --argjson fx "$fx" '
   {fetched:(now|todate), us:$us, ar:$ar,
-   fx:{series:"'"$FX_ID"'", ars_per_usd:($fx.data[-1][1]), period:($fx.data[-1][0][0:7]), source:"BCRA via datos.gob.ar (monthly average)", basis:"INDEC conversions use monthly average matched to price month. Carrefour and USDA records use daily latest, stored per record."},
+   fx:{series:"'"$FX_ID"'", ars_per_usd:($fx.data[-1][1]), period:($fx.data[-1][0][0:7]), source:"BCRA via datos.gob.ar (monthly average)", basis:"INDEC conversions use monthly average matched to price month. Carrefour conversions use the latest returned daily observation, whose date may lag. USDA is native USD."},
    sources:{us:"US Bureau of Labor Statistics, Average Price Data", ar:"INDEC IPC-GBA average prices via datos.gob.ar"}}' > "$snapshot"
 
 # scrape USDA ad prices + Argentine supermarket prices for the cuts the open APIs lack (needs pdftotext)
-BEEF_PRICES_OUT="$snapshot" ./scrape-retail.py
-mv "$snapshot" data/prices.json
+./scrape-retail.py --official-snapshot "$snapshot"
 echo "Updated data/prices.json"
