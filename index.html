@@ -898,12 +898,14 @@ header.site-header{
       </div>
       <p class="section-sub">Select a cut to explore its character</p>
 
-      <p class="reference-note">Schematic regions, not cutting specifications. Translated names and price pairs require preparation and source qualifications.</p>
+      <p class="reference-note">Schematic regions, not cutting specifications. Translated names and price pairs require preparation and source qualifications. Hatching marks lomo, entraña and peceto as layered references.</p>
       <details class="reference-directory"><summary>Browse all cuts and U.S. primals</summary><div id="cut-directory"></div><div id="primal-directory"></div></details>
       <div class="cows-compare-grid">
         <!-- Retail Cuts Cow -->
         <div class="cow-column">
-          <svg class="cow-stage-svg" id="retail-cow-svg" viewBox="40 130 830 425" aria-label="Schematic Argentine cut map"></svg>
+          <div class="cow-map-kicker"><span>01 / Argentina</span><span>20 cuts</span></div>
+          <svg class="cow-stage-svg" id="retail-cow-svg" viewBox="15 100 885 465" aria-label="Schematic Argentine cut map"></svg>
+          <p class="cow-map-readout" id="retail-map-label" aria-hidden="true">Explore the Argentine cuts</p>
           <div class="cow-col-footer">
             <div class="cow-col-info">
               <h4>Retail Cuts</h4>
@@ -915,7 +917,9 @@ header.site-header{
 
         <!-- Wholesale Cuts Cow -->
         <div class="cow-column">
-          <svg class="cow-stage-svg" id="wholesale-cow-svg" viewBox="40 130 830 425" aria-label="Schematic U.S. primal map"></svg>
+          <div class="cow-map-kicker"><span>02 / United States</span><span>9 regions</span></div>
+          <svg class="cow-stage-svg" id="wholesale-cow-svg" viewBox="15 100 885 465" aria-label="Schematic U.S. primal map"></svg>
+          <p class="cow-map-readout" id="wholesale-map-label" aria-hidden="true">Explore the U.S. regions</p>
           <div class="cow-col-footer">
             <div class="cow-col-info">
               <h4>Wholesale Cuts</h4>
@@ -1129,41 +1133,41 @@ const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
 // 1. DATASETS
-const COW_SILHOUETTE = "M 40,268 C 36,254 40,240 56,226 C 76,208 100,186 126,168 C 138,158 146,150 156,154 C 164,158 166,168 168,174 C 178,164 192,148 214,140 C 245,136 290,136 335,136 C 430,136 520,136 610,136 C 680,136 735,138 780,142 C 812,146 836,155 848,168 C 858,182 862,212 862,250 C 862,295 856,342 850,382 C 844,408 846,432 844,455 C 841,482 838,512 836,538 L 778,538 C 782,510 785,478 784,446 C 782,420 766,402 746,386 C 726,395 706,400 682,402 C 612,408 532,408 462,405 C 432,402 414,398 402,392 L 398,432 C 399,466 397,506 398,538 L 346,538 C 347,506 346,466 344,432 C 338,404 326,386 312,366 C 286,375 260,368 240,354 C 216,338 186,318 160,302 C 130,284 98,272 74,272 C 55,272 44,274 40,268 Z";
+const COW_SILHOUETTE = "M 40,270 L 42,246 L 83,207 L 119,193 L 145,158 L 164,149 L 174,168 L 193,150 L 215,139 L 302,132 L 445,138 L 599,130 L 734,138 L 808,144 L 846,160 L 855,211 L 846,298 L 842,367 L 822,426 L 832,524 L 775,536 L 776,465 L 758,423 L 735,389 L 648,407 L 550,414 L 463,405 L 407,392 L 393,433 L 394,524 L 342,536 L 349,453 L 337,402 L 312,365 L 287,374 L 259,360 L 215,323 L 170,307 L 119,285 L 76,280 Z";
 
 const RETAIL_CUTS = [
-  {id:'cogote',n:'Cogote',eq:'Neck',us:'chuck',color:'#783d26',p:'196,140 300,140 294,325 214,325',how:'braise',tenderness:2.0,marbling:2.5,info:'Connective-tissue rich neck. Hearty stews, puchero, and flavorful ground chuck.'},
-  {id:'aguja',arSeries:'aguja',usSeries:'chuck_roast',n:'Aguja',eq:'Chuck roll',us:'chuck',color:'#a82b2b',p:'300,140 472,140 451,230 297,230',how:'braise',tenderness:4.5,marbling:4.0,info:'Shoulder rib-end. Heavily marbled, flavorful roasts, and the chuck-eye steak.'},
-  {id:'paleta',arSeries:'paleta',n:'Paleta',eq:'Shoulder clod',us:'chuck',color:'#8c3426',p:'297,230 451,230 429,325 294,325',how:'braise',tenderness:4.2,marbling:2.5,info:'Shoulder clod & top blade. Yields the prized flat iron steak.'},
-  {id:'pecho',usSeries:'brisket_whole',n:'Pecho',eq:'Brisket',us:'brisket',color:'#783d26',p:'214,325 429,325 411,395 214,395',how:'braise',tenderness:2.8,marbling:4.5,info:'Chest meat (flat and point). Barbecue smokehouse staple and corned beef.'},
-  {id:'brazuelo',arSeries:'osobuco',n:'Brazuelo',eq:'Fore shank',us:'shank',color:'#c46d20',p:'318,395 412,395 412,545 318,545',how:'braise',tenderness:1.8,marbling:2.0,info:'Front leg cross-cut osso buco with marrow.'},
-  {id:'bife-ancho',arSeries:'bife_ancho',usSeries:'ribeye_bnls',n:'Bife ancho',eq:'Ribeye',us:'rib',color:'#c22e2e',p:'472,140 610,140 607,235 450,235',how:'grill',tenderness:9.0,marbling:5.0,info:'The king of steaks. Generous marbling, ribeye eye (ojo de bife) and spinalis cap.'},
-  {id:'costillar',usSeries:'short_ribs',arSeries:'asado',n:'Asado de tira',eq:'Short ribs',us:'plate',color:'#df9e35',p:'450,235 607,235 601,338 427,338',how:'grill',tenderness:6.5,marbling:4.5,info:'Cross-cut short ribs sawn across bone into long strips. The asado signature.'},
-  {id:'matambre',arSeries:'matambre',n:'Matambre',eq:'Rose meat / superficial cutaneous muscle',us:'plate',color:'#e5a93c',p:'427,338 601,338 598,405 411,405',how:'grill',tenderness:5.5,marbling:3.5,info:'Thin superficial muscle over ribs and flank; not flank flap. Preparation and membrane treatment vary.'},
-  {id:'bife-angosto',arSeries:'bife_angosto',usSeries:'strip_bnls',n:'Bife de chorizo',eq:'NY Strip / Bife angosto',us:'shortloin',color:'#b82e2e',p:'610,140 692,140 692,250 605,250',how:'grill',tenderness:8.5,marbling:3.8,info:'Strip loin, known as bife de chorizo. Firm bite, rich fat ribbon.'},
-  {id:'vacio',arSeries:'vacio',usSeries:'flank',n:'Vacío',eq:'Abdominal-wall cut; partial flank relationship',us:'flank',color:'#bd3a2b',p:'605,250 692,250 700,305 712,405 598,405',how:'grill',tenderness:7.2,marbling:2.8,info:'Broad abdominal-wall preparation. SENASA distinguishes vacío from bife de vacío; U.S. flank is qualified context, not an exact order equivalent.'},
-  {id:'tapa',arSeries:'tapa',n:'Tapa de cuadril',eq:'Picanha / Coulotte',us:'sirloin',color:'#e5a93c',p:'745,140 850,140 850,212 748,205',how:'grill',tenderness:8.2,marbling:3.6,info:'Rump cap with thick fat layer. Brazilian picanha favorite.'},
-  {id:'cuadril',arSeries:'cuadril',usSeries:'sirloin_steak',n:'Cuadril',eq:'Top sirloin',us:'sirloin',color:'#d99028',p:'692,140 745,140 748,205 850,212 850,268 692,268',how:'grill',tenderness:6.8,marbling:2.2,info:'Upper rump. Lean, beefy, excellent for everyday grilling and roasts.'},
-  {id:'colita',arSeries:'colita',usSeries:'tri_tip',n:'Colita de cuadril',eq:'Tri-tip',us:'sirloin',color:'#e09b30',p:'694,268 790,268 722,332',how:'grill',tenderness:7.6,marbling:2.6,info:'Triangular muscle at the bottom of the sirloin. Santa Maria BBQ star.'},
-  {id:'bola',usSeries:'round_roast',n:'Bola de lomo',eq:'Sirloin tip',us:'round',color:'#b84232',p:'692,268 772,268 772,428 712,405 700,305',how:'roast',tenderness:5.0,marbling:1.4,info:'Front of thigh. Lean everyday steaks, milanesa, and stir-fry.'},
-  {id:'nalga',arSeries:'nalga',usSeries:'round_steak',n:'Nalga',eq:'Top round',us:'round',color:'#a23024',p:'772,268 850,268 850,336 772,336',how:'roast',tenderness:4.8,marbling:1.2,info:'Inner thigh. Commonly used for milanesas; traditions and preparation vary.'},
-  {id:'cuadrada',usSeries:'bottom_round',n:'Cuadrada',eq:'Bottom round',us:'round',color:'#942820',p:'772,336 850,336 850,428 772,428',how:'roast',tenderness:3.6,marbling:1.2,info:'Outer rear thigh. Lean, suited for pot roasts or deli roast beef.'},
-  {id:'garron',n:'Garrón',eq:'Hind shank',us:'shank',color:'#c46d20',p:'772,428 850,428 850,545 772,545',how:'braise',tenderness:1.5,marbling:2.0,info:'Hind leg shank, rich in gelatin for locro and winter stews.'},
-  {id:'lomo',arSeries:'lomo',usSeries:'tenderloin',n:'Lomo',eq:'Tenderloin (filet mignon)',us:'shortloin',color:'#c22e2e',p:'M600,252 C640,244 690,246 735,256 C690,276 640,278 600,272 Z',how:'grill',tenderness:10.0,marbling:1.8,info:'The tenderest muscle in the animal. Melt-in-mouth filet mignon.'},
-  {id:'entrana',arSeries:'entrana',usSeries:'skirt',n:'Entraña',eq:'Outside skirt / Entraña fina (generic skirt price unqualified)',us:'plate',color:'#c22e2e',p:'M492,343 a50,10 0 1,0 100,0 a50,10 0 1,0 -100,0Z',how:'grill',tenderness:7.8,marbling:3.2,info:'Diaphragm steak. Intensely beefy, grilled blazing hot over embers.'},
-  {id:'peceto',arSeries:'peceto',usSeries:'eye_round',n:'Peceto',eq:'Eye of round',us:'round',color:'#b2382c',p:'M745,345 C752,328 774,328 782,345 C788,372 782,396 770,404 C758,398 743,374 745,345 Z',how:'roast',tenderness:5.5,marbling:1.1,info:'Very lean cylindrical muscle. Sliced paper-thin for vitel toné.'}
+  {id:'cogote',n:'Cogote',eq:'Neck',us:'chuck',color:'#783d26',p:'187,150 290,141 302,234 281,326 215,317',how:'braise',tenderness:2.0,marbling:2.5,info:'Connective-tissue rich neck. Hearty stews, puchero, and flavorful ground chuck.'},
+  {id:'aguja',arSeries:'aguja',usSeries:'chuck_roast',n:'Aguja',eq:'Chuck roll',us:'chuck',color:'#a82b2b',p:'290,141 463,137 445,237 302,234',how:'braise',tenderness:4.5,marbling:4.0,info:'Shoulder rib-end. Heavily marbled, flavorful roasts, and the chuck-eye steak.'},
+  {id:'paleta',arSeries:'paleta',n:'Paleta',eq:'Shoulder clod',us:'chuck',color:'#8c3426',p:'302,234 445,237 423,329 281,326',how:'braise',tenderness:4.2,marbling:2.5,info:'Shoulder clod & top blade. Yields the prized flat iron steak.'},
+  {id:'pecho',usSeries:'brisket_whole',n:'Pecho',eq:'Brisket',us:'brisket',color:'#783d26',p:'215,317 281,326 423,329 405,395 321,383 280,369 246,343',how:'braise',tenderness:2.8,marbling:4.5,info:'Chest meat (flat and point). Barbecue smokehouse staple and corned beef.'},
+  {id:'brazuelo',arSeries:'osobuco',n:'Brazuelo',eq:'Fore shank',us:'shank',color:'#c46d20',p:'321,383 405,395 396,459 399,544 335,544 348,455',how:'braise',tenderness:1.8,marbling:2.0,info:'Front leg cross-cut osso buco with marrow.'},
+  {id:'bife-ancho',arSeries:'bife_ancho',usSeries:'ribeye_bnls',n:'Bife ancho',eq:'Ribeye',us:'rib',color:'#c22e2e',p:'463,137 604,130 610,243 445,237',how:'grill',tenderness:9.0,marbling:5.0,info:'The king of steaks. Generous marbling, ribeye eye (ojo de bife) and spinalis cap.'},
+  {id:'costillar',usSeries:'short_ribs',arSeries:'asado',n:'Asado de tira',eq:'Short ribs',us:'plate',color:'#df9e35',p:'445,237 610,243 602,335 423,329',how:'grill',tenderness:6.5,marbling:4.5,info:'Cross-cut short ribs sawn across bone into long strips. The asado signature.'},
+  {id:'matambre',arSeries:'matambre',n:'Matambre',eq:'Rose meat / superficial cutaneous muscle',us:'plate',color:'#e5a93c',p:'423,329 602,335 594,413 463,411 405,395',how:'grill',tenderness:5.5,marbling:3.5,info:'Thin superficial muscle over ribs and flank; not flank flap. Preparation and membrane treatment vary.'},
+  {id:'bife-angosto',arSeries:'bife_angosto',usSeries:'strip_bnls',n:'Bife de chorizo',eq:'NY Strip / Bife angosto',us:'shortloin',color:'#b82e2e',p:'604,130 695,137 685,251 610,243',how:'grill',tenderness:8.5,marbling:3.8,info:'Strip loin, known as bife de chorizo. Firm bite, rich fat ribbon.'},
+  {id:'vacio',arSeries:'vacio',usSeries:'flank',n:'Vacío',eq:'Abdominal-wall cut; partial flank relationship',us:'flank',color:'#bd3a2b',p:'610,243 685,251 714,328 719,403 654,412 594,413 602,335',how:'grill',tenderness:7.2,marbling:2.8,info:'Broad abdominal-wall preparation. SENASA distinguishes vacío from bife de vacío; U.S. flank is qualified context, not an exact order equivalent.'},
+  {id:'tapa',arSeries:'tapa',n:'Tapa de cuadril',eq:'Picanha / Coulotte',us:'sirloin',color:'#e5a93c',p:'756,140 816,145 850,162 847,211 778,200',how:'grill',tenderness:8.2,marbling:3.6,info:'Rump cap with thick fat layer. Brazilian picanha favorite.'},
+  {id:'cuadril',arSeries:'cuadril',usSeries:'sirloin_steak',n:'Cuadril',eq:'Top sirloin',us:'sirloin',color:'#d99028',p:'695,137 756,140 778,200 847,211 847,269 766,264 685,251',how:'grill',tenderness:6.8,marbling:2.2,info:'Upper rump. Lean, beefy, excellent for everyday grilling and roasts.'},
+  {id:'colita',arSeries:'colita',usSeries:'tri_tip',n:'Colita de cuadril',eq:'Tri-tip',us:'sirloin',color:'#e09b30',p:'685,251 766,264 737,314 714,328',how:'grill',tenderness:7.6,marbling:2.6,info:'Triangular muscle at the bottom of the sirloin. Santa Maria BBQ star.'},
+  {id:'bola',usSeries:'round_roast',n:'Bola de lomo',eq:'Sirloin tip',us:'round',color:'#b84232',p:'714,328 737,314 779,301 781,390 754,428 719,403',how:'roast',tenderness:5.0,marbling:1.4,info:'Front of thigh. Lean everyday steaks, milanesa, and stir-fry.'},
+  {id:'nalga',arSeries:'nalga',usSeries:'round_steak',n:'Nalga',eq:'Top round',us:'round',color:'#a23024',p:'766,264 847,269 846,336 781,340 779,301 737,314',how:'roast',tenderness:4.8,marbling:1.2,info:'Inner thigh. Commonly used for milanesas; traditions and preparation vary.'},
+  {id:'cuadrada',usSeries:'bottom_round',n:'Cuadrada',eq:'Bottom round',us:'round',color:'#942820',p:'781,340 846,336 837,428 754,428 781,390',how:'roast',tenderness:3.6,marbling:1.2,info:'Outer rear thigh. Lean, suited for pot roasts or deli roast beef.'},
+  {id:'garron',n:'Garrón',eq:'Hind shank',us:'shank',color:'#c46d20',p:'754,428 837,428 840,545 766,545',how:'braise',tenderness:1.5,marbling:2.0,info:'Hind leg shank, rich in gelatin for locro and winter stews.'},
+  {id:'lomo',arSeries:'lomo',usSeries:'tenderloin',n:'Lomo',eq:'Tenderloin (filet mignon)',us:'shortloin',color:'#c22e2e',p:'590,246 631,234 708,242 738,260 699,273 628,264',how:'grill',tenderness:10.0,marbling:1.8,info:'The tenderest muscle in the animal. Melt-in-mouth filet mignon.'},
+  {id:'entrana',arSeries:'entrana',usSeries:'skirt',n:'Entraña',eq:'Outside skirt / Entraña fina (generic skirt price unqualified)',us:'plate',color:'#c22e2e',p:'482,335 529,321 574,329 603,350 556,363 507,349',how:'grill',tenderness:7.8,marbling:3.2,info:'Diaphragm steak. Intensely beefy, grilled blazing hot over embers.'},
+  {id:'peceto',arSeries:'peceto',usSeries:'eye_round',n:'Peceto',eq:'Eye of round',us:'round',color:'#b2382c',p:'794,307 813,321 819,362 805,402 789,378 785,339',how:'roast',tenderness:5.5,marbling:1.1,info:'Very lean cylindrical muscle. Sliced paper-thin for vitel toné.'}
 ];
 
 const WHOLESALE_PRIMALS = [
-  {key:'chuck',n:'Chuck',color:'#234a75',share:26,ps:['196,140 472,140 429,325 214,325'],desc:'Shoulder & neck. Roasts, ground chuck, flat iron.'},
-  {key:'rib',n:'Rib',color:'#1a3e63',share:9.5,ps:['472,140 610,140 604,300 435,300'],desc:'Ribs 6–12. Prime rib and ribeye steaks.'},
-  {key:'shortloin',n:'Short Loin',color:'#2b5585',share:8,ps:['610,140 692,140 692,270 604,270'],desc:'T-bone, porterhouse, strip loin and tenderloin.'},
-  {key:'sirloin',n:'Sirloin',color:'#20436b',share:9,ps:['692,140 850,140 850,268 790,268 722,332 694,268'],desc:'Top sirloin, tri-tip, and coulotte.'},
-  {key:'round',n:'Round',color:'#1f3752',share:22,ps:['692,262 850,262 850,428 692,428'],desc:'Rear leg muscles. Lean roasts, deli beef, milanesas.'},
-  {key:'plate',n:'Plate',color:'#365f8a',share:8.5,ps:['435,300 604,300 598,405 411,405'],desc:'Short ribs and skirt steak.'},
-  {key:'flank',n:'Flank',color:'#4a749d',share:5,ps:['604,270 692,270 700,305 712,405 598,405'],desc:'Flank steak and bavette.'},
-  {key:'brisket',n:'Brisket',color:'#2c4c6e',share:6,ps:['214,325 429,325 411,395 214,395'],desc:'Breast muscle for barbecue smoking.'},
-  {key:'shank',n:'Shank',color:'#50779e',share:6,ps:['318,395 412,395 412,545 318,545','772,428 850,428 850,545 772,545'],desc:'Legs for osso buco, soups, and gelatin stocks.'}
+  {key:'chuck',n:'Chuck',color:'#234a75',share:26,ps:['187,150 290,141 463,137 445,237 423,329 281,326 215,317'],desc:'Shoulder & neck. Roasts, ground chuck, flat iron.'},
+  {key:'rib',n:'Rib',color:'#1a3e63',share:9.5,ps:['463,137 604,130 610,243 602,302 430,302'],desc:'Ribs 6–12. Prime rib and ribeye steaks.'},
+  {key:'shortloin',n:'Short Loin',color:'#2b5585',share:8,ps:['604,130 695,137 685,251 607,278'],desc:'T-bone, porterhouse, strip loin and tenderloin.'},
+  {key:'sirloin',n:'Sirloin',color:'#20436b',share:9,ps:['695,137 756,140 816,145 850,162 847,269 766,264 737,314 714,328 685,251'],desc:'Top sirloin, tri-tip, and coulotte.'},
+  {key:'round',n:'Round',color:'#1f3752',share:22,ps:['766,264 847,269 846,336 837,428 754,428 719,403 714,328 737,314'],desc:'Rear leg muscles. Lean roasts, deli beef, milanesas.'},
+  {key:'plate',n:'Plate',color:'#365f8a',share:8.5,ps:['430,302 602,302 594,413 463,411 405,395'],desc:'Short ribs and skirt steak.'},
+  {key:'flank',n:'Flank',color:'#4a749d',share:5,ps:['607,278 685,251 714,328 719,403 654,412 594,413 602,302'],desc:'Flank steak and bavette.'},
+  {key:'brisket',n:'Brisket',color:'#2c4c6e',share:6,ps:['215,317 281,326 423,329 405,395 321,383 280,369 246,343'],desc:'Breast muscle for barbecue smoking.'},
+  {key:'shank',n:'Shank',color:'#50779e',share:6,ps:['321,383 405,395 396,459 399,544 335,544 348,455', '754,428 837,428 840,545 766,545'],desc:'Legs for osso buco, soups, and gelatin stocks.'}
 ];
 
 const EXTRA_CUTS = [
@@ -1317,35 +1321,41 @@ const PRICE_ROWS = [
 ];
 
 // 2. COW VISUALIZATIONS RENDERER
+// Display inks are independent of the market charts' data colors.
+const RETAIL_MAP_INKS = {
+  cogote:'#b78851', aguja:'#bb3827', paleta:'#7b2c22', pecho:'#d39b35', brazuelo:'#b78851',
+  'bife-ancho':'#bb3827', costillar:'#d39b35', matambre:'#b78851', 'bife-angosto':'#7b2c22',
+  vacio:'#bb3827', tapa:'#e2bd77', cuadril:'#d39b35', colita:'#b78851', bola:'#e2bd77',
+  nalga:'#7b2c22', cuadrada:'#bb3827', garron:'#d39b35'
+};
+const PRIMAL_MAP_INKS = {
+  chuck:'#1b3f52', rib:'#a8bec0', shortloin:'#3f6b7d', sirloin:'#d39b35', round:'#1b3f52',
+  plate:'#3f6b7d', flank:'#a8bec0', brisket:'#d39b35', shank:'#a8bec0'
+};
 function renderCowSilhouette(svgSelection, clipId) {
   const defs = svgSelection.append('defs');
-  defs.append('clipPath')
-    .attr('id', clipId)
-    .append('path')
-    .attr('d', COW_SILHOUETTE);
+  defs.append('clipPath').attr('id', clipId).append('path').attr('d', COW_SILHOUETTE);
+  const hatch = defs.append('pattern').attr('id', `${clipId}-hatch`)
+    .attr('patternUnits','userSpaceOnUse').attr('width',12).attr('height',12).attr('patternTransform','rotate(-30)');
+  hatch.append('rect').attr('width',12).attr('height',12).attr('fill','#f5f0e6');
+  hatch.append('path').attr('d','M 0,0 L 0,12').attr('stroke','#7b2c22').attr('stroke-width',4);
+  const underlay = svgSelection.append('g').attr('aria-hidden','true').attr('pointer-events','none');
+  // Offset far legs and a crooked tail retain the cut-paper character.
+  underlay.append('path').attr('d','M 374,379 L 425,391 L 416,456 L 425,525 L 402,535 L 388,479 Z M 700,380 L 756,387 L 747,449 L 759,522 L 732,532 L 716,446 Z').attr('fill','#25231f');
+  underlay.append('path').attr('d','M 841,165 L 870,211 L 862,305 L 878,394')
+    .attr('fill','none').attr('stroke','#25231f').attr('stroke-width',8).attr('stroke-linejoin','miter');
+  underlay.append('path').attr('d','M 878,382 L 890,409 L 878,433 L 866,410 Z').attr('fill','#25231f');
+  underlay.append('path').attr('d',COW_SILHOUETTE).attr('fill','#25231f');
+  underlay.append('path').attr('d','M 132,183 L 139,138 L 160,170 Z').attr('fill','#25231f');
+}
 
-  // Background shadow off-legs
-  svgSelection.append('path')
-    .attr('d', 'M 382,385 L 424,385 L 418,460 L 422,512 L 428,538 L 388,538 L 394,512 L 396,460 Z M 700,385 L 755,385 L 748,435 L 746,512 L 752,538 L 718,538 L 722,512 L 726,440 Z')
-    .attr('fill', '#38332e');
-
-  // Slender tail
-  svgSelection.append('path')
-    .attr('d', 'M 848,168 C 864,225 866,325 856,408')
-    .attr('fill', 'none')
-    .attr('stroke', '#4a443e')
-    .attr('stroke-width', 4)
-    .attr('stroke-linecap', 'round');
-  svgSelection.append('ellipse')
-    .attr('cx', 856).attr('cy', 424).attr('rx', 7).attr('ry', 16)
-    .attr('fill', '#4a443e');
-
-  // Main Steer Body (Dark Gray Architectural Silhouette)
-  svgSelection.append('path')
-    .attr('d', COW_SILHOUETTE)
-    .attr('fill', '#46403a')
-    .attr('stroke', '#221c17')
-    .attr('stroke-width', 2);
+function finishCowDrawing(svgSelection) {
+  const details = svgSelection.append('g').attr('aria-hidden','true').attr('pointer-events','none');
+  details.append('path').attr('d',COW_SILHOUETTE).attr('fill','none')
+    .attr('stroke','#25231f').attr('stroke-width',5).attr('stroke-linejoin','miter');
+  details.append('path').attr('d','M 129,218 L 141,213 L 145,224 L 134,229 Z M 170,178 L 190,171 L 179,195 Z')
+    .attr('fill','#f5f0e6');
+  details.append('path').attr('d','M 48,261 L 72,265').attr('stroke','#f5f0e6').attr('stroke-width',4);
 }
 
 function renderCowMaps() {
@@ -1354,73 +1364,61 @@ function renderCowMaps() {
     showChartFallback('wholesale-cow-svg', 'Map unavailable; browse the directory above.');
     return;
   }
-// Render Retail Cuts Cow
-const retailSvg = d3.select('#retail-cow-svg');
-renderCowSilhouette(retailSvg, 'clip-retail-cow');
-
-const retailClippedG = retailSvg.append('g').attr('clip-path', 'url(#clip-retail-cow)');
-retailClippedG.selectAll('path.cut-path')
-  .data(RETAIL_CUTS)
-  .join('path')
-  .attr('class', 'cut-path')
-  .attr('d', d => d.p[0] === 'M' ? d.p : `M ${d.p} Z`)
-  .attr('fill', d => d.color)
-  .attr('data-primal', d => d.us || '').attr('role','button').attr('tabindex',0).attr('aria-label',d => `Inspect ${d.n}, ${d.eq}`).on('keydown',(e,d) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openCutModal(d); } })
-  .on('mouseover', (e, d) => {
-    showTooltip(e, `<b>${d.n}</b> (${d.eq})<br>${priceLine(priceOf(d).ar, priceOf(d).us)}`);
-    if (typeof highlightPrimal === 'function' && d.us) highlightPrimal(d.us, true);
-  })
-  .on('mousemove', moveTooltip)
-  .on('mouseout', (e, d) => {
-    hideTooltip();
-    if (typeof clearCowHighlight === 'function') clearCowHighlight();
-  })
-  .on('click', (e, d) => openCutModal(d));
-
-// Overlay outline
-retailSvg.append('path')
-  .attr('d', COW_SILHOUETTE)
-  .attr('fill', 'none')
-  .attr('stroke', '#221c17')
-  .attr('stroke-width', 2.4)
-  .attr('pointer-events', 'none');
-
-// Render Wholesale Cuts Cow
-const wholesaleSvg = d3.select('#wholesale-cow-svg');
-renderCowSilhouette(wholesaleSvg, 'clip-wholesale-cow');
-
-const wholesaleClippedG = wholesaleSvg.append('g').attr('clip-path', 'url(#clip-wholesale-cow)');
-wholesaleClippedG.selectAll('path.cut-path')
-  .data(WHOLESALE_PRIMALS)
-  .join('path')
-  .attr('class', 'cut-path')
-  .attr('d', d => d.ps.map(p => p[0] === 'M' ? p : `M ${p} Z`).join(' '))
-  .attr('fill', d => d.color)
-  .attr('stroke', '#fff')
-  .attr('stroke-width', 1.8)
-  .attr('stroke-dasharray', '5,3')
-  .attr('data-primal', d => d.key).attr('role','button').attr('tabindex',0).attr('aria-label',d => `Inspect ${d.n} primal`).on('keydown',(e,d) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openPrimalModal(d); } })
-  .on('mouseover', (e, d) => {
-    showTooltip(e, `<b>${d.n} Primal</b><br>${d.share} of 100 illustrative teaching units`);
-    if (typeof highlightPrimal === 'function') highlightPrimal(d.key, true);
-  })
-  .on('mousemove', moveTooltip)
-  .on('mouseout', () => {
-    hideTooltip();
-    if (typeof clearCowHighlight === 'function') clearCowHighlight();
-  })
-  .on('click', (e, d) => {
-    openPrimalModal(d);
-  });
-
-wholesaleSvg.append('path')
-  .attr('d', COW_SILHOUETTE)
-  .attr('fill', 'none')
-  .attr('stroke', '#221c17')
-  .attr('stroke-width', 2.4)
-  .attr('pointer-events', 'none');
-
+  const maps = [
+    {svg:'#retail-cow-svg', clip:'clip-retail-cow', label:'#retail-map-label', idle:'Explore the Argentine cuts',
+      data:RETAIL_CUTS, key:d=>d.us, id:d=>d.id, path:d=>`M ${d.p} Z`,
+      ink:d=>RETAIL_MAP_INKS[d.id] || 'url(#clip-retail-cow-hatch)',
+      name:d=>`${d.n} · ${d.eq}`, aria:d=>`Inspect ${d.n}, ${d.eq}`,
+      tooltip:d=>`<b>${d.n}</b> (${d.eq})<br>${priceLine(priceOf(d).ar, priceOf(d).us)}`, open:openCutModal},
+    {svg:'#wholesale-cow-svg', clip:'clip-wholesale-cow', label:'#wholesale-map-label', idle:'Explore the U.S. regions',
+      data:WHOLESALE_PRIMALS, key:d=>d.key, id:d=>d.key, path:d=>d.ps.map(p=>`M ${p} Z`).join(' '),
+      ink:d=>PRIMAL_MAP_INKS[d.key], name:d=>`${d.n} · ${d.desc}`, aria:d=>`Inspect ${d.n} primal`,
+      tooltip:d=>`<b>${d.n} Primal</b><br>${d.share} of 100 illustrative teaching units`, open:openPrimalModal}
+  ];
+  for (const map of maps) {
+    const svg = d3.select(map.svg);
+    svg.selectAll('*').remove();
+    renderCowSilhouette(svg,map.clip);
+    const activate = d => { $(map.label).textContent=map.name(d); highlightPrimal(map.key(d),true); };
+    const reset = e => {
+      hideTooltip();
+      if (document.activeElement === e.currentTarget) return;
+      $(map.label).textContent=map.idle;
+      clearCowHighlight();
+    };
+    svg.append('g').attr('clip-path',`url(#${map.clip})`).selectAll('path.cut-path').data(map.data).join('path')
+      .attr('class','cut-path').attr('d',map.path).attr('fill',map.ink)
+      .attr('data-primal',map.key).attr('data-cut-id',map.id)
+      .attr('role','button').attr('tabindex',0).attr('aria-label',map.aria)
+      .on('keydown',(e,d)=>{ if (e.key==='Enter'||e.key===' ') { e.preventDefault(); hideTooltip(); map.open(d); } })
+      .on('focus',(e,d)=>activate(d)).on('blur',reset)
+      .on('mouseover',(e,d)=>{activate(d);showTooltip(e,map.tooltip(d));})
+      .on('mousemove',moveTooltip).on('mouseout',reset)
+      .on('click',(e,d)=>{hideTooltip();map.open(d);});
+    finishCowDrawing(svg);
+  }
+  // The broader U.S. regions have room for permanent labels; small retail
+  // muscles use the readout and the existing full-name directory instead.
+  const labels = [
+    {x:332,y:227,lines:['CHUCK'],ink:'#f5f0e6'},
+    {x:523,y:226,lines:['RIB'],ink:'#25231f'},
+    {x:650,y:189,lines:['SHORT','LOIN'],ink:'#f5f0e6'},
+    {x:775,y:232,lines:['SIRLOIN'],ink:'#25231f'},
+    {x:785,y:349,lines:['ROUND'],ink:'#f5f0e6'},
+    {x:513,y:360,lines:['PLATE'],ink:'#f5f0e6'},
+    {x:658,y:353,lines:['FLANK'],ink:'#25231f'},
+    {x:325,y:358,lines:['BRISKET'],ink:'#25231f'},
+    {x:370,y:475,lines:['SHANK'],ink:'#25231f',small:true},
+    {x:800,y:484,lines:['SHANK'],ink:'#25231f',small:true}
+  ];
+  const legend=d3.select('#wholesale-cow-svg').append('g').attr('aria-hidden','true').attr('pointer-events','none');
+  for (const label of labels) {
+    const text=legend.append('text').attr('class',`cow-region-label${label.small?' small':''}`)
+      .attr('x',label.x).attr('y',label.y).attr('fill',label.ink).attr('text-anchor','middle');
+    label.lines.forEach((line,i)=>text.append('tspan').attr('x',label.x).attr('dy',i?24:0).text(line));
+  }
 }
+
 function highlightPrimal(key, active) {
   if (!key) return;
   $$('.cow-stage-svg [data-primal]').forEach(path => { path.classList.toggle('on', active && path.dataset.primal === key); path.classList.toggle('dim', active && path.dataset.primal !== key); });

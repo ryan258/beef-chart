@@ -29,6 +29,18 @@ header.site-header{background:var(--bg);backdrop-filter:none;border-bottom:1px s
 .modal-cut-illustration{max-height:160px;width:auto;max-width:100%;object-fit:contain;mix-blend-mode:multiply}
 
 /* Truth-and-harmony additions retain the existing palette and geometry. */
+.cow-map-kicker{display:flex;justify-content:space-between;gap:12px;width:100%;margin:0 0 18px;font:600 10px/1.4 'Space Grotesk',sans-serif;text-transform:uppercase;letter-spacing:1px}
+.cow-map-kicker span:last-child{color:var(--mut);font-weight:400}
+.cow-stage-svg{max-height:none;overflow:visible}
+.cow-stage-svg .cut-path{stroke:var(--bg);stroke-width:6;stroke-linejoin:miter;transition:opacity .15s,filter .15s}
+.cow-stage-svg .cut-path:hover,.cow-stage-svg .cut-path.on{stroke:var(--bg);stroke-width:7;filter:brightness(1.08)}
+.cow-stage-svg .cut-path.dim{opacity:1;filter:saturate(.15)}
+.cow-stage-svg .cut-path:focus-visible{outline:none;stroke:var(--ink);stroke-width:9;filter:drop-shadow(0 0 2px var(--bg))}
+.cow-region-label{font:500 25px 'Oswald',sans-serif;letter-spacing:.5px;pointer-events:none}
+.cow-region-label.small{font-size:18px;letter-spacing:0}
+.cow-map-readout{align-self:stretch;min-height:3.3em;margin:12px 0 0;font:500 12px/1.6 'Space Grotesk',sans-serif;color:var(--ink)}
+.cow-col-footer{margin-top:8px}
+@media(max-width:800px) and (min-width:481px){.cows-compare-grid{grid-template-columns:1fr}}
 .reference-note{font-size:12px;line-height:1.6;color:var(--mut)}
 .reference-directory,.chart-data{margin:16px 0;font-size:12px}
 .reference-directory summary,.chart-data summary{cursor:pointer;padding:12px 0;font-weight:600}
