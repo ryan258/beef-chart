@@ -10,6 +10,7 @@ import unittest
 from unittest.mock import patch
 
 from price_contract import qualify_snapshot, validate_snapshot, write_snapshot, merge_records
+from official_prices import parse_bls, US_SERIES
 
 spec = importlib.util.spec_from_file_location('retail_phase', Path(__file__).parents[1] / 'scrape-retail.py')
 retail = importlib.util.module_from_spec(spec)
@@ -110,11 +111,8 @@ class TruthHarmony(unittest.TestCase):
         self.assertTrue(all('fx_provenance' in p for p in data['ar'].values()))
 
     def test_bls_period_sorting_skips_m13_and_records_actual_previous(self):
-        script=(Path(__file__).parents[1]/'fetch-prices.sh').read_text()
-        expression=script.split("--arg label \"$label\" '",1)[1].split("'\ndone",1)[0]
-        payload={'Results':{'series':[{'seriesID':'s','data':[{'year':'2026','period':'M05','value':'5'},{'year':'2026','period':'M13','value':'99'},{'year':'2026','period':'M08','value':'8'},{'year':'2026','period':'M07','value':'-'}]}]}}
-        result=subprocess.run(['jq','--arg','k','cut','--arg','sid','s','--arg','label','Cut',expression],input=json.dumps(payload),text=True,capture_output=True,check=True)
-        record=json.loads(result.stdout)['cut']
+        payload={'status':'REQUEST_SUCCEEDED','Results':{'series':[{'seriesID':US_SERIES['ground_beef'][0],'data':[{'year':'2026','period':'M05','value':'5'},{'year':'2026','period':'M13','value':'99'},{'year':'2026','period':'M08','value':'8'},{'year':'2026','period':'M07','value':'-'}]}]}}
+        record=parse_bls(payload,'2026-10-12T00:00:00Z')['ground_beef']
         self.assertEqual(record['period'],'2026-08')
         self.assertEqual(record['prev_period'],'2026-05')
         self.assertEqual(record['prev_usd_lb'],5)

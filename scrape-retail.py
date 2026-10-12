@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Scrape current retail beef prices and merge them into data/prices.json (run after fetch-prices.sh).
+"""Explicit retail refresh into data/prices.json; ./fetch-prices.sh also attempts official monthly sources.
 
   US: USDA AMS weekly grocery-store beef ad report (PDF, needs `pdftotext` from poppler: brew install poppler).
       Advertised prices, store-weighted across conventional fresh items; not shelf-price averages.
@@ -12,6 +12,7 @@ import argparse, os, math, json, re, statistics, subprocess, sys, tempfile, time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from price_contract import positive, valid_period, qualify_snapshot, merge_records, write_snapshot, timestamp
+from official_prices import fetch_official, merge_official
 
 OUT = Path(os.environ.get("BEEF_PRICES_OUT", Path(__file__).parent / "data" / "prices.json"))
 USDA_PDF = "https://www.ams.usda.gov/mnreports/AMS_3228.pdf"
@@ -229,16 +230,22 @@ def carrefour_prices(fx, keys=None):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--cuts", nargs="+", choices=sorted(AR_ITEMS))
-    parser.add_argument("--official-snapshot", type=Path, help="Merge staged BLS/INDEC records without deleting catalog history")
+    official_mode = parser.add_mutually_exclusive_group()
+    official_mode.add_argument("--official", action="store_true", help="Attempt BLS, INDEC and monthly FX independently")
+    official_mode.add_argument("--official-snapshot", type=Path, help="Merge a local staged official snapshot by source")
     args = parser.parse_args()
     data = qualify_snapshot(json.loads(OUT.read_text()))
     attempted = timestamp()
-    if args.official_snapshot:
-        official = qualify_snapshot(json.loads(args.official_snapshot.read_text()))
-        for region, source in (("us", "BLS"), ("ar", "INDEC")):
-            merge_records(data, region, source, official[region], list(official[region]), attempted)
-        data['fx'].update(official['fx'])
     errors = []
+    if args.official or args.official_snapshot:
+        if args.official:
+            official = fetch_official(attempted)
+        else:
+            try:
+                official = json.loads(args.official_snapshot.read_text())
+            except (OSError, ValueError):
+                official = None  # Classify all official sources as failed; retail still runs.
+        errors.extend(merge_official(data, official, attempted))
     fx_row = None
     try:
         fx_row = json.loads(get(FX_URL))["data"][0]
@@ -279,7 +286,7 @@ def main():
                     record['observation_status'] = 'retained_after_error'
     data['sources'].update(us_ads='USDA AMS Weekly Grocery Store Beef Feature Activity', ar_retail='Carrefour Argentina online catalog')
     write_snapshot(OUT, data)
-    print(f"Stored snapshot; {len(errors)} source failures, original observation dates retained")
+    print(f"Stored snapshot; {len(errors)} source issues, retained observations keep their original dates")
     if errors:
         raise RuntimeError('Partial refresh: ' + ', '.join(errors))
 
