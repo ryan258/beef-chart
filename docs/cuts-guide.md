@@ -1,6 +1,14 @@
 # Beef cuts: names, relationships, and preparation
 
-This is an educational Argentine/U.S. reference, not a purchasing specification or a validated fabrication guide. Retail names vary by region, seller, bone removal, membrane, trim, and portioning. The atlas geometry is schematic; matching colors indicate a broad anatomical group rather than an exact cutting boundary.
+This is an educational Argentine/U.S. reference, not a purchasing specification or a validated fabrication guide. Retail names vary by region, seller, bone removal, membrane, trim, and portioning. The atlas geometry is schematic. Hover or keyboard focus highlights a broad relationship across the maps; decorative fill colors are not a shared anatomical key.
+
+## Reading the illustrated atlas
+
+The Argentine map has 20 cut controls; the U.S. map has nine region controls, with front and hind shanks sharing one control. Four specialty entries sit outside the body map, bringing the illustrated catalog to 24 cuts. Each dossier has a transparent halftone illustration. A steak portion, whole muscle, or bone-in preparation in the artwork is an identification aid, not proof that a price observation describes that exact form.
+
+The angular cut-paper diagrams preserve broad regional ordering. Hatching marks lomo, entraña, and peceto as layered references; it does not mean those muscles are exposed on the same outer surface. U.S. regions have permanent labels, and both maps show the full selected name on hover or focus. Use the full-name directory when a small region is difficult to select. Enter or Space opens a region's dossier.
+
+Ribeye is drawn with a rounded central eye and cap; sirloin has a broader, leaner, tapered silhouette. Tenderloin is shown as a medallion, brisket as a slab, and the fore/hind shank references use different presentations. Confirm the actual seller's bone, trim, thickness, and portioning separately. See [the artwork and diagram record](artwork-prompts.md) for asset mappings and reference links.
 
 ## How to read a relationship
 
