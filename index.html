@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>The Cow, Two Ways — Same Animal. Different Perspective.</title>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/svg+xml" sizes="any" href="assets/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,400&display=swap" rel="stylesheet">
 <!-- D3.js v7 and D3-Sankey with CDN fallback -->
@@ -876,7 +878,7 @@ header.site-header{
       </div>
       <div class="hero-art">
         <div class="art-stripes" aria-hidden="true"></div>
-        <div class="cow-disc"><img src="assets/hero_cow.webp" alt="Close portrait of a Hereford steer" fetchpriority="high"></div>
+        <div class="cow-disc"><img src="assets/hero_cow.webp" alt="Halftone portrait of a horned, white-faced cow" fetchpriority="high"></div>
         <span class="art-caption">Fig. 01 / The starting point</span>
         <span class="art-plus" aria-hidden="true">+</span>
         <div class="art-square" aria-hidden="true"><span>↗</span></div>
@@ -1028,7 +1030,7 @@ header.site-header{
         <div class="quote-rule"></div>
       </div>
       <div class="quote-graphic-bottom">
-        <img src="assets/pasture_fence.webp" alt="Pasture fence at sunset">
+        <img src="assets/pasture_fence.webp" alt="Halftone pasture scene with a fence leading toward distant farm buildings">
       </div>
     </div>
   </div>
@@ -1099,10 +1101,10 @@ header.site-header{
     <h2 id="extra-heading" class="section-title">Beyond the usual cuts</h2>
     <p>Bone-in steak, sweetbreads, kidney, and tongue. Argentine retail listings; US prices are not yet connected.</p>
     <div class="extra-price-grid">
-      <button class="extra-cut" data-cut="bife-costilla"><b>Bife de costilla</b><span>Bone-in steak</span><span class="cut-card-price" data-ar="bife_costilla">Not available</span></button>
-      <button class="extra-cut" data-cut="molleja"><b>Mollejas</b><span>Sweetbreads · gland unverified</span><span class="cut-card-price" data-ar="molleja">Not available</span></button>
-      <button class="extra-cut" data-cut="rinon"><b>Riñón</b><span>Beef kidney</span><span class="cut-card-price" data-ar="rinon">Not available</span></button>
-      <button class="extra-cut" data-cut="lengua"><b>Lengua</b><span>Beef tongue</span><span class="cut-card-price" data-ar="lengua">Not available</span></button>
+      <button class="extra-cut" data-cut="bife-costilla"><img src="assets/cut_bife_costilla.webp" alt="Bife de costilla" class="extra-cut-img"><b>Bife de costilla</b><span>Bone-in steak</span><span class="cut-card-price" data-ar="bife_costilla">Not available</span></button>
+      <button class="extra-cut" data-cut="molleja"><img src="assets/cut_molleja.webp" alt="Mollejas" class="extra-cut-img"><b>Mollejas</b><span>Sweetbreads · gland unverified</span><span class="cut-card-price" data-ar="molleja">Not available</span></button>
+      <button class="extra-cut" data-cut="rinon"><img src="assets/cut_rinon.webp" alt="Riñón" class="extra-cut-img"><b>Riñón</b><span>Beef kidney</span><span class="cut-card-price" data-ar="rinon">Not available</span></button>
+      <button class="extra-cut" data-cut="lengua"><img src="assets/cut_lengua.webp" alt="Lengua" class="extra-cut-img"><b>Lengua</b><span>Beef tongue</span><span class="cut-card-price" data-ar="lengua">Not available</span></button>
     </div>
     <p class="extra-price-note">Stored catalog references in USD/lb. Availability and conversion dates belong to the observation; they do not establish today's offer. Missing prices are never borrowed from another cut.</p>
   </section>
@@ -1180,6 +1182,33 @@ const CUT_RELATIONSHIPS = {
   molleja:{type:'Organ reference; gland unresolved'}
 };
 for (const cut of ALL_CUTS) cut.relationship = CUT_RELATIONSHIPS[cut.id] || {type:'Terminology reference; exact purchase specification unreviewed'};
+
+const CUT_IMAGE_MAP = {
+  'bife-ancho': 'assets/cut_ribeye.webp',
+  'bife-angosto': 'assets/cut_bife_chorizo.webp',
+  'aguja': 'assets/cut_aguja.webp',
+  'vacio': 'assets/cut_vacio.webp',
+  'entrana': 'assets/cut_entrana.webp',
+  'matambre': 'assets/cut_matambre.webp',
+  'costillar': 'assets/cut_asado_tira.webp',
+  'cuadril': 'assets/cut_cuadril.webp',
+  'peceto': 'assets/cut_peceto.webp',
+  'nalga': 'assets/cut_nalga.webp',
+  'bife-costilla': 'assets/cut_bife_costilla.webp',
+  'molleja': 'assets/cut_molleja.webp',
+  'rinon': 'assets/cut_rinon.webp',
+  'lengua': 'assets/cut_lengua.webp',
+  'pecho': 'assets/cut_brisket.webp',
+  'lomo': 'assets/cut_tenderloin.webp',
+  'paleta': 'assets/cut_paleta.webp',
+  'colita': 'assets/cut_colita_cuadril.webp',
+  'tapa': 'assets/cut_tapa_cuadril.webp',
+  'brazuelo': 'assets/cut_brazuelo.webp',
+  'garron': 'assets/cut_garron.webp',
+  'cogote': 'assets/cut_cogote.webp',
+  'bola': 'assets/cut_bola_lomo.webp',
+  'cuadrada': 'assets/cut_cuadrada.webp'
+};
 
 const BY_ID = Object.fromEntries(ALL_CUTS.map(c=>[c.id, c]));
 
@@ -1668,18 +1697,21 @@ function openPrimalModal(primal) {
 function openCutModal(cut) {
   if (!cut) return;
   if (typeof cutList !== "undefined" && cutList.includes(cut.id)) cutIndex = cutList.indexOf(cut.id);
+  const cutImg = CUT_IMAGE_MAP[cut.id];
+  const heroHtml = cutImg ? `<div class="modal-cut-hero"><img src="${cutImg}" alt="${escapeHtml(cut.n)}" class="modal-cut-illustration"></div>` : '';
   if (EXTRA_CUTS.includes(cut)) {
-    modalContent.innerHTML = `<h2 id="modal-cut-title">${cut.n}</h2><p>${cut.eq}</p><p>${cut.info}</p><p class="reference-note">${cut.relationship.type}</p>${priceBlock(cut)}<p>US price is not connected for this entry. Argentine catalog observations retain their original availability and FX dates; they do not establish a current offer.</p>`;
+    modalContent.innerHTML = `${heroHtml}<h2 id="modal-cut-title">${escapeHtml(cut.n)}</h2><p>${escapeHtml(cut.eq)}</p><p>${escapeHtml(cut.info)}</p><p class="reference-note">${escapeHtml(cut.relationship.type)}</p>${priceBlock(cut)}<p>US price is not connected for this entry. Argentine catalog observations retain their original availability and FX dates; they do not establish a current offer.</p>`;
     focusModal();
     return;
   }
   const primal = WHOLESALE_PRIMALS.find(p => p.key === cut.us) || WHOLESALE_PRIMALS[0];
   modalContent.innerHTML = `
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
+    <div class="cut-dossier-heading" style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
       <span style="font-family:'Oswald';font-size:.84rem;letter-spacing:.1em;text-transform:uppercase;color:var(--red);font-weight:700">Retail Cut Dossier</span>
       <span style="font-size:.8rem;color:var(--mut)">• US ${primal.n} Primal</span>
     </div>
-    <h2 id="modal-cut-title" style="font-family:'Playfair Display',serif;font-size:2.4rem;margin:0 0 4px;color:var(--ink)">${cut.n}</h2>
+    ${heroHtml}
+    <h2 id="modal-cut-title" style="font-family:'Playfair Display',serif;font-size:2.4rem;margin:0 0 4px;color:var(--ink)">${escapeHtml(cut.n)}</h2>
     <div style="font-size:1.05rem;color:var(--navy);margin-bottom:16px">
       Name / qualified relationship: <b>${cut.eq}</b><p class="reference-note">Anatomical overlap or cooking context does not establish interchangeable specifications. ${cut.relationship.type}.${cut.relationship.source ? ` <a href="${cut.relationship.source}" target="_blank" rel="noopener">Reference source</a>` : ''}</p>
     </div>
