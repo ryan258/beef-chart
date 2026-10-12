@@ -1,63 +1,25 @@
-# Project Roadmap: The Cow, Two Ways
+# Roadmap and evidence status
 
-This document tracks completed milestones, architectural iterations, and planned future enhancements for the Beef Chart application.
+The October 12 [comprehensive review](reports/Beef%20chart%20comprehensive%20review.md) defines the current direction: useful, evidence-backed journeys for enthusiasts and meat professionals, preserving the current design and low-input operation.
 
----
+## Phase 1 — Truth and harmony
 
-## Completed Milestones
+Implemented locally, uncommitted: consistent catalog unit/species/form rejection; explicit USDA effective-week contract and fail-closed unresolved layouts; positive/date validation; legacy FX qualification; source/cut attempt states and retained references; native prices when conversion is missing; snapshot/status/source context; native dialogs and full directory/table alternatives; D3/plugin isolation; readable narrow-screen dossiers/table views; 100-unit teaching flow and explicit value/radar semantics; qualified anatomical names; organ price unit-scale qualification (withholding *mollejas*, *riñón*, *lengua* prices while retaining stored evidence); safe loopback public launcher; reconciled docs.
 
-### Phase 1: Dual-Tradition Anatomical Core ✅
-- [x] Defined foundational SVG paths for the bovine carcass.
-- [x] Mapped American primal cuts (Chuck, Rib, Loin, Round, Flank, Plate, Brisket, Shank).
-- [x] Mapped Argentine primals and subprimals (*Cuarto Delantero*, *Costillar*, *Cuarto Trasero*, *Vacío*, *Matambre*, *Nalga*, *Lomo*, etc.).
-- [x] Bi-directional hover highlighting: hovering an Argentine cut illuminates corresponding US anatomical sections and vice-versa.
-- [x] Modal inspection dialog with culinary descriptions, recommended cooking methods, and Spanish/English naming equivalents.
+Validation and residual boundaries are recorded in [TRUTH-HARMONY.md](docs/TRUTH-HARMONY.md). Deterministic/local browser checks are not professional, production, real-provider, device/AT, or WCAG acceptance. USDA real-layout acceptance remains unresolved. Official monthly staging still fails as a unit. One previous observation is retained; a complete history store is not implemented. Source/image rights and specialist crosswalk acceptance remain open.
 
-### Phase 2: Live Multi-Source Market Intelligence ✅
-- [x] Automated BLS API v2 integration for monthly US national retail beef price benchmarks.
-- [x] Automated INDEC IPC-GBA integration via `datos.gob.ar` API for Argentine peso prices.
-- [x] Integrated Banco Central de la República Argentina (BCRA) monthly average foreign exchange series to normalize ARS/kg into USD/lb.
-- [x] Automated USDA AMS weekly grocery store advertised feature PDF scraping using `pdftotext` extraction.
-- [x] Live Carrefour Argentina catalog scraper (`scrape-retail.py`) targeting butcher-counter per-kilogram fresh beef items.
-- [x] Consolidated atomic snapshot output in `data/prices.json`.
+## Phase 2 — Exceptional enthusiast reference
 
-### Phase 3: Contemporary Bauhaus Visual Identity ✅
-- [x] Full visual overhaul into a Contemporary Bauhaus aesthetic (`assets/bauhaus.css`).
-- [x] Geometric layout with strict 1px ink structural borders, primary color accents (Bauhaus Red `#c73524`, Bauhaus Gold `#edc445`, Bauhaus Navy `#234dba`).
-- [x] Modern typography scale using `Space Grotesk` for headlines and `Inter` for data density and body text.
-- [x] Responsive layout refactoring with comprehensive breakpoints (1600px desktop grid down to 320px mobile).
-- [x] Accessible UX enhancements: skip links, keyboard navigation focus indicators, and WCAG AA contrast compliance.
+Canonical reviewed catalog and bilingual operation; explained substitutes/comparison, butcher cards, product-aware preparation/safety references, editable quantities, and saved task state. Exit: a user chooses an unfamiliar cut, makes an understandable purchase request, reaches sourced preparation guidance, and resumes with minimal re-entry.
 
-### Phase 4: Advanced D3 Data Visualizations ✅
-- [x] **D3 Sankey Flow**: Visualizes primal divisions on the left to culinary uses on the right with distinct "Other primals" and "Other uses" nodes and resilient CDN fallbacks.
-- [x] **D3 US vs Argentina Price Comparison**: Lollipop chart comparing retail price per lb across cuts with connecting range lines and store-weighted USDA vs Carrefour dots.
-- [x] **Primal Yield Treemap**: Carcass volume and weight distribution across major carcass zones with fallback messaging.
-- [x] **Sensory Radar Chart**: Six-axis interactive radar visualization inside cut detail modals mapping tenderness, marbling, flavor, cooking speed, sear crust, and gelatin.
+## Phase 3 — Practical professional workbench
 
-### Phase 5: Specialized Cuts, Pipeline Hardening & Accessibility ✅
-- [x] Introduced the "Beyond the usual cuts" section for traditional Latin American and specialty butcher offerings (*bife de costilla*, *mollejas*, *riñón*, *lengua*).
-- [x] Hardened Carrefour catalog scraper with strict unit multiplier checks, cross-species exclusions, per-kg price validation, and explicit daily latest FX basis tracking.
-- [x] Stored explicit FX basis per record: INDEC records use BCRA monthly average matched to the price month; Carrefour records use BCRA daily latest.
-- [x] Enhanced anatomical interactive anatomy with synchronized dual-cow primal highlighting (`highlightPrimal`).
-- [x] Implemented WCAG-compliant accessible modal dialog (`role="dialog"`, `aria-modal="true"`, focus trapping, focus restoration on close, Escape key handler).
-- [x] Expanded test suite (`tests/test_retail_prices.py`) with 8 unit tests covering USDA AMS PDF parsing, store-weighted averages, non-conventional row filtering, stock detection, and FX basis guards.
+Reviewed product specifications, private manual supplier quotes, actual or explicitly assumed fabrication yield, usable/portion costing, and reproducible saved/exported scenarios. Exit: a professional compares two real qualified offers and independently reproduces their usable-cost decision.
 
----
+## Phase 4 — Dependable market context
 
-## Upcoming & Future Work
+Independent accepted adapters, original receipts, immutable observations/revisions, a chosen U.S./Argentine professional source, and reviewed current FX transport/convention. Exit: each adopted series reconciles to retained native source evidence and survives missing/revised/error states without false comparability.
 
-### Phase 6: Historical Time-Series & Inflation Trends ⏳
-- [ ] Implement historical price tracking with month-over-month and year-over-year percentage change graphs.
-- [ ] D3 line chart displaying rolling 12-month price trajectory for key flagship cuts (*Bife de chorizo* vs *NY Strip*, *Asado* vs *Short Rib*).
-- [ ] Inflation-adjusted price indexes comparing relative purchasing power across Argentina and the US.
+## Phase 5 — Reviewed breadth and use
 
-### Phase 7: International Butchery Expansions 🔮
-- [ ] **Brazilian Rodízio Cuts**: Add *Picanha* (tapa de cuadril/rump cap), *Fraldinha* (vacío), *Costela de chão*, and *Alcatra*.
-- [ ] **French / European Cuts**: Cross-reference *Entrecôte*, *Faux-filet*, *Bavette d'aloyau*, and *Onglet*.
-- [ ] **Japanese Wagyu Grading & Yield**: Compare A5 yield cuts (*Ichibo*, *Shin-shin*, *Zabuton*) against Western primals.
-
-### Phase 8: Automation & Application Polishing 🔮
-- [ ] GitHub Actions scheduled cron job to run `./fetch-prices.sh` monthly and commit updated `data/prices.json`.
-- [ ] Bilingual UI toggle: Full Spanish / English interface translation switcher.
-- [ ] Offline PWA support with service worker caching for offline butcher reference.
-- [ ] High-resolution downloadable PDF butcher charts styled in the Bauhaus visual language.
+Selected nutrition, training, offline/print, imports, and meaningful change features, followed by chosen regions/species or landed-cost needs. Expansion follows actual task value and domain acceptance. A planned feature is not shipped evidence; future scheduling, provider access, commits, pushing and publication remain separate owner-controlled actions.

@@ -1,115 +1,46 @@
-# Beef Cuts Guide: Argentine vs. American Butchery
+# Beef cuts: names, relationships, and preparation
 
-A cross-cultural reference guide comparing the culinary anatomy of Argentine and American beef butchery traditions.
+This is an educational Argentine/U.S. reference, not a purchasing specification or a validated fabrication guide. Retail names vary by region, seller, bone removal, membrane, trim, and portioning. The atlas geometry is schematic; matching colors indicate a broad anatomical group rather than an exact cutting boundary.
 
----
+## How to read a relationship
 
-## 1. Butchery Philosophies
+An anatomical relationship, a similar cooking use, and an interchangeable purchase specification are different claims. Before ordering, confirm species, muscle/boundaries, bone, membrane, trim, thickness, fresh/frozen state, and the applicable standard/edition. Price pairs in this atlas are contextual observations, not proof of identical products.
 
-| Dimension | American Butchery (USDA) | Argentine Butchery (*Cortes Criollos*) |
+The core references are [Argentina's SENASA nomenclador, Resolution 1128/1999 and its original annex](https://www.argentina.gob.ar/normativa/nacional/resoluci%C3%B3n-1128-1999-60581/texto), [USDA IMPS purchasing specifications](https://www.ams.usda.gov/grades-standards/imps), and [USMEF's regional cut dictionary](https://usmefsudamerica.org/corte-de-res/). The original annex is not a claim that all later amendments or regional names have been reviewed. Uruguay's INAC manual can provide regional context, but is not an Argentine authority. Full specialist acceptance of this atlas remains open.
+
+## Relationships requiring particular care
+
+| Argentine name | Useful U.S./English reference | Qualification |
 |---|---|---|
-| **Primary Culinary Destination** | High-heat steakhouse grilling, low-and-slow barbecue smoking, oven roasting | *La Parrilla* (wood/charcoal ember grilling), *El Asado* |
-| **Separation Strategy** | Divided along specific bone landmarks and major primal cross-sections | Follows anatomical muscle seams (*desposte a cuchillo*), preserving whole muscle sheets |
-| **Fat Trimming** | Heavy external fat trimming down to 1/8" or 1/4"; emphasis on intramuscular marbling | Moderate-to-generous fat cap retained; fat renders slowly over low embers to baste muscle |
-| **Bone Handling** | Bone-in roasts and cross-cut steaks (T-Bone, Porterhouse, Rib Steak, Bone-in Chuck) | Flanken-style cross-cut ribs (*Asado de tira*), bone-in loin chops, or whole bone-free muscle groups |
+| Bife ancho | Ribeye | Verify boneless/bone-in form, cap, and trim; a ribeye survey is a price reference |
+| Bife de chorizo / bife angosto | Strip loin / NY strip | Boneless steak context; separate from a bone-in costeleta |
+| Bife de costilla / costeleta / chuleta | Bone-in loin steak | Regional styles vary; do not call it T-bone unless the tenderloin is present |
+| Entraña fina | Outside skirt / diaphragm | USMEF distinguishes falsa entraña (inside skirt) and entraña gruesa (hanging tender); a generic retailer or survey 'skirt' is not identified as outside skirt |
+| Vacío | Abdominal-wall cut | SENASA distinguishes vacío 2471 from bife de vacío 2472 (rectus abdominis portion); broader vacío is not automatically a U.S. flank steak |
+| Matambre | Rose meat / superficial cutaneous muscle | Not a flank flap; surface position and preparation differ |
+| Aguja | Chuck-region reference | A chuck roast/roll observation does not identify every aguja preparation |
+| Cuadril | Sirloin/rump-region reference | Confirm muscle and preparation rather than relying on a top-sirloin translation |
+| Colita de cuadril | Tri-tip reference | Confirm preparation and trim |
+| Asado de tira | Cross-cut ribs / flanken-style reference | Rib section and thickness matter; generic short-rib prices are qualified context |
+| Lomo | Tenderloin | Whole versus portioned, trim, and head/tail inclusion affect comparison |
+| Paleta | Shoulder/clod-region reference | Includes different preparations; flat iron is a particular fabrication, not every paleta |
+| Peceto | Eye-of-round reference | Confirm trim and portioning |
+| Nalga / cuadrada | Round-region references | Country names and survey steak/roast categories are broader than an exact order |
+| Brazuelo / garrón / osobuco | Fore/hind shank or cross-cut shank | Bone, cut thickness, and front/hind origin remain separate fields |
 
----
+## Practical preparation context
 
-## 2. Primal Cross-Reference Map
+Cooking categories in the atlas are broad editorial suggestions. Connective-tissue-rich neck, shank, chuck-region cuts, and brisket commonly suit braising or other extended cooking; steak preparations vary with thickness, trim, equipment, and desired result. Slice coarse-grained cuts across the grain. Membrane/fat treatment and recipes depend on the specific preparation, not just a translated cut name.
 
-```
-+------------------------------------+------------------------------------+
-| American Primal (USDA)             | Argentine Cuts (Cortes Criollos)   |
-+------------------------------------+------------------------------------+
-| Chuck                              | Roast beef, Paleta, Palomita, Aguja|
-| Rib                                | Bife ancho, Asado (primeras costillas)|
-| Loin (Short Loin + Sirloin)        | Bife angosto, Bife de costilla,    |
-|                                    | Lomo, Cuadril, Colita de cuadril   |
-| Round                              | Nalga, Peceto, Cuadrada, Bola de lomo|
-| Flank                              | Vacío, Matambre                    |
-| Short Plate                        | Asado de tira, Entraña             |
-| Brisket                            | Tapa de asado, Pecho               |
-| Shank                              | Osobuco                            |
-+------------------------------------+------------------------------------+
-```
+Avoid fixed-time promises: neither a fixed number of minutes nor a color/texture preference establishes a safe result. Consult product-form and jurisdiction-specific guidance and use a food thermometer. [USDA FSIS's consumer temperature chart](https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/safe-temperature-chart) and [beef handling reference](https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/meat-catfish/beef-farm-table) are U.S. consumer sources; an establishment's approved process and other jurisdictions need their own applicable references. [Mechanically tenderized beef](https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/meat/mechanically-tenderized-beef) needs product-form-aware handling.
 
----
+The radar and tenderness/marbling values are editorial heuristics, not measured sensory data or USDA grades. Preparation, animal, aging, and trim can change the result. Outbound recipe links are general web searches, not reviewed recipes or evidence of authenticity.
 
-## 3. Comprehensive Cut Dictionary
+## Specialty entries
 
-### Steaks & Grilling Favorites
+- **Mollejas:** sweetbreads; a generic retailer name does not prove thymus versus another gland. Keep gland identification unresolved unless the product supplies it.
+- **Riñón:** kidney; raw and prepared products must remain separate.
+- **Lengua:** tongue; whole raw tongue and cooked/vinaigrette products are different observations.
+- **Bife de costilla:** retain the bone-in qualification and keep it separate from boneless strip and T-bone.
 
-#### Bife de Chorizo (Boneless Strip Steak / NY Strip)
-- **Anatomy**: Muscle *longissimus dorsi* located in the Argentine *bife angosto* (American short loin).
-- **Profile**: Firm texture with an iconic dense external strip of fat. 
-- **Cooking**: Grilled *a punto* (medium-rare to medium) over medium coals. 
-
-#### Bife Ancho (Ribeye / Scotch Fillet)
-- **Anatomy**: Upper rib section (ribs 6 through 12).
-- **Profile**: Rich intramuscular marbling with the distinct *ojo de bife* (ribeye center) and *tapa de bife* (spinalis dorsi cap).
-- **Cooking**: High heat direct sear followed by gentle ember roast.
-
-#### Bife de Costilla (Bone-in Strip / Loin Chop)
-- **Anatomy**: Similar to the T-bone area or bone-in strip, leaving the rib/vertebral bone attached to the loin muscle.
-- **Profile**: Savory, bone-infused flavor.
-- **Cooking**: Direct grill, seasoned with coarse parrillero salt.
-
-#### Lomo (Tenderloin / Filet Mignon)
-- **Anatomy**: The *psoas major* muscle nestled underneath the vertebrae.
-- **Profile**: Maximum tenderness, minimal intramuscular fat, subtle beef flavor.
-- **Cooking**: Quick sear or wrapped in lardo/bacon; often sliced thick as medallions or cooked whole (*lomo entero*).
-
-#### Entraña (Skirt Steak)
-- **Anatomy**: The diaphragm muscle attached inside the rib cage. In Argentina, the *entraña fina* (inside skirt) with membrane intact is revered.
-- **Profile**: Intense mineral flavor, loose grain, crispy outer membrane when salted and grilled fast.
-- **Cooking**: High heat direct fire, 8-10 minutes total; sliced across the grain.
-
-#### Vacío (Flank / Bavette)
-- **Anatomy**: Abdominal wall muscle hanging between the ribs and the hip bone.
-- **Profile**: Coarse fibrous grain encased in thin, crispy outer fat membranes. Extremely juicy when cooked patiently.
-- **Cooking**: Low-and-slow on the cooler side of the parilla (40–60 minutes), keeping fat cap intact until blistered and golden.
-
-#### Asado de Tira (Short Ribs / Flanken Cut)
-- **Anatomy**: Cross-cut rib sections across ribs 4 through 8, sliced perpendicular to the bones (1–2 inches wide).
-- **Profile**: Quintessential Argentine cut; delivers charred bone marrow richness and caramelized fat.
-- **Cooking**: Slow ember grilling bone-side down first for 75% of cooking time.
-
----
-
-### Roasts, Braises & Everyday Cuts
-
-#### Cuadril & Colita de Cuadril (Rump & Tri-Tip)
-- **Cuadril**: Upper rump muscle (*gluteus medius*), equivalent to US top sirloin. Lean, versatile, sliced for steaks or roasts.
-- **Colita de Cuadril**: Tri-tip muscle (*tensor fasciae latae*). Roasted whole on the grill or in ovens, basted with chimichurri.
-
-#### Matambre (Rose Meat / Fly Shaker)
-- **Anatomy**: Thin superficial muscle covering the ribs and flank (*cutaneous trunci*).
-- **Culinary Use**: Rolled with boiled eggs, carrots, and herbs (*Matambre arrollado*), or grilled flat topped with tomato sauce and mozzarella (*Matambre a la pizza*).
-
-#### Peceto (Eye of Round)
-- **Anatomy**: *Semitendinosus* muscle in the round. Very lean, cylindrical, uniform shape.
-- **Culinary Use**: Iconic choice for Argentine *milanesas* (thin breaded cutlets) and cold deli *vitel toné*.
-
-#### Nalga & Cuadrada (Top Round & Bottom Round)
-- **Nalga**: Largest, most tender muscle of the round (*semimembranosus*). The gold-standard base for homemade milanesas.
-- **Cuadrada**: Slightly firmer, ideal for stews (*guisos*), mincing, or braised milanesas.
-
-#### Osobuco (Beef Shank)
-- **Anatomy**: Cross-cut shin/leg containing central marrow bone.
-- **Culinary Use**: Slow-braised in wine, broth, or traditional *puchero* stew.
-
----
-
-### Specialty & Offal Cuts (*Achuras*)
-
-Traditional Argentine asados invariably commence with *las achuras* served straight off the grill:
-
-1. **Mollejas (Sweetbreads)**:
-   - Typically the thymus gland (*molleja de corazón* or *garganta*).
-   - Prepared crispy on the exterior with sea salt and fresh lemon juice, velvety on the interior.
-2. **Riñón (Kidneys)**:
-   - Sliced or butterflied, soaked in lemon/vinegar, grilled over hot coals.
-3. **Lengua (Tongue)**:
-   - Poached until tender, peeled, and traditionally served cold in vinaigrette (*lengua a la vinagreta*).
-4. **Chinchulines (Small Intestines)**:
-   - Cleaned, braided, and grilled until crispy and golden.
+Achuras are part of many asado traditions; menus and practices vary. These entries do not constitute reviewed offal-safety instructions. Furthermore, stored Carrefour organ observations (*mollejas*, *riñón*, *lengua*) carry unverified unit scales; their comparison prices are withheld while retaining native values as stored evidence only until units and availability are verified. Prices can be inactive catalog references or missing, and the atlas must not substitute another product's price to fill a gap.
