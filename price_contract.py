@@ -58,6 +58,40 @@ def qualify_snapshot(data):
     return data
 
 
+def validate_sampling(record):
+    """Optional observation-owned sample evidence; absence never proves coverage."""
+    if 'sampling' not in record:
+        return
+    sample = record['sampling']
+    if not isinstance(sample, dict):
+        raise ValueError('Invalid sampling object')
+    for field in ('per_query_limit', 'eligible_count', 'selected_count', 'unknown_seller_count'):
+        value = sample.get(field)
+        if type(value) is not int or value < (0 if field == 'unknown_seller_count' else 1):
+            raise ValueError('Invalid sampling count')
+    if not sample['unknown_seller_count'] <= sample['selected_count'] <= sample['eligible_count'] or type(record.get('products')) is not int or record['products'] != sample['selected_count']:
+        raise ValueError('Inconsistent sampling counts')
+    queries = sample.get('queries')
+    if not isinstance(queries, list) or not queries:
+        raise ValueError('Missing sampling queries')
+    for query in queries:
+        if not isinstance(query, dict) or not isinstance(query.get('query'), str) or not query['query'].strip() or type(query.get('returned_products')) is not int or query['returned_products'] < 0:
+            raise ValueError('Invalid sampling query')
+    expected = 'possibly_truncated' if any(q['returned_products'] >= sample['per_query_limit'] for q in queries) else 'unknown'
+    if sample.get('coverage') != expected:
+        raise ValueError('Invalid sampling coverage')
+    if sample.get('population') not in ('available_listings', 'out_of_stock_references') or sample.get('seller_policy') != 'first_seller_per_sku':
+        raise ValueError('Invalid sampling population or seller policy')
+    ids = sample.get('seller_ids')
+    if not isinstance(ids, list) or any(not isinstance(s, str) or not s.strip() for s in ids) or len(set(ids)) != len(ids):
+        raise ValueError('Invalid sampling seller IDs')
+    known = sample['selected_count'] - sample['unknown_seller_count']
+    if len(ids) > known or bool(ids) != bool(known):
+        raise ValueError('Inconsistent sampling sellers')
+    if 'region' not in sample or (sample['region'] is not None and (not isinstance(sample['region'], str) or not sample['region'].strip())):
+        raise ValueError('Invalid sampling region')
+
+
 def validate_snapshot(data):
     if data.get('schema_version') != 2 or not isinstance(data.get('fx'), dict) or not isinstance(data.get('source_status'), dict):
         raise ValueError('Expected v2 snapshot and FX object')
@@ -80,6 +114,7 @@ def validate_snapshot(data):
                     raise ValueError(f'{region}/{key}: invalid text field {field}')
             if 'unit_scale_unverified' in record and not isinstance(record['unit_scale_unverified'], bool):
                 raise ValueError(f'{region}/{key}: invalid unit-scale flag')
+            validate_sampling(record)
             native = 'ars_kg' if region == 'ar' else 'usd_lb'
             if not positive(record.get(native)):
                 raise ValueError(f'{region}/{key}: invalid native price')

@@ -205,11 +205,14 @@ def carrefour_prices(fx, keys=None):
         if keys is not None and key not in keys:
             continue
         listed = []
+        queries = []
+        query_limit = 20
         for query in AR_ALIASES.get(key, (words,)):
             q = urllib.parse.quote(query)
-            found = json.loads(get(f"https://www.carrefour.com.ar/api/catalog_system/pub/products/search?ft={q}&_from=0&_to=19"))
+            found = json.loads(get(f"https://www.carrefour.com.ar/api/catalog_system/pub/products/search?ft={q}&_from=0&_to={query_limit - 1}"))
             if not isinstance(found, list):
                 raise ValueError("Unexpected Carrefour response; previous snapshot retained")
+            queries.append({"query": query, "returned_products": len(found)})
             listed.extend(catalog_matches(found, key, words))
             time.sleep(1)
         # Alias queries may return the same SKU; count it only once.
@@ -217,10 +220,21 @@ def carrefour_prices(fx, keys=None):
         selected = [p for p in listed if p["available"]] or listed
         if selected:
             ars = statistics.median(p["ars_kg"] for p in selected)
+            seller_ids = {p['seller_id'] for p in selected if isinstance(p['seller_id'], str) and p['seller_id'].strip()}
+            sampling = {
+                "queries": queries, "per_query_limit": query_limit,
+                "eligible_count": len(listed), "selected_count": len(selected),
+                "population": "available_listings" if any(p['available'] for p in selected) else "out_of_stock_references",
+                "seller_policy": "first_seller_per_sku", "seller_ids": sorted(seller_ids),
+                "unknown_seller_count": sum(not isinstance(p['seller_id'], str) or not p['seller_id'].strip() for p in selected),
+                "region": None,
+                "coverage": "possibly_truncated" if any(q['returned_products'] >= query_limit for q in queries) else "unknown",
+            }
             out[key] = {"label": label, "ars_kg": ars, "usd_lb": round(ars / fx / LB_PER_KG, 2), "prev_usd_lb": None,
                         "period": datetime.now(timezone.utc).strftime("%Y-%m-%d"), "products": len(selected), "source": "Carrefour AR",
                         "availability": "in_stock" if any(p["available"] for p in selected) else "out_of_stock",
                         "fx_basis": "Latest returned daily observation (BCRA via datos.gob.ar)", "listings": selected,
+                        "sampling":sampling,
                         "sampling_note":"At most 20 products/query, first seller; deduplicated SKU sample", "availability_as_of":timestamp()}
         else:
             print(f"  Carrefour: no verified per-kg matches for {label}", file=sys.stderr)

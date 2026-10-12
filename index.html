@@ -1209,6 +1209,21 @@ function validPeriod(value) {
   const date = new Date(full + 'T12:00:00Z');
   return !Number.isNaN(date.getTime()) && date.toISOString().slice(0,10) === full;
 }
+function validateSampling(p) {
+  if (!('sampling' in p)) return;
+  const s = p.sampling;
+  if (!s || typeof s !== 'object' || Array.isArray(s)) throw new Error('Invalid sampling object');
+  for (const key of ['per_query_limit','eligible_count','selected_count','unknown_seller_count']) if (!Number.isSafeInteger(s[key]) || s[key] < (key === 'unknown_seller_count' ? 0 : 1)) throw new Error('Invalid sampling count');
+  if (s.unknown_seller_count > s.selected_count || s.selected_count > s.eligible_count || !Number.isSafeInteger(p.products) || p.products !== s.selected_count) throw new Error('Inconsistent sampling counts');
+  if (!Array.isArray(s.queries) || !s.queries.length || s.queries.some(q => !q || typeof q.query !== 'string' || !q.query.trim() || !Number.isSafeInteger(q.returned_products) || q.returned_products < 0)) throw new Error('Invalid sampling query');
+  const expected = s.queries.some(q => q.returned_products >= s.per_query_limit) ? 'possibly_truncated' : 'unknown';
+  if (s.coverage !== expected) throw new Error('Invalid sampling coverage');
+  if (!['available_listings','out_of_stock_references'].includes(s.population) || s.seller_policy !== 'first_seller_per_sku') throw new Error('Invalid sampling population or seller policy');
+  if (!Array.isArray(s.seller_ids) || s.seller_ids.some(id => typeof id !== 'string' || !id.trim()) || new Set(s.seller_ids).size !== s.seller_ids.length) throw new Error('Invalid sampling seller IDs');
+  const known = s.selected_count - s.unknown_seller_count;
+  if (s.seller_ids.length > known || Boolean(s.seller_ids.length) !== Boolean(known)) throw new Error('Inconsistent sampling sellers');
+  if (!('region' in s) || (s.region !== null && (typeof s.region !== 'string' || !s.region.trim()))) throw new Error('Invalid sampling region');
+}
 function validatePrices(data) {
   if (!data || data.schema_version !== 2 || typeof data.fx !== 'object' || !data.fx || !data.source_status || Array.isArray(data.source_status) || typeof data.source_status !== 'object') throw new Error('Unsupported snapshot contract');
   for (const state of Object.values(data.source_status)) if (!state || typeof state !== 'object' || typeof state.status !== 'string') throw new Error('Invalid source attempt state');
@@ -1218,6 +1233,7 @@ function validatePrices(data) {
       if (!p || !validPeriod(p.period) || !positiveNumber(p[group === 'ar' ? 'ars_kg' : 'usd_lb'])) throw new Error('Invalid native observation');
       for (const key of ['label','source','method','geography','provenance_status','observation_status','availability','fx_basis','fx_provenance','retrieved_at']) if (p[key] != null && typeof p[key] !== 'string') throw new Error('Invalid evidence text');
       if ('unit_scale_unverified' in p && typeof p.unit_scale_unverified !== 'boolean') throw new Error('Invalid unit-scale flag');
+      validateSampling(p);
       for (const key of ['usd_lb','prev_usd_lb','fx_ars_per_usd']) if (p[key] != null && !positiveNumber(p[key])) throw new Error('Invalid price or FX');
       for (const key of ['fx_date','prev_period','publication_date']) if (p[key] != null && !validPeriod(p[key])) throw new Error('Invalid date');
       if (p.fx_date && (p.fx_date.slice(0,7) > p.period.slice(0,7) || (p.period.length === 10 && p.fx_date > p.period))) throw new Error('Future FX date');
@@ -1245,6 +1261,16 @@ function recordContext(p) {
   if (!p) return 'No observation in this snapshot';
   const period = p.effective_period_status === 'unverified_report_date' ? `Stored report label ${p.period}; feature interval unverified` : `Observation ${p.period}`;
   return `${p.source || 'Unknown source'} · ${p.method || 'method unknown'} · ${p.geography || 'region unknown'} · ${period} · ${recordStatus(p)}`;
+}
+function samplingContext(p) {
+  if (p.source !== 'Carrefour AR') return '';
+  const s = p.sampling;
+  if (!s) return `Historical sample: ${Number.isSafeInteger(p.products) && p.products > 0 ? `recorded selected count ${p.products}; ` : ''}original query counts, limit hits and seller/region coverage unknown. ${typeof p.sampling_note === 'string' ? p.sampling_note + '. ' : ''}Not an exhaustive retailer sample.`;
+  const population = s.population === 'available_listings' ? 'listings available at observation' : 'out-of-stock references only';
+  const queries = s.queries.map(q => `${q.query}: ${q.returned_products}`).join('; ');
+  const sellers = s.seller_ids.length ? s.seller_ids.join(', ') : 'unknown';
+  const coverage = s.coverage === 'possibly_truncated' ? 'Query limit reached; possibly truncated' : 'Query limit not reached; coverage still unknown';
+  return `Sample median: ${s.selected_count} ${population}, from ${s.eligible_count} eligible listings after alias deduplication. Products returned per query (${s.per_query_limit} requested maximum): ${queries}. First seller per SKU; selected seller IDs: ${sellers}${s.unknown_seller_count ? `; ${s.unknown_seller_count} selected listings lack a seller ID` : ''}. Delivery region: ${s.region || 'unknown'}. ${coverage}; no exhaustive retailer coverage claim.`;
 }
 const PRICE_ROWS = [
   {label:'Ribeye / Bife ancho', ar:'bife_ancho', us:'ribeye_bnls'},
@@ -1618,7 +1644,7 @@ function fxLine(p) {
 }
 function priceBlock(cut) {
   const {ar, us} = priceOf(cut);
-  const one = (country, p) => !p ? '' : `<div class="price-evidence"><b>${country}</b><div class="price-value">${p.unit_scale_unverified ? 'Price withheld' : validPrice(p) ? usd(p.usd_lb) + ' /lb' : 'USD unavailable'}</div>${p.unit_scale_unverified ? `<p class="reference-note">${escapeHtml(retainedPriceEvidence(p))}</p>` : positiveNumber(p.ars_kg) ? `<div>Native ${p.ars_kg.toLocaleString('en-US')} ARS/kg</div>` : ''}<p>${escapeHtml(recordContext(p))}${country === 'Argentina' ? fxLine(p) : ''}<br>Retrieved: ${escapeHtml(p.retrieved_at || 'unknown; legacy receipt absent')}<br>Publication: ${escapeHtml(p.publication_date || 'unknown')}${p.sampling_note ? '<br>' + escapeHtml(p.sampling_note) : ''}</p></div>`;
+  const one = (country, p) => !p ? '' : `<div class="price-evidence"><b>${country}</b><div class="price-value">${p.unit_scale_unverified ? 'Price withheld' : validPrice(p) ? usd(p.usd_lb) + ' /lb' : 'USD unavailable'}</div>${p.unit_scale_unverified ? `<p class="reference-note">${escapeHtml(retainedPriceEvidence(p))}</p>` : positiveNumber(p.ars_kg) ? `<div>Native ${p.ars_kg.toLocaleString('en-US')} ARS/kg</div>` : ''}<p>${escapeHtml(recordContext(p))}${country === 'Argentina' ? fxLine(p) : ''}<br>Retrieved: ${escapeHtml(p.retrieved_at || 'unknown; legacy receipt absent')}<br>Publication: ${escapeHtml(p.publication_date || 'unknown')}${samplingContext(p) ? '<br>' + escapeHtml(samplingContext(p)) : ''}</p></div>`;
   return one('Argentina',ar) + one('United States',us) || '<p>No verified price in this snapshot; another cut’s price is never substituted.</p>';
 }
 
@@ -1873,7 +1899,7 @@ function renderPrices() {
   $('#market-sub').textContent = `US ${safePeriod(us)} · Argentina ${safeUsd(ar)}/lb, ${safePeriod(ar)} · survey context, different geography`;
   $$('.cut-card-price').forEach(el => { el.innerHTML = priceLine(PRICES.ar[el.dataset.ar], PRICES.us[el.dataset.us]); });
   const rows = [];
-  for (const [region, records] of [['US',PRICES.us],['AR',PRICES.ar]]) for (const p of Object.values(records)) rows.push([`${region}: ${p.label || 'Unnamed'}`,p.unit_scale_unverified ? 'Price withheld' : validPrice(p) ? usd(p.usd_lb) + '/lb' : 'USD unavailable',p.unit_scale_unverified ? retainedPriceEvidence(p) : positiveNumber(p.ars_kg) ? p.ars_kg + ' ARS/kg' : 'USD/lb native',recordContext(p),region === 'AR' ? `${p.fx_ars_per_usd ?? 'unknown'} ARS/USD · ${p.fx_date || 'unknown date'} · ${p.fx_basis || 'unknown basis'} · ${(p.fx_provenance || 'unknown').replaceAll('_',' ')}` : 'Native USD; no FX',p.retrieved_at || 'Retrieval unknown']);
+  for (const [region, records] of [['US',PRICES.us],['AR',PRICES.ar]]) for (const p of Object.values(records)) rows.push([`${region}: ${p.label || 'Unnamed'}`,p.unit_scale_unverified ? 'Price withheld' : validPrice(p) ? usd(p.usd_lb) + '/lb' : 'USD unavailable',p.unit_scale_unverified ? retainedPriceEvidence(p) : positiveNumber(p.ars_kg) ? p.ars_kg + ' ARS/kg' : 'USD/lb native',[recordContext(p),samplingContext(p)].filter(Boolean).join(' · '),region === 'AR' ? `${p.fx_ars_per_usd ?? 'unknown'} ARS/USD · ${p.fx_date || 'unknown date'} · ${p.fx_basis || 'unknown basis'} · ${(p.fx_provenance || 'unknown').replaceAll('_',' ')}` : 'Native USD; no FX',p.retrieved_at || 'Retrieval unknown']);
   renderTable('price-table','All stored observations; unverified unit scales are withheld from comparisons. Other comparisons require product, geography, method and interval qualifications.',['Observation','USD/lb','Native / retained evidence','Source and status','FX lineage','Retrieval'],rows);
   const attempts = Object.entries(PRICES.source_status || {}).map(([name,p]) => `${name}: ${String(p.status || 'unknown').replaceAll('_',' ')}, attempt ${p.attempted_at || 'unknown'}`).join('; ');
   $('#data-note').textContent = `Stored snapshot, legacy fetched label ${PRICES.fetched || 'unknown'}; metadata generated ${PRICES.generated_at || 'unknown'}. Generation is not retrieval. BLS monthly U.S. averages, INDEC GBA monthly averages, USDA advertised features and sampled Carrefour catalog offers differ in product, method, interval and geography. Read every qualification in the price table. Latest returned FX ${PRICES.fx.latest?.date || 'unknown date'} can lag. Inferred legacy FX is not original receipt proof. ${attempts}. Schematics, trait scores and value shares are illustrative. No current purchasing or conformance claim.`;
