@@ -25,3 +25,37 @@ header.site-header{background:var(--bg);backdrop-filter:none;border-bottom:1px s
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
 
 .extra-cuts{border:1px solid var(--ink);margin-bottom:36px}.extra-cuts>p{font-size:12px;max-width:75ch}.extra-price-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:24px 0}.extra-cut{display:flex;flex-direction:column;gap:12px;text-align:left;padding:20px 12px;border:1px solid var(--line-dark);background:transparent;min-width:0}.extra-cut:hover{background:var(--gold)}.extra-cut b{font-family:'Space Grotesk',sans-serif}.extra-cut span{font-size:11px}.extra-price-note{color:var(--mut)}@media(max-width:800px){.extra-price-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* Truth-and-harmony additions retain the existing palette and geometry. */
+.reference-note{font-size:12px;line-height:1.6;color:var(--mut)}
+.reference-directory,.chart-data{margin:16px 0;font-size:12px}
+.reference-directory summary,.chart-data summary{cursor:pointer;padding:12px 0;font-weight:600}
+#cut-directory,#primal-directory,#cut-results,#primal-cut-list{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.directory-cut{font:inherit;text-align:left;background:transparent;border:1px solid var(--line-dark);padding:10px;min-height:44px;max-width:100%;overflow-wrap:anywhere}
+.directory-cut:hover{background:var(--gold)}
+.chart-data table{border-collapse:collapse;width:100%;table-layout:fixed;font-size:11px}
+.chart-data caption,#radar-table caption{font-weight:600;text-align:left;margin-bottom:10px}
+.chart-data th,.chart-data td,#radar-table th,#radar-table td{padding:8px 5px;border-bottom:1px solid var(--line-dark);text-align:left;vertical-align:top;overflow-wrap:anywhere}
+.chart-data th{font-weight:600}
+#radar-table table{width:100%;font-size:12px}
+.cut-card-price small{display:block;font-size:10px;margin-top:4px;font-weight:400;line-height:1.5}
+.modal-overlay:not([open]){display:none}
+dialog.modal-overlay{margin:0;width:100%;max-width:none;max-height:none;border:0;height:100%}
+.modal-card{min-width:0;overflow-wrap:anywhere}
+#modal-cut-title{padding-right:45px}
+.cut-dossier-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,200px);gap:20px;background:#fff;padding:16px;border:1px solid var(--line);margin-bottom:20px}
+.cut-traits{display:flex;flex-wrap:wrap;gap:16px;font-size:13px;margin-top:10px}
+.price-evidence{font-size:12px;line-height:1.6;margin-bottom:12px;overflow-wrap:anywhere}
+.price-value{font:700 22px 'Space Grotesk',sans-serif}
+@media(max-width:600px){
+  #sankey-chart-svg,#scatter-chart-svg{display:none!important}
+  .chart-data table,.chart-data thead,.chart-data tbody,.chart-data tr,.chart-data th,.chart-data td{display:block;width:100%}
+  .chart-data thead{display:none}
+  .chart-data tr{padding:10px 0;border-bottom:1px solid var(--ink)}
+  .chart-data th,.chart-data td{border:0;padding:4px 0}
+  .chart-data td::before{content:attr(data-label) ': ';font-weight:600}
+  .modal-overlay{padding:12px}
+  .modal-card{padding:22px 16px;max-height:92vh}
+  .cut-dossier-grid{grid-template-columns:minmax(0,1fr)}
+  .modal-card h2{font-size:28px!important}
+}
