@@ -138,3 +138,24 @@ node --test tests/test_catalog_sampling.cjs tests/test_organ_unit_scale.cjs
 ```
 
 This completes the bounded local C14 transparency correction. Tests do not establish actual retailer coverage, live transport compatibility, inventory, original organ units, real-device/screen-reader acceptance or professional acceptance. C04's accepted real USDA fixture and the other previously documented limits remain open. No full suite, live price refresh, new feeds, provider spending, scheduling, staging, commit, push, deployment or publication was performed.
+
+## Bilingual operation (English / Castellano porteño) — October 12–13 follow-up
+
+Implemented bilingual operation via `assets/i18n.js` and an in-place header toggle, providing full English and Castellano porteño (Rioplatense Spanish with voseo) presentation.
+
+- `assets/i18n.js` defines the authored translation dictionary, string templates, number/date formatting helpers (`usd`, `monthLabel`, `t`, `locale`), and DOM translator `translateStaticPage()`.
+- `index.html` adds the accessible header language bar (`aria-pressed`, `aria-label`, visible focus), `data-i18n` attributes across static markup, and translated dynamic renderers (directories, cow maps, Sankey, scatter, treemap, radar, cut dossiers, search status, data tables, and price summaries).
+- Cow map idle readouts and reset states translate on render and pointer reset.
+- URL parameter `?lang=es-AR` / `?lang=en` takes precedence over optional `localStorage` preference; storage blockage does not prevent URL selection or in-page toggling.
+- Presentation boundary guarantee: underlying price data in `data/prices.json`, numeric amounts, currency identities, measurement units ($/lb, ARS/kg), and organ withholding invariants (`unit_scale_unverified: true`) are never mutated by language switching. Spanish displays dollar amounts as `US$` with Argentine comma-decimal conventions and translates qualifications without modifying retained price evidence.
+- Search accepts cut names, English equivalents, and local aliases (*ojo de bife*, *tira de asado*, *achuras*) in either language with accent insensitivity.
+- `serve.sh` allows `assets/*.js` in the public loopback directory.
+- Regressions in `tests/test_language.cjs` verify language precedence, denied storage fallback, translation coverage for all 24 cut dossiers and 9 primals, template interpolation/escaping, and immutable price/validator independence. Existing sampling and organ tests (`test_catalog_sampling.cjs`, `test_organ_unit_scale.cjs`) pass with `assets/i18n.js` integrated.
+
+Focused repeat command:
+
+```bash
+node --test tests/test_language.cjs tests/test_catalog_sampling.cjs tests/test_organ_unit_scale.cjs
+```
+
+This completes the local bilingual operation pass. Tests do not establish native-speaker or assistive-technology acceptance across all screen readers or operating systems. All price evidence, official sources, and previous boundaries remain unchanged.

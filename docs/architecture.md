@@ -16,6 +16,14 @@ Beef Chart is a zero-build static page combining a Bauhaus layout, vintage halft
 
 Search is accent-insensitive and operates on names, aliases, and IDs. One result opens; ambiguous matches show choices; missing/empty queries explain recovery. Primal actions open an actual primal explanation rather than an arbitrary retail cut. Popular-card previous/next actions synchronize with the selected featured cut.
 
+## Languages
+
+`assets/i18n.js` holds the authored English-to-Argentine-Spanish catalog and display helpers. `data-i18n` marks trusted static HTML fragments; explicit attribute markers translate accessible names, placeholders, titles and image descriptions. Dynamic renderers call `t()` on copy or tagged templates at the display boundary. Canonical cut IDs, U.S. region names, price records, validation, and comparison logic stay language-independent; interpolated upstream evidence is still escaped in HTML.
+
+English is the default. The `English / Castellano porteño` buttons switch in place, update `html[lang]` and pressed states, and rerender the directories, maps, charts, tables and current search without re-fetching prices. Expanded sections and input values persist. `?lang=en` or `?lang=es-AR` overrides the optional `beef-chart-language` browser preference; toggling updates that parameter while preserving other parameters and the fragment. Restricted storage does not prevent URL selection or toggling. Spanish uses voseo and occasional local phrasing, with factual and evidence qualifications kept explicit. All 24 descriptions and nine U.S. region explanations are translated; U.S. terms remain cross-reference names, not newly asserted cut equivalences.
+
+The preview allowlist includes `assets/*.js`. After editing translations, restart the copy-based preview just as for HTML/CSS. The focused language tests cover preference precedence, storage denial, all catalog descriptions, interpolation, evidence escaping, numeric formatting, and price/validator independence. Browser checks cover switching, search, mobile layout, dialog use and chart fallback; they do not establish native-speaker or assistive-technology acceptance.
+
 ## Visual assets and diagrams
 
 `CUT_IMAGE_MAP` connects every one of the 24 cut IDs to a transparent 1024 × 1024 WebP. `openCutModal` adds the illustration to regular and specialty dossiers. Six popular cards and four specialty cards use the same set. Chuck/aguja, strip/bife de chorizo, and sirloin/cuadril retain paired filenames with identical image content; ribeye and sirloin are distinct illustrations.

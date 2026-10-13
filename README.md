@@ -14,6 +14,7 @@ Both traditions combine anatomical boundaries, local retail practice, and culina
 
 - **Interactive Cut Maps**: Twenty Argentine cut controls and nine U.S. region controls, with shared hover/focus highlighting, full-name readouts, keyboard activation, and a complete directory alternative. Hatched lomo, entraña, and peceto overlays identify layered references.
 - **Illustrated Dossiers**: All 24 catalog entries have transparent halftone illustrations. Six popular-cut cards and four specialty cards use the same illustration set; ribeye and sirloin have distinct shapes. The cow portrait, pasture scene, and cow favicon complete the visual treatment.
+- **English / Castellano porteño**: The header toggle translates the page, all 24 dossiers, chart/table labels, search feedback, and price qualifications. Spanish uses Rioplatense voseo and light lunfardo; U.S. names remain available as cultural references. Search accepts names in either language, with or without accents, plus aliases such as *ojo de bife* and *tira de asado*.
 - **Stored Retail Context**: Dated observations normalized to USD per pound ($/lb). Source, geography, interval, product form, availability, and FX basis qualify comparison.
 - **Advanced D3 Data Visualizations**:
   - **Sankey Flow Diagram**: Primal to culinary use flow with distinct Other primals and Other uses nodes.
@@ -61,6 +62,7 @@ beef-chart/
 │   ├── bauhaus.css                 # Contemporary Bauhaus overrides applied over index.html base
 │   ├── cut_*.webp                  # 24 cut illustrations plus three card/dossier filename aliases
 │   ├── hero_cow.webp               # Halftone cow portrait in the hero collage
+│   ├── i18n.js                     # Authored English-to-Argentine-Spanish catalog and display helpers
 │   ├── pasture_fence.webp          # Halftone pasture in the editorial quote card
 │   ├── favicon.svg                # Cow icon with a cream background
 │   ├── favicon-32.png             # 32px browser fallback
@@ -78,6 +80,7 @@ beef-chart/
 ├── tests/
 │   ├── test_catalog_sampling.py    # Offline catalog sample evidence and retention fixtures
 │   ├── test_catalog_sampling.cjs   # Browser sampling contract, shared display text, escaping
+│   ├── test_language.cjs           # Language selection, translations, formatting, and price independence
 │   ├── test_official_prices.py     # Offline official-source isolation and retention fixtures
 │   ├── test_organ_unit_scale.cjs   # Node/DOM tests verifying organ price withholding and evidence display
 │   ├── test_organ_unit_scale.py    # Python tests for organ unit-scale qualification and immutability
@@ -116,6 +119,8 @@ Use the public-file launcher so the JSON route works and repository/private file
 
 Open `http://127.0.0.1:8792`. Stop with Ctrl-C and restart after edits; the launcher copies the public files into a temporary directory. Set `BEEF_CHART_PORT` to choose another port. Do not serve the repository root or rely on `file://` for JSON fetching.
 
+The language toggle remembers the reader's preference in that browser and updates the URL. To open directly in Argentine Spanish, append `?lang=es-AR` to the page URL, before any `#section`; `?lang=en` opens English. An explicit URL choice wins over the saved preference. Storage is optional. Currency and measurement units remain the same in both languages; Spanish formats dates and decimals for Argentina and labels dollar amounts as `US$`.
+
 ### Running Tests
 
 Run only the regressions relevant to the change (no live providers):
@@ -130,6 +135,9 @@ node --test tests/test_organ_unit_scale.cjs
 # Catalog sample evidence and shared dossier/table disclosure
 PYTHONPATH=.:tests python3 -m unittest -q test_catalog_sampling
 node --test tests/test_catalog_sampling.cjs
+
+# Language selection, translations, formatting, and unchanged price qualification
+node --test tests/test_language.cjs tests/test_organ_unit_scale.cjs tests/test_catalog_sampling.cjs
 ```
 
 ### Refreshing Price Data

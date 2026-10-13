@@ -10,6 +10,8 @@ The angular cut-paper diagrams preserve broad regional ordering. Hatching marks 
 
 Ribeye is drawn with a rounded central eye and cap; sirloin has a broader, leaner, tapered silhouette. Tenderloin is shown as a medallion, brisket as a slab, and the fore/hind shank references use different presentations. Confirm the actual seller's bone, trim, thickness, and portioning separately. See [the artwork and diagram record](artwork-prompts.md) for asset mappings and reference links.
 
+The atlas operates in both English and Castellano porteño (Rioplatense Spanish). The header toggle translates all 24 cut dossiers, diagrams, tables, and search feedback in-place, while preserving cross-cultural U.S. and Argentine reference names. Search operates in either language, ignoring accents and matching common aliases (*ojo de bife*, *tira de asado*, *achuras*).
+
 ## How to read a relationship
 
 An anatomical relationship, a similar cooking use, and an interchangeable purchase specification are different claims. Before ordering, confirm species, muscle/boundaries, bone, membrane, trim, thickness, fresh/frozen state, and the applicable standard/edition. Price pairs in this atlas are contextual observations, not proof of identical products.

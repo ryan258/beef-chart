@@ -18,7 +18,9 @@ Validation and residual boundaries are recorded in [TRUTH-HARMONY.md](docs/TRUTH
 
 ## Phase 2 — Exceptional enthusiast reference
 
-Canonical reviewed catalog and bilingual operation; explained substitutes/comparison, butcher cards, product-aware preparation/safety references, editable quantities, and saved task state. Exit: a user chooses an unfamiliar cut, makes an understandable purchase request, reaches sourced preparation guidance, and resumes with minimal re-entry.
+Implemented: bilingual operation (English / Castellano porteño) via `assets/i18n.js` and in-place header toggle, with Rioplatense voseo, URL query parameter (`?lang=es-AR` / `?lang=en`) precedence over optional `localStorage` preference, full-page dynamic translation across all 24 cut dossiers, diagrams, tables, and search feedback, bilingual accent-insensitive search with Argentine aliases, and preserved price evidence, numeric units, and organ withholding invariants.
+
+Future work: canonical reviewed catalog expansion; explained substitutes/comparison, butcher cards, product-aware preparation/safety references, editable quantities, and saved task state. Exit: a user chooses an unfamiliar cut, makes an understandable purchase request, reaches sourced preparation guidance, and resumes with minimal re-entry.
 
 ## Phase 3 — Practical professional workbench
 

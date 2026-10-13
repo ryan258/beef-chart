@@ -29,6 +29,7 @@ The owning validator is `price_contract.py`; browser validation enforces the cor
 - `source_status` and `catalog_attempts` report source/cut attempt outcome and timestamp. No match, error, legacy unknown, and successful retrieval are distinct.
 - Official source states use `ok`, `partial`, `no_match` or `error`. BLS/INDEC `coverage` includes every configured series, including missing ones; INDEC `native_only` lists new observations without matching monthly FX. `FX monthly` and `FX daily` are separate attempts. `fx.monthly_retrieved_at` dates a successful monthly-rate retrieval; it does not replace the rate's observation period or the separate daily `fx.latest` evidence.
 - New records can retain `previous_observation` for bounded recovery. This keeps one previous version, not an append-only historical store.
+- Display localization (`assets/i18n.js`) operates strictly at the presentation boundary: formatting dates and decimals for Argentina and prefixing dollar amounts with `US$` in Spanish. Underlying price observations, numeric amounts, currency identities, measurement units ($/lb, ARS/kg), and validation invariants are never mutated by language switching.
 
 The bundled October 7 snapshot was qualified locally on October 12: values, record periods, legacy fetched timestamp, and August 31 latest-returned FX were not refreshed. Original raw receipts are not reconstructed. The three stored organ observations also carry `unit_scale_unverified: true`; parser regressions do not prove the cause of their unusually low nominal values.
 
