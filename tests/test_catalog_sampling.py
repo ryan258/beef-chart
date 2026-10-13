@@ -105,10 +105,7 @@ class CatalogSampling(unittest.TestCase):
                 with patch.object(m, 'OUT', path), patch.object(m.sys, 'argv', ['scraper', '--cuts', 'lengua']), \
                      patch.object(m, 'get', side_effect=[b'{"data":[["2026-08-31",1500]]}', OSError('fixture') if failed else b'[]']), \
                      patch.object(m.time, 'sleep'), patch('builtins.print'):
-                    if failed:
-                        with self.assertRaises(RuntimeError):
-                            m.main()
-                    else:
+                    with self.assertRaises(RuntimeError):
                         m.main()
                 retained = json.loads(path.read_text())['ar']['lengua']
                 expected = {**original, 'observation_status': 'retained_after_error' if failed else 'retained_no_match'}

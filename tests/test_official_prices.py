@@ -94,7 +94,9 @@ class OfficialIsolation(unittest.TestCase):
 
     def test_success_matches_monthly_rates_and_retains_previous_observations(self):
         result, issue = self.run_refresh()
-        self.assertIsNone(issue)
+        # The catalog fixture updates only Lomo; other requested cuts are no-match.
+        self.assertIn('Carrefour AR: no match', issue)
+        self.assertEqual(result['source_status']['Carrefour AR']['status'], 'partial')
         for source in ('BLS', 'INDEC', 'FX monthly'):
             self.assertEqual(result['source_status'][source]['status'], 'ok')
         for region, keys in [('us', official.US_SERIES), ('ar', official.AR_SERIES)]:

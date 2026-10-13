@@ -61,10 +61,8 @@ class OrganUnitScale(unittest.TestCase):
                      patch.object(retail, 'get', return_value=b'{"data":[["2026-08-31",1509.4686]]}'), \
                      patch.object(retail, 'carrefour_prices', **({'side_effect': OSError('fixture failure')} if failed else {'return_value': {}})), \
                      patch('builtins.print'):
-                    if failed:
-                        with self.assertRaises(RuntimeError):
-                            retail.main()
-                    else:
+                    # Empty matches and failed attempts both save evidence, then exit nonzero.
+                    with self.assertRaises(RuntimeError):
                         retail.main()
                 result = json.loads(path.read_text())
                 for key in ORGANS:

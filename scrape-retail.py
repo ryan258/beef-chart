@@ -9,15 +9,17 @@
       fx_date, and fx_basis so the page can display provenance without mixing bases.
 """
 import argparse, os, math, json, re, statistics, subprocess, sys, tempfile, time, unicodedata, urllib.parse, urllib.request
+from http.client import HTTPException
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from price_contract import positive, valid_period, qualify_snapshot, merge_records, write_snapshot, timestamp
+from price_contract import positive, valid_period, qualify_snapshot, validate_snapshot, merge_records, write_snapshot, timestamp
 from official_prices import fetch_official, merge_official
 
 OUT = Path(os.environ.get("BEEF_PRICES_OUT", Path(__file__).parent / "data" / "prices.json"))
 USDA_PDF = "https://www.ams.usda.gov/mnreports/AMS_3228.pdf"
 FX_URL = "https://apis.datos.gob.ar/series/api/series/?ids=92.2_TIPO_CAMBIION_0_0_21_24&last=1&format=json"
 LB_PER_KG = 2.2046226
+RETAIL_ERRORS = (OSError, ValueError, KeyError, IndexError, TypeError, OverflowError, HTTPException)
 # not plain beef cuts, or premium/branded lines that would skew a "typical" price
 SKIP = re.compile(r"cerdo|pollo|cordero|guanaco|congel|milanesa|etiqueta negra|huella natural|cabana|holis|premium")
 
@@ -77,7 +79,7 @@ def catalog_matches(products, key, words):
     excluded = re.compile(r"cerdo|porcin|pollo|aviar|cordero|ovin|caprin|cabra|conejo|rabbit|pavo|pescad|lenguado|vinagreta|cocid|cocinad|escabeche|preparad|empanad|marinad|rebozad|ahumad|curad|salam|vegetal|soja|pancreas")
     for product in products:
         if not isinstance(product, dict):
-            continue
+            raise ValueError('Catalog product must be an object')
         name = unaccent(str(product.get("productName", "")))
         if not any(re.match(re.escape(alias) + r"\b", name) for alias in aliases):
             continue
@@ -94,11 +96,23 @@ def catalog_matches(products, key, words):
             continue
         if not re.search(r"(?:x|por)\s*(?:1\s*)?kg\b", name):
             continue
-        for item in product.get("items", []):
+        items = product.get("items", [])
+        if not isinstance(items, list):
+            raise ValueError('Catalog items must be a list')
+        for item in items:
+            if not isinstance(item, dict):
+                raise ValueError('Catalog item must be an object')
             if item.get("measurementUnit") != "kg" or (item.get("unitMultiplier") != 1 or isinstance(item.get("unitMultiplier"), bool)):
                 continue
-            for seller in item.get("sellers", [])[:1]:
+            sellers = item.get("sellers", [])
+            if not isinstance(sellers, list):
+                raise ValueError('Catalog sellers must be a list')
+            for seller in sellers[:1]:
+                if not isinstance(seller, dict):
+                    raise ValueError('Catalog seller must be an object')
                 offer = seller.get("commertialOffer", {})
+                if not isinstance(offer, dict):
+                    raise ValueError('Catalog offer must be an object')
                 price = offer.get("Price")
                 if not positive(price):
                     continue
@@ -112,7 +126,8 @@ def catalog_matches(products, key, words):
 
 def get(url):
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (compatible; beef-chart price snapshot)"})
-    return urllib.request.urlopen(req, timeout=20).read()
+    with urllib.request.urlopen(req, timeout=20) as response:
+        return response.read()
 
 
 def unaccent(s):
@@ -241,6 +256,17 @@ def carrefour_prices(fx, keys=None):
     return out
 
 
+def validate_retail_records(region, source, records, keys):
+    """Reject one malformed adapter batch before it can contaminate other sources."""
+    if not isinstance(records, dict) or set(records) - set(keys):
+        raise ValueError('Unexpected retail observation keys')
+    if any(not isinstance(p, dict) or p.get('source') != source for p in records.values()):
+        raise ValueError('Unexpected retail observation source')
+    candidate = {'us': {}, 'ar': {}, 'fx': {}}
+    candidate[region] = records
+    validate_snapshot(qualify_snapshot(candidate))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--cuts", nargs="+", choices=sorted(AR_ITEMS))
@@ -267,7 +293,7 @@ def main():
             raise ValueError("Invalid/future FX observation")
         data["fx"]["latest"] = {"ars_per_usd":fx_row[1], "date":fx_row[0], "basis":"Latest returned daily observation (BCRA via datos.gob.ar)"}
         data['source_status']['FX daily'] = {'status':'ok', 'attempted_at':attempted, 'observation_date':fx_row[0]}
-    except (OSError, ValueError, KeyError, IndexError, TypeError) as error:
+    except RETAIL_ERRORS as error:
         fx_row = None
         errors.append('FX daily')
         data['source_status']['FX daily'] = {'status':'error', 'attempted_at':attempted, 'error_type':type(error).__name__}
@@ -278,21 +304,34 @@ def main():
             if fx_row is None:
                 raise ValueError('FX unavailable; retaining original native and converted observations')
             records = carrefour_prices(fx_row[1], [key])
+            validate_retail_records('ar', 'Carrefour AR', records, [key])
             for record in records.values():
+                if not isinstance(record, dict):
+                    raise ValueError('Catalog observation must be an object')
                 record.update(fx_ars_per_usd=fx_row[1], fx_date=fx_row[0], fx_provenance='recorded', fx_basis='Latest returned daily observation (BCRA via datos.gob.ar)')
+            validate_retail_records('ar', 'Carrefour AR', records, [key])
             merge_records(data, 'ar', 'Carrefour AR', records, [key], attempted)
             data.setdefault('catalog_attempts', {})[key] = data['source_status']['Carrefour AR']
-        except (OSError, ValueError, KeyError, TypeError) as error:
+        except RETAIL_ERRORS as error:
             errors.append('Carrefour ' + key)
             data.setdefault('catalog_attempts', {})[key] = {'status':'error', 'attempted_at':attempted, 'error_type':type(error).__name__}
             if key in data['ar']:
                 data['ar'][key]['observation_status'] = 'retained_after_error'
-    data['source_status']['Carrefour AR'] = {'status':'partial_error' if any(e.startswith('Carrefour') for e in errors) else 'ok', 'attempted_at':attempted, 'coverage':{k:data['catalog_attempts'][k]['status'] for k in keys}}
+    coverage = {k:data['catalog_attempts'][k]['status'] for k in keys}
+    outcomes = set(coverage.values())
+    catalog_status = ('error' if outcomes == {'error'} else 'partial_error' if 'error' in outcomes
+                      else 'no_match' if outcomes == {'no_match'} else 'partial' if 'no_match' in outcomes else 'ok')
+    data['source_status']['Carrefour AR'] = {'status':catalog_status, 'attempted_at':attempted, 'coverage':coverage}
+    if 'no_match' in outcomes:
+        errors.append('Carrefour AR: no match for ' + ', '.join(k for k, state in coverage.items() if state == 'no_match'))
     if not args.cuts:
         try:
             us = usda_prices()
+            validate_retail_records('us', 'USDA ad survey', us, list(US_ITEMS))
             merge_records(data, 'us', 'USDA ad survey', us, list(US_ITEMS), attempted)
-        except (OSError, ValueError, subprocess.SubprocessError, KeyError, TypeError) as error:
+            if data['source_status']['USDA ad survey']['status'] == 'no_match':
+                errors.append('USDA: no match')
+        except (*RETAIL_ERRORS, subprocess.SubprocessError) as error:
             errors.append('USDA')
             data['source_status']['USDA ad survey'] = {'status':'error', 'attempted_at':attempted, 'error_type':type(error).__name__}
             for record in data['us'].values():
