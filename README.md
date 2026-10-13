@@ -17,8 +17,8 @@ Both traditions combine anatomical boundaries, local retail practice, and culina
 - **English / Castellano porteño**: The header toggle translates the page, all 24 dossiers, chart/table labels, search feedback, and price qualifications. Spanish uses Rioplatense voseo and light lunfardo; U.S. names remain available as cultural references. Search accepts names in either language, with or without accents, plus aliases such as *ojo de bife* and *tira de asado*.
 - **Stored Retail Context**: Dated observations normalized to USD per pound ($/lb). Source, geography, interval, product form, availability, and FX basis qualify comparison.
 - **Advanced D3 Data Visualizations**:
-  - **Sankey Flow Diagram**: Primal to culinary use flow with distinct Other primals and Other uses nodes.
-  - **US vs Argentina Price Lollipop**: Retail price per lb by cut with store weighted USDA dots and Carrefour medians.
+  - **Sankey Flow Diagram**: Nine primal teaching allocations flow to culinary uses, including Other uses; 100 illustrative units in total.
+  - **US vs Argentina Price Lollipop**: Mixed-source retail context by cut: USDA advertised features and BLS monthly averages for the U.S., Carrefour catalog medians and INDEC monthly averages for Argentina. Color identifies the country; it does not identify one uniform source or product.
   - **Value Treemap**: Fixed illustrative retail-value allocation; not carcass weight, measured yield, or a current-price calculation.
   - **Editorial Radar**: Six heuristic trait scores; not measured sensory evidence or grades.
 - **Specialized & Offal Cuts**: Dedicated entries for *bife de costilla*, *mollejas* (sweetbreads), *riñón* (kidney), and *lengua* (tongue). The three stored organ prices remain withheld because their unit scales are unverified.
@@ -81,6 +81,8 @@ beef-chart/
 │   ├── test_catalog_sampling.py    # Offline catalog sample evidence and retention fixtures
 │   ├── test_catalog_sampling.cjs   # Browser sampling contract, shared display text, escaping
 │   ├── test_language.cjs           # Language selection, translations, formatting, and price independence
+│   ├── test_harmony_ui.cjs         # Both-language search, price mappings, formatting, loading and dossier recovery
+│   ├── test_refresh_harmony.py     # Retail transport/batch isolation and aggregate refresh health
 │   ├── test_official_prices.py     # Offline official-source isolation and retention fixtures
 │   ├── test_organ_unit_scale.cjs   # Node/DOM tests verifying organ price withholding and evidence display
 │   ├── test_organ_unit_scale.py    # Python tests for organ unit-scale qualification and immutability
@@ -119,7 +121,9 @@ Use the public-file launcher so the JSON route works and repository/private file
 
 Open `http://127.0.0.1:8792`. Stop with Ctrl-C and restart after edits; the launcher copies the public files into a temporary directory. Set `BEEF_CHART_PORT` to choose another port. Do not serve the repository root or rely on `file://` for JSON fetching.
 
-The language toggle remembers the reader's preference in that browser and updates the URL. To open directly in Argentine Spanish, append `?lang=es-AR` to the page URL, before any `#section`; `?lang=en` opens English. An explicit URL choice wins over the saved preference. Storage is optional. Currency and measurement units remain the same in both languages; Spanish formats dates and decimals for Argentina and labels dollar amounts as `US$`.
+The language toggle remembers the reader's preference in that browser and updates the URL. To open directly in Argentine Spanish, append `?lang=es-AR` to the page URL, before any `#section`; `?lang=en` opens English. An explicit URL choice wins over the saved preference. Storage is optional. Search includes both English and Spanish terms independently of the display language. Currency and measurement units remain the same in both languages; Spanish formats dates, decimals, percentages, native-price and FX displays for Argentina and labels dollar amounts, including chart ticks, as `US$`. Formatting rounds display only: USD amounts use two decimals, benchmark changes use one, and native amounts/FX use up to six consistently in tables, dossiers and evidence. Stored evidence stays unchanged.
+
+Navigation accounts for the actual sticky-header height. At 600px and below, dense flow/price charts use initially open tables; entering that width opens the reader views without overriding manual choices while staying within it. An early-opened dossier shows a loading state and updates when prices arrive, preserving its focused control and reading position. A failed load shows a recovery explanation inside the dossier; a successfully loaded snapshot with no observation for that cut remains a distinct missing-observation state. Pecho and Cuadrada can display their own future Argentine catalog observations, with the same product/source qualifications; absent observations remain absent.
 
 ### Running Tests
 
@@ -138,6 +142,10 @@ node --test tests/test_catalog_sampling.cjs
 
 # Language selection, translations, formatting, and unchanged price qualification
 node --test tests/test_language.cjs tests/test_organ_unit_scale.cjs tests/test_catalog_sampling.cjs
+
+# October 13 correction regressions and affected evidence/recovery paths
+PYTHONPATH=.:tests python3 -m unittest -q test_refresh_harmony test_official_prices test_organ_unit_scale test_catalog_sampling.CatalogSampling.test_failed_empty_and_replacement_preserve_observation_owned_evidence test_truth_harmony.TruthHarmony.test_cut_failures_do_not_block_healthy_cut_or_change_dates test_truth_harmony.TruthHarmony.test_invalid_data_never_replaces_good_file test_retail_prices.PriceMatching.test_alias_dedup_conversion_and_stock test_truth_harmony.TruthHarmony.test_uniform_unit_contract_for_all_cuts test_truth_harmony.TruthHarmony.test_species_and_prepared_products_fail_closed
+node --test tests/test_harmony_ui.cjs tests/test_language.cjs tests/test_organ_unit_scale.cjs tests/test_catalog_sampling.cjs
 ```
 
 ### Refreshing Price Data
@@ -152,7 +160,7 @@ To execute a complete data refresh:
 python3 scrape-retail.py --cuts bife_costilla molleja rinon lengua
 ```
 
-Official sources fail independently. A partial refresh saves healthy observations and dated failure states, then exits nonzero. INDEC native prices can advance with USD unavailable when matching monthly FX is missing. New catalog observations record bounded sampling evidence; a query limit hit means possible truncation, and a short response still has unknown coverage. Historical observations do not acquire invented query counts. Inspect source statuses and original observation dates before treating data as refreshed; see [the pipeline contract](docs/data-pipeline.md).
+Official and retail sources fail independently for classified transport, parsing and validation errors. Retail batches validate before merging; a malformed cut or USDA batch cannot prevent healthy batches from reaching the final write. A partial, empty-match or failed refresh saves healthy observations and dated attempt states, then exits nonzero. Carrefour summaries distinguish `ok`, `no_match`, `partial`, `error` and `partial_error`; inspect per-cut coverage. `ok` describes successfully obtained reference observations, not a current purchasable offer. INDEC native prices can advance with USD unavailable when matching monthly FX is missing. New catalog observations record bounded sampling evidence; a query limit hit means possible truncation, and a short response still has unknown coverage. Historical observations do not acquire invented query counts. Inspect source statuses and original observation dates before treating data as refreshed; see [the pipeline contract](docs/data-pipeline.md).
 
 ---
 
@@ -162,4 +170,4 @@ There is currently no tracked LICENSE or completed asset/data-rights manifest. C
 
 ## Current correction evidence
 
-See [the correction and review record](docs/TRUTH-HARMONY.md) for verification and [the roadmap](roadmap.md) for remaining work. C06 source isolation and C14 sampling disclosure are implemented and checked with offline fixtures. All 24 illustrations and the interactive diagrams have local desktop/mobile checks. The bundled snapshot retains its old price values, observation periods, and FX dates; this work did not refresh prices. Live-provider compatibility, USDA real-layout acceptance, specialist anatomy/rights review, and production/device/AT behavior remain open.
+See [the correction and review record](docs/TRUTH-HARMONY.md) for verification and [the roadmap](roadmap.md) for remaining work. C06 source isolation and C14 sampling disclosure are implemented and checked with offline fixtures. All 24 illustrations and the interactive diagrams have local desktop/mobile checks. The October 13 correction pass adds retail batch/transport isolation, truthful incomplete-refresh exits, independent bilingual search, header/focus/reader corrections and active-dossier loading recovery, with targeted regression and bounded browser evidence recorded in the correction log, including the final review follow-up. The bundled snapshot retains its old price values, observation periods, and FX dates; this work did not refresh prices. Live-provider compatibility, USDA real-layout acceptance, specialist anatomy/rights review, and production/device/AT behavior remain open.

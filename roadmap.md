@@ -2,11 +2,17 @@
 
 The October 12 [comprehensive review](reports/Beef%20chart%20comprehensive%20review.md) defines the broader direction. The current implementation is an educational atlas and stored retail-context reference, with low-input exploration. Professional workflows below remain future work.
 
-## Current visual state — October 12, 2026
+## Current visual state — October 12–13, 2026
 
 Implemented: all 24 catalog cuts have transparent vintage halftone illustrations; six popular cards, four specialty cards, and cut dossiers use the set. Ribeye and sirloin are distinct. The cow hero and pasture use matching halftone art, and SVG/PNG cow favicons are installed. Interactive cut-paper diagrams retain 20 Argentine cut controls and nine U.S. region controls, with full-name hover/focus readouts, keyboard activation, and hatched layer references. Maps stack through 800px, and narrow dossiers reserve room for the close control.
 
-The [artwork record](docs/artwork-prompts.md) contains retained prompts, asset mappings, sources, and desktop/mobile browser evidence. These visual updates preserve cut identities, price mappings, chart colors, and teaching shares. Source rights and specialist anatomical acceptance are still open.
+The [artwork record](docs/artwork-prompts.md) contains retained prompts, asset mappings, sources, and desktop/mobile browser evidence. The artwork and diagram updates preserved cut identities, price mappings, chart colors, and teaching shares; the separate correction follow-up below connects the previously omitted Pecho/Cuadrada series. Source rights and specialist anatomical acceptance are still open.
+
+## October 13 correction follow-up
+
+Implemented: classified incomplete HTTP-response recovery at retail boundaries; nested catalog shape validation; per-batch catalog/USDA validation before merge; truthful catalog aggregate no-match/partial/error health and nonzero incomplete-refresh results; search that indexes both languages regardless of display language; measured sticky-header anchor offsets; contrasting search-panel focus; loading/ready/unavailable states and active-dossier refresh preserving focus/scroll; Pecho/Cuadrada price mappings; localized chart ticks, legend, percentages, table numbers and new-record geography; matching 600px table-reader behavior; consistent gland-unspecified molleja copy. The final review aligns native amount precision across all evidence views, keeps failed-load recovery distinct from absent observations, and preserves canonical copy for the Other-value dialog when changing language. Focus uses gold on the blue panel and ink inside the white search box.
+
+The bounded follow-up leaves the stored snapshot and artwork untouched. Targeted evidence and residual limits are recorded in [TRUTH-HARMONY.md](docs/TRUTH-HARMONY.md). This correction pass does not implement the later saved-state, butcher-card, source-history or professional-workbench features.
 
 ## Phase 1 — Truth and harmony
 

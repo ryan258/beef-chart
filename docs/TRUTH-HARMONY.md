@@ -2,7 +2,7 @@
 
 October 12, 2026. Records the first correction phase, C06/C14 follow-ups, and the illustrated atlas update. The sections below preserve the evidence and limits of each pass; historical statements about uncommitted work or earlier visuals describe that pass, not the current repository state. The final review and documentation reconciliation prepare this work for Ryan-authorized local commits. No push, deployment, live price refresh, new feed, account, or costing engine is included.
 
-## Current review and visual state
+## October 12 review and visual state
 
 All current source, test, asset, and documentation changes were reviewed together before packaging. No blocking implementation regression was found in the reviewed paths. Documentation drift was corrected: the README no longer describes cut photography, the roadmap no longer says official monthly sources fail together, and the cut guide no longer presents map colors as a common anatomical key.
 
@@ -143,7 +143,7 @@ This completes the bounded local C14 transparency correction. Tests do not estab
 
 Implemented bilingual operation via `assets/i18n.js` and an in-place header toggle, providing full English and Castellano porteño (Rioplatense Spanish with voseo) presentation.
 
-- `assets/i18n.js` defines the authored translation dictionary, string templates, number/date formatting helpers (`usd`, `monthLabel`, `t`, `locale`), and DOM translator `translateStaticPage()`.
+- `assets/i18n.js` defines the authored translation dictionary, string templates (`t`), locale selection (`locale`), and DOM translator `translateStaticPage()`. `usd` and `monthLabel` remain inline in `index.html`; the October 13 correction adds `formatNumber` and `currencyTick` to the translation module.
 - `index.html` adds the accessible header language bar (`aria-pressed`, `aria-label`, visible focus), `data-i18n` attributes across static markup, and translated dynamic renderers (directories, cow maps, Sankey, scatter, treemap, radar, cut dossiers, search status, data tables, and price summaries).
 - Cow map idle readouts and reset states translate on render and pointer reset.
 - URL parameter `?lang=es-AR` / `?lang=en` takes precedence over optional `localStorage` preference; storage blockage does not prevent URL selection or in-page toggling.
@@ -159,3 +159,51 @@ node --test tests/test_language.cjs tests/test_catalog_sampling.cjs tests/test_o
 ```
 
 This completes the local bilingual operation pass. Tests do not establish native-speaker or assistive-technology acceptance across all screen readers or operating systems. All price evidence, official sources, and previous boundaries remain unchanged.
+
+## October 13 correction pass
+
+Implemented the bounded correction pass from the project review, leaving all changes unstaged and uncommitted.
+
+- Retail recovery now classifies incomplete HTTP responses at daily-FX, catalog-cut and USDA boundaries. Response handles close on failed reads. Malformed nested catalog products/items/sellers/offers raise a classified `ValueError`; each catalog/USDA candidate batch validates before merge so a rejected batch cannot contaminate healthy staged results.
+- Catalog aggregate health distinguishes `ok`, `no_match`, `partial`, `error` and `partial_error` with per-cut coverage. Requested catalog no-match outcomes, retail failures and empty USDA batches save qualified results/statuses and then exit nonzero. Updated existing empty-retention fixtures to assert this exit policy without changing their evidence-preservation expectations.
+- Search uses a stable index of both English and Spanish equivalents plus aliases, independent of display language. The same query retains the same matching cut IDs after toggling.
+- Sticky-header height supplies the anchor offset, including language/mobile wrapping. Blue-panel controls use contrasting gold focus. The 600px reader breakpoint matches CSS and opens tables on startup/entry while preserving manual choices within the same viewport range.
+- Price loading has distinct loading/ready/unavailable states. A dossier opened before JSON arrival updates after loading, preserving the focused control and dossier scroll position. Pecho and Cuadrada now connect to their own Argentine series when observations exist; absent observations remain absent and cross-market relationships remain qualified.
+- The legend, axis dollar ticks, unavailable chart text, benchmark percentage, numeric table cells, teaching shares, FX displays and new-record geography localize consistently. Molleja copy identifies sweetbreads with the gland unspecified rather than asserting thymus in the primary label. Stored values and currency/unit identities remain unchanged.
+- README, architecture, pipeline, cut guide and roadmap now describe these boundaries. The obsolete Other-primals node and uniform USDA/Carrefour chart-source claims were corrected. Historical review reports remain dated evidence.
+
+Pre-edit GitNexus impact reported LOW for `catalog_matches` and scraper `main`. Shared HTTP helper `get` was HIGH, with daily-FX, catalog and USDA callers; this was announced before editing. The request interface and 20-second timeout were retained, with response lifecycle and all three failure boundaries checked. Inline UI functions and unittest-discovered methods were UNKNOWN/not resolved; their boot/event/render/source callers were inspected directly. Ryan refreshed the index during this pass; no agent reanalysis was run. The subsequent change analysis reported HIGH risk across nine fetching/validation flows. Its inline-JavaScript and untracked-test coverage remains limited, so it is not a frontend all-clear.
+
+Actual targeted verification:
+
+- **28 Python tests passed:** eight new refresh-harmony tests, ten official-isolation tests, four organ tests, the sampling-retention test, the cut-failure and atomic-rejection tests, the alias/stock test, plus uniform-unit and species/prepared-product rejection checks. Network is blocked in the new fixtures; writes go to temporary files. Covered incomplete responses for all three retail boundaries, malformed nested and candidate batches, one final write, retained values/dates/organ flags, aggregate success/no-match/partial/error behavior and response closure.
+- **18 Node tests passed:** five new harmony UI tests plus language, sampling and organ-price regressions. Covered both-language search, future mapped series without price borrowing, localized rendered evidence and unchanged values, loading/failure distinction, and active-dossier focus/scroll restoration. These use actual source functions with bounded DOM doubles; browser evidence is separate.
+- Chromium desktop: identical search IDs in both languages; Spanish legend and `US$` axis ticks; comma-decimal benchmark; all 36 price rows and three withheld organ rows; unchanged in-memory price evidence after switching.
+- At **320 × 740**, document width remained 320px, all 24 illustrated dossiers fit, and the explorer began at approximately 193px below a 181px sticky header, with its heading below the header. The gold search-result focus was visually inspected. Native Enter opened the named Mollejas dialog; Escape restored its initiating control.
+- At **600 × 900**, the hidden dense charts had open reader tables; manually closing a table and toggling language preserved that choice. Synthetic Pecho/Cuadrada records connected to their own dossiers and were removed afterward.
+- A delayed JSON browser fixture showed a loading message, then updated the open Lomo dossier to its stored price while preserving recipe-link focus and a 200px dossier scroll position. Invalid JSON produced a translated unavailable-chart/recovery state; runtime D3 absence retained search, directory and dialog access. No console errors/warnings were reported in these bounded checks.
+- Inline/external JavaScript and shell syntax, bundled snapshot validation, current relative documentation links and whitespace checks passed. The bundled snapshot and artwork remain byte-for-byte unchanged. No full suite, live price refresh, paid provider run, staging, commit, push, deployment or publication was performed.
+
+Repeat only the affected checks when needed; the README contains the combined targeted command. Current provider/real-USDA-layout compatibility, specialist anatomy/rights review, physical-device/screen-reader acceptance, print and cold-offline acceptance remain open. The preview is copy-based and must be restarted after source edits.
+
+## October 13 final working-tree review
+
+Reviewed all 13 modified tracked files and both new test files against HEAD, including the existing correction diff, documentation and changed fixture expectations. Found and repaired four remaining UI inconsistencies:
+
+- Native amounts used three fraction digits in dossiers/fallbacks/retained evidence but up to six in the table. All now share `formatNumber`, with the same display precision in both languages and unchanged stored amounts. USD and benchmark rounding remain two and one fraction digits respectively.
+- A failed snapshot load produced a cut-level missing-observation message. Dossiers now show the load/validation failure and reload recovery; a ready snapshot without that cut's observation keeps its separate missing-observation explanation.
+- The treemap Other-value dialog captured already-translated Spanish copy. Its renderer now passes canonical English strings to the reference dialog, allowing Spanish-to-English rerendering. Primal dialogs already regenerate from their canonical records.
+- The blue-panel gold focus rule also reached the white search box. Controls on blue retain gold; the white input/button container now uses ink for a contrasting outline.
+
+The final review left pipeline behavior intact and added explicit regressions for empty USDA batches and catalog FX dates incompatible with an observation. Both save healthy results in one write, retain affected evidence and report non-success as documented. README, architecture, pipeline and roadmap wording now matches the display precision, load recovery, canonical reference content and focus contexts. The architecture's public-file description now includes JavaScript assets.
+
+Final targeted verification:
+
+- **10 Python refresh-harmony tests passed**, covering all previously added retail recovery/health cases plus empty USDA and derived-FX rejection. Existing broader targeted results above remain dated evidence; no full suite or live providers ran in this review.
+- **20 distinct Node checks passed** across harmony UI, language, organ and sampling tests. The initial run passed 19; the new isolated treemap test lacked tooltip callback stubs in its DOM/D3 harness. Adding those fixture stubs made its isolated retry pass. No application change was required for that harness failure, and passing unaffected tests were not rerun.
+- Browser reproduced each UI issue before repair and verified the result afterward: Other-value text restores English; a six-decimal native amount agrees in table/dossier/fallback/evidence in both languages; failed-load dossiers show localized recovery. Temporary browser data was restored to the stored snapshot afterward, with 36 rows and three withheld organ prices.
+- Actual window resize from 1200px to 600px, without reloading the document, opened all reader tables and hid the dense charts. Closing one table then resizing within the reader range to 550px preserved that choice.
+- At 320 × 740, document width stayed 320px; the explorer heading stayed below the 181px header; focus outlines were ink on white and gold on blue. No console errors/warnings were reported in the final browser checks.
+- Final source syntax, snapshot validation, documentation-link and whitespace gates passed. Stored price data and artwork remain unchanged; the staged diff is empty and all implementation/docs/test changes remain uncommitted. The review preview was stopped after verification.
+
+GitNexus change review still flags the combined pricing diff HIGH across nine flows. Inline UI symbols and untracked test methods remain UNKNOWN/not resolved; direct source callers and bounded regressions cover the reviewed paths. No reanalysis, staging, commits, push, deployment or publication occurred. No further blocking inconsistency was found in this correction scope; the provider, specialist and human/device acceptance boundaries above remain open.

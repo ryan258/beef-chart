@@ -10,7 +10,7 @@ The angular cut-paper diagrams preserve broad regional ordering. Hatching marks 
 
 Ribeye is drawn with a rounded central eye and cap; sirloin has a broader, leaner, tapered silhouette. Tenderloin is shown as a medallion, brisket as a slab, and the fore/hind shank references use different presentations. Confirm the actual seller's bone, trim, thickness, and portioning separately. See [the artwork and diagram record](artwork-prompts.md) for asset mappings and reference links.
 
-The atlas operates in both English and Castellano porteño (Rioplatense Spanish). The header toggle translates all 24 cut dossiers, diagrams, tables, and search feedback in-place, while preserving cross-cultural U.S. and Argentine reference names. Search operates in either language, ignoring accents and matching common aliases (*ojo de bife*, *tira de asado*, *achuras*).
+The atlas operates in both English and Castellano porteño (Rioplatense Spanish). The header toggle translates all 24 cut dossiers, diagrams, tables, and search feedback in-place, while preserving cross-cultural U.S. and Argentine reference names. Search indexes both languages independently of the chosen display language, ignoring accents and matching common aliases (*ojo de bife*, *tira de asado*, *achuras*).
 
 ## How to read a relationship
 
@@ -48,9 +48,9 @@ The radar and tenderness/marbling values are editorial heuristics, not measured 
 
 ## Specialty entries
 
-- **Mollejas:** sweetbreads; a generic retailer name does not prove thymus versus another gland. Keep gland identification unresolved unless the product supplies it.
+- **Mollejas:** sweetbreads, with the gland unspecified in the primary UI label; a generic retailer name does not prove thymus versus another gland. Keep gland identification unresolved unless the product supplies it.
 - **Riñón:** kidney; raw and prepared products must remain separate.
 - **Lengua:** tongue; whole raw tongue and cooked/vinaigrette products are different observations.
 - **Bife de costilla:** retain the bone-in qualification and keep it separate from boneless strip and T-bone.
 
-Achuras are part of many asado traditions; menus and practices vary. These entries do not constitute reviewed offal-safety instructions. Furthermore, stored Carrefour organ observations (*mollejas*, *riñón*, *lengua*) carry unverified unit scales; their comparison prices are withheld while retaining native values as stored evidence only until units and availability are verified. Prices can be inactive catalog references or missing, and the atlas must not substitute another product's price to fill a gap.
+Achuras are part of many asado traditions; menus and practices vary. These entries do not constitute reviewed offal-safety instructions. Furthermore, stored Carrefour organ observations (*mollejas*, *riñón*, *lengua*) carry unverified unit scales; their comparison prices are withheld while retaining native values as stored evidence only until units and availability are verified. Pecho and Cuadrada dossiers can display their own Argentine catalog observations when those series have evidence; this connection does not establish an exact product match. Prices can be inactive catalog references or missing, and the atlas must not substitute another product's price to fill a gap.
