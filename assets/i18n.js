@@ -198,7 +198,7 @@ const SPANISH = {
   "Abdominal-wall cut; partial flank relationship": "Corte de la pared abdominal; relación parcial con flank",
   "Outside skirt / Entraña fina (generic skirt price unqualified)": "Outside skirt / entraña fina (precio genérico de skirt sin equivalencia verificada)",
   "Bone-in strip / Costeleta / Chuleta": "Costeleta / chuleta / bone-in strip",
-  "Sweetbreads / Thymus / Timo": "Mollejas / timo / sweetbreads",
+  "Sweetbreads / gland unspecified": "Mollejas / glándula sin especificar",
   "Beef kidney / Riñones": "Riñón vacuno / riñones",
   "Connective-tissue rich neck. Hearty stews, puchero, and flavorful ground chuck.": "Carne del cuello, rica en tejido conectivo. Va bien en guisos, pucheros y carne picada con mucho sabor.",
   "Shoulder rib-end. Heavily marbled, flavorful roasts, and the chuck-eye steak.": "Zona delantera junto a las costillas, con grasa entreverada. Da piezas sabrosas para cocción lenta y el bife llamado chuck eye.",
@@ -221,7 +221,7 @@ const SPANISH = {
   "Diaphragm steak. Intensely beefy, grilled blazing hot over embers.": "Corte del diafragma, de sabor intenso. Un clásico para cocinar sobre brasas bien fuertes.",
   "Very lean cylindrical muscle. Sliced paper-thin for vitel toné.": "Músculo cilíndrico y muy magro. Cortado en fetas finitas, un clásico del vitel toné.",
   "Bone-in steak; regional cutting styles vary. Kept separate from boneless bife de chorizo and T-bone with tenderloin.": "Bife con hueso; la forma de cortarlo cambia según la región. Se distingue del bife de chorizo sin hueso y del T-bone que incluye lomo.",
-  "Argentine molleja refers to thymus, but a generic retailer listing may not identify the gland. These are sweetbread listing prices, not verified thymus-only prices.": "La molleja argentina se refiere al timo, pero una publicación genérica puede no identificar la glándula. Estos registros corresponden a publicaciones de mollejas; no se verificó que sean exclusivamente de timo.",
+  "Sweetbreads; a generic retailer listing does not establish the gland. Thymus-only identity requires product evidence.": "Mollejas: una publicación genérica no identifica la glándula. Para afirmar que son exclusivamente de timo, hace falta evidencia del producto.",
   "Beef kidney, tracked separately from muscle cuts. Only raw per-kilogram butcher listings qualify.": "Riñón vacuno, registrado aparte de los cortes musculares. Solo se admiten publicaciones de carnicería de producto crudo por kilo.",
   "Whole raw beef tongue. Prepared tongue, escabeche, and fixed-weight packs are excluded from this price series.": "Lengua vacuna entera y cruda. Esta serie excluye lengua preparada, al escabeche y paquetes de peso fijo.",
   "Shoulder & neck. Roasts, ground chuck, flat iron.": "Hombro y cuello. Cortes para horno, carne picada de chuck y flat iron.",
@@ -277,6 +277,13 @@ Object.assign(SPANISH, {
   'Sampled catalog median': 'Mediana de una muestra del catálogo',
   'Store-weighted advertised features': 'Ofertas anunciadas, ponderadas por cantidad de locales',
   'Carrefour Argentina catalog; delivery region unknown': 'Catálogo de Carrefour Argentina; región de entrega desconocida',
+  'Carrefour Argentina; delivery region unknown': 'Carrefour Argentina; región de entrega desconocida',
+  'Loading stored prices…': 'Cargando precios guardados…',
+  'ok': 'consulta completa',
+  'partial': 'consulta parcial',
+  'partial error': 'consulta parcial con errores',
+  'error': 'error',
+  'no match': 'sin coincidencias',
   'Greater Buenos Aires': 'Gran Buenos Aires',
   'BCRA monthly average': 'Promedio mensual del BCRA',
   'Latest returned daily observation (BCRA via datos.gob.ar)': 'Última observación diaria devuelta (BCRA vía datos.gob.ar)',
@@ -322,6 +329,14 @@ function t(message, ...values) {
   return values.length ? translated.replace(/\{(\d+)\}/g, (_, index) => String(values[index])) : translated;
 }
 const locale = () => language === 'es-AR' ? 'es-AR' : 'en-US';
+// Display rounding only; canonical evidence and calculations retain their values.
+function formatNumber(value, options = {}) {
+  return typeof value === 'number' && Number.isFinite(value)
+    ? value.toLocaleString(locale(), {maximumFractionDigits:6, ...options}) : t('unknown');
+}
+function currencyTick(value) {
+  return `${language === 'es-AR' ? 'US$' : '$'}${formatNumber(value)}`;
+}
 const originalCopy = new WeakMap();
 function translateStaticPage() {
   document.documentElement.lang = language;

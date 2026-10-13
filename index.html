@@ -1023,7 +1023,7 @@ header.site-header{
       </div>
       <p class="section-sub" data-i18n>Stored retail context in USD/lb · sources, dates, and product specifications differ</p>
 
-      <div class="legend"><span><i style="background:var(--navy)"></i>Argentina</span><span><i style="background:var(--red)"></i>United States</span></div>
+      <div class="legend"><span><i style="background:var(--navy)"></i>Argentina</span><span><i style="background:var(--red)"></i><span data-i18n>United States</span></span></div>
       <svg id="scatter-chart-svg" aria-hidden="true"></svg><details class="chart-data" id="price-data"><summary data-i18n>Read every price and qualification</summary><div id="price-table"></div></details>
 
       <a class="card-bottom-link" href="#price-data" data-i18n>See The Data →</a>
@@ -1162,7 +1162,7 @@ const RETAIL_CUTS = [
   {id:'cogote',n:'Cogote',eq:'Neck',us:'chuck',color:'#783d26',p:'187,150 290,141 302,234 281,326 215,317',how:'braise',tenderness:2.0,marbling:2.5,info:'Connective-tissue rich neck. Hearty stews, puchero, and flavorful ground chuck.'},
   {id:'aguja',arSeries:'aguja',usSeries:'chuck_roast',n:'Aguja',eq:'Chuck roll',us:'chuck',color:'#a82b2b',p:'290,141 463,137 445,237 302,234',how:'braise',tenderness:4.5,marbling:4.0,info:'Shoulder rib-end. Heavily marbled, flavorful roasts, and the chuck-eye steak.'},
   {id:'paleta',arSeries:'paleta',n:'Paleta',eq:'Shoulder clod',us:'chuck',color:'#8c3426',p:'302,234 445,237 423,329 281,326',how:'braise',tenderness:4.2,marbling:2.5,info:'Shoulder clod & top blade. Yields the prized flat iron steak.'},
-  {id:'pecho',usSeries:'brisket_whole',n:'Pecho',eq:'Brisket',us:'brisket',color:'#783d26',p:'215,317 281,326 423,329 405,395 321,383 280,369 246,343',how:'braise',tenderness:2.8,marbling:4.5,info:'Chest meat (flat and point). Barbecue smokehouse staple and corned beef.'},
+  {id:'pecho',arSeries:'pecho',usSeries:'brisket_whole',n:'Pecho',eq:'Brisket',us:'brisket',color:'#783d26',p:'215,317 281,326 423,329 405,395 321,383 280,369 246,343',how:'braise',tenderness:2.8,marbling:4.5,info:'Chest meat (flat and point). Barbecue smokehouse staple and corned beef.'},
   {id:'brazuelo',arSeries:'osobuco',n:'Brazuelo',eq:'Fore shank',us:'shank',color:'#c46d20',p:'321,383 405,395 396,459 399,544 335,544 348,455',how:'braise',tenderness:1.8,marbling:2.0,info:'Front leg cross-cut osso buco with marrow.'},
   {id:'bife-ancho',arSeries:'bife_ancho',usSeries:'ribeye_bnls',n:'Bife ancho',eq:'Ribeye',us:'rib',color:'#c22e2e',p:'463,137 604,130 610,243 445,237',how:'grill',tenderness:9.0,marbling:5.0,info:'The king of steaks. Generous marbling, ribeye eye (ojo de bife) and spinalis cap.'},
   {id:'costillar',usSeries:'short_ribs',arSeries:'asado',n:'Asado de tira',eq:'Short ribs',us:'plate',color:'#df9e35',p:'445,237 610,243 602,335 423,329',how:'grill',tenderness:6.5,marbling:4.5,info:'Cross-cut short ribs sawn across bone into long strips. The asado signature.'},
@@ -1174,7 +1174,7 @@ const RETAIL_CUTS = [
   {id:'colita',arSeries:'colita',usSeries:'tri_tip',n:'Colita de cuadril',eq:'Tri-tip',us:'sirloin',color:'#e09b30',p:'685,251 766,264 737,314 714,328',how:'grill',tenderness:7.6,marbling:2.6,info:'Triangular muscle at the bottom of the sirloin. Santa Maria BBQ star.'},
   {id:'bola',usSeries:'round_roast',n:'Bola de lomo',eq:'Sirloin tip',us:'round',color:'#b84232',p:'714,328 737,314 779,301 781,390 754,428 719,403',how:'roast',tenderness:5.0,marbling:1.4,info:'Front of thigh. Lean everyday steaks, milanesa, and stir-fry.'},
   {id:'nalga',arSeries:'nalga',usSeries:'round_steak',n:'Nalga',eq:'Top round',us:'round',color:'#a23024',p:'766,264 847,269 846,336 781,340 779,301 737,314',how:'roast',tenderness:4.8,marbling:1.2,info:'Inner thigh. Commonly used for milanesas; traditions and preparation vary.'},
-  {id:'cuadrada',usSeries:'bottom_round',n:'Cuadrada',eq:'Bottom round',us:'round',color:'#942820',p:'781,340 846,336 837,428 754,428 781,390',how:'roast',tenderness:3.6,marbling:1.2,info:'Outer rear thigh. Lean, suited for pot roasts or deli roast beef.'},
+  {id:'cuadrada',arSeries:'cuadrada',usSeries:'bottom_round',n:'Cuadrada',eq:'Bottom round',us:'round',color:'#942820',p:'781,340 846,336 837,428 754,428 781,390',how:'roast',tenderness:3.6,marbling:1.2,info:'Outer rear thigh. Lean, suited for pot roasts or deli roast beef.'},
   {id:'garron',n:'Garrón',eq:'Hind shank',us:'shank',color:'#c46d20',p:'754,428 837,428 840,545 766,545',how:'braise',tenderness:1.5,marbling:2.0,info:'Hind leg shank, rich in gelatin for locro and winter stews.'},
   {id:'lomo',arSeries:'lomo',usSeries:'tenderloin',n:'Lomo',eq:'Tenderloin (filet mignon)',us:'shortloin',color:'#c22e2e',p:'590,246 631,234 708,242 738,260 699,273 628,264',how:'grill',tenderness:10.0,marbling:1.8,info:'The tenderest muscle in the animal. Melt-in-mouth filet mignon.'},
   {id:'entrana',arSeries:'entrana',usSeries:'skirt',n:'Entraña',eq:'Outside skirt / Entraña fina (generic skirt price unqualified)',us:'plate',color:'#c22e2e',p:'482,335 529,321 574,329 603,350 556,363 507,349',how:'grill',tenderness:7.8,marbling:3.2,info:'Diaphragm steak. Intensely beefy, grilled blazing hot over embers.'},
@@ -1195,7 +1195,7 @@ const WHOLESALE_PRIMALS = [
 
 const EXTRA_CUTS = [
   {id:'bife-costilla', arSeries:'bife_costilla', n:'Bife de costilla', eq:'Bone-in strip / Costeleta / Chuleta', info:'Bone-in steak; regional cutting styles vary. Kept separate from boneless bife de chorizo and T-bone with tenderloin.'},
-  {id:'molleja', arSeries:'molleja', n:'Mollejas', eq:'Sweetbreads / Thymus / Timo', info:'Argentine molleja refers to thymus, but a generic retailer listing may not identify the gland. These are sweetbread listing prices, not verified thymus-only prices.'},
+  {id:'molleja', arSeries:'molleja', n:'Mollejas', eq:'Sweetbreads / gland unspecified', info:'Sweetbreads; a generic retailer listing does not establish the gland. Thymus-only identity requires product evidence.'},
   {id:'rinon', arSeries:'rinon', n:'Riñón', eq:'Beef kidney / Riñones', info:'Beef kidney, tracked separately from muscle cuts. Only raw per-kilogram butcher listings qualify.'},
   {id:'lengua', arSeries:'lengua', n:'Lengua', eq:'Beef tongue', info:'Whole raw beef tongue. Prepared tongue, escabeche, and fixed-weight packs are excluded from this price series.'}
 ];
@@ -1239,8 +1239,9 @@ const CUT_IMAGE_MAP = {
 
 const BY_ID = Object.fromEntries(ALL_CUTS.map(c=>[c.id, c]));
 
-// 1b. LIVE PRICES: data/prices.json, written by ./fetch-prices.sh (BLS for US, INDEC for Argentina)
+// 1b. STORED PRICES: mixed-source snapshot written by the explicit refresh pipeline.
 let PRICES = null;
+let priceLoadState = 'loading';
 const positiveNumber = n => typeof n === 'number' && Number.isFinite(n) && n > 0;
 const usd = n => positiveNumber(n) ? `${language === 'es-AR' ? 'US$' : '$'}${n.toLocaleString(locale(), {minimumFractionDigits:2, maximumFractionDigits:2})}` : t('Not available');
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -1256,7 +1257,7 @@ const priceLine = (ar, us, layout = 'compact') => {
   const parts = [];
   for (const [country, p] of [['US',us],['AR',ar]]) {
     if (!p) continue;
-    const price = p.unit_scale_unverified ? t('Price withheld') : validPrice(p) ? usd(p.usd_lb) + '/lb' : positiveNumber(p.ars_kg) ? p.ars_kg.toLocaleString(locale()) + t(" ARS/kg; USD unavailable") : t('Not available');
+    const price = p.unit_scale_unverified ? t('Price withheld') : validPrice(p) ? usd(p.usd_lb) + '/lb' : positiveNumber(p.ars_kg) ? formatNumber(p.ars_kg) + t(" ARS/kg; USD unavailable") : t('Not available');
     if (layout === 'tooltip') {
       parts.push(`<div class="tooltip-price-row"><div class="tooltip-price-heading"><span class="tooltip-market">${escapeHtml(t(country === 'US' ? 'United States' : 'Argentina'))}</span><strong class="tooltip-price">${escapeHtml(price).replace('/lb', '<span class="tooltip-unit"> / lb</span>')}</strong></div><p class="tooltip-note">${escapeHtml(recordStatus(p))}</p><span class="tooltip-date">${escapeHtml(monthLabel(p.period))}</span></div>`);
     } else {
@@ -1316,7 +1317,7 @@ function recordStatus(p) {
   return (p.unit_scale_unverified ? t('Unverified unit scale; price withheld · ') : '') + status;
 }
 function retainedPriceEvidence(p) {
-  const native = positiveNumber(p.ars_kg) ? t`${p.ars_kg.toLocaleString(locale())} recorded as ARS/kg; ` : '';
+  const native = positiveNumber(p.ars_kg) ? t`${formatNumber(p.ars_kg)} recorded as ARS/kg; ` : '';
   const converted = positiveNumber(p.usd_lb) ? t`${usd(p.usd_lb)}/lb recorded conversion` : t('USD conversion unavailable');
   return t`Stored evidence only: ${native}${converted}. Original sale unit / package-weight basis unverified. Excluded from price rankings, value comparisons and buying estimates until units and availability are verified.`;
 }
@@ -1403,7 +1404,7 @@ function renderCowMaps() {
     {svg:'#wholesale-cow-svg', clip:'clip-wholesale-cow', label:'#wholesale-map-label', idle:'Explore the U.S. regions',
       data:WHOLESALE_PRIMALS, key:d=>d.key, id:d=>d.key, path:d=>d.ps.map(p=>`M ${p} Z`).join(' '),
       ink:d=>PRIMAL_MAP_INKS[d.key], name:d=>`${d.n} · ${t(d.desc)}`, aria:d=>t`Inspect US primal: ${d.n}`,
-      tooltip:d=>`<div class="tooltip-title">${escapeHtml(t`US primal: ${d.n}`)}</div><div class="tooltip-description">${t`${d.share} of 100 illustrative teaching units`}</div>`, open:openPrimalModal}
+      tooltip:d=>`<div class="tooltip-title">${escapeHtml(t`US primal: ${d.n}`)}</div><div class="tooltip-description">${t`${formatNumber(d.share)} of 100 illustrative teaching units`}</div>`, open:openPrimalModal}
   ];
   for (const map of maps) {
     const svg = d3.select(map.svg);
@@ -1525,7 +1526,7 @@ function renderSankey() {
     .attr('d', d3.sankeyLinkHorizontal())
     .attr('stroke', d => d.source.color)
     .attr('stroke-width', d => Math.max(1.8, d.width))
-    .on('mouseover', (e, d) => showTooltip(e, `<div class="tooltip-title">${escapeHtml(t(d.source.name))} → ${escapeHtml(t(d.target.name))}</div><div class="tooltip-description">${t`${d.value} of 100 illustrative teaching units`}</div>`))
+    .on('mouseover', (e, d) => showTooltip(e, `<div class="tooltip-title">${escapeHtml(t(d.source.name))} → ${escapeHtml(t(d.target.name))}</div><div class="tooltip-description">${t`${formatNumber(d.value)} of 100 illustrative teaching units`}</div>`))
     .on('mousemove', moveTooltip)
     .on('mouseout', hideTooltip);
 
@@ -1566,7 +1567,7 @@ function renderScatter() {
 
   if (!PRICES) {
     svg.append('text').attr('x', width / 2).attr('y', height / 2).attr('text-anchor', 'middle')
-      .attr('fill', 'var(--mut)').attr('font-size', 13).text('Price data unavailable');
+      .attr('fill', 'var(--mut)').attr('font-size', 13).text(t(priceLoadState === 'loading' ? 'Loading stored prices…' : 'Price data unavailable'));
     return;
   }
 
@@ -1579,7 +1580,7 @@ function renderScatter() {
   const y = d3.scaleBand().domain(rows.map(r => r.label)).range([m.top, height - m.bottom]).padding(0.3);
 
   svg.append('g').attr('transform', `translate(0, ${height - m.bottom})`)
-    .call(d3.axisBottom(x).ticks(5).tickSize(-(height - m.bottom - m.top)).tickFormat(d => `$${d}`))
+    .call(d3.axisBottom(x).ticks(5).tickSize(-(height - m.bottom - m.top)).tickFormat(currencyTick))
     .call(a => a.select('.domain').remove())
     .call(a => a.selectAll('.tick line').attr('stroke', '#e4dcd0'))
     .call(a => a.selectAll('text').attr('font-family', 'Oswald').attr('fill', 'var(--mut)').attr('font-size', '10px'));
@@ -1644,12 +1645,12 @@ function renderTreemap() {
     .join('g')
     .attr('class', 'treemap-node')
     .attr('transform', d => `translate(${d.x0}, ${d.y0})`)
-    .on('mouseover', (e, d) => showTooltip(e, `<div class="tooltip-title">${escapeHtml(t(d.data.name))}</div><div class="tooltip-description">${t`${d.data.value}% of illustrative retail value`}</div>`))
+    .on('mouseover', (e, d) => showTooltip(e, `<div class="tooltip-title">${escapeHtml(t(d.data.name))}</div><div class="tooltip-description">${t`${formatNumber(d.data.value)}% of illustrative retail value`}</div>`))
     .on('mousemove', moveTooltip)
     .on('mouseout', hideTooltip)
     .on('click', (e, d) => {
       const primal = WHOLESALE_PRIMALS.find(p => p.key === d.data.key);
-      if (d.data.name === 'Other') openReferenceModal(t('Other illustrative value'), t('This fixed 2% teaching allocation groups unspecified other value; it is not a shank yield or price.'));
+      if (d.data.name === 'Other') openReferenceModal('Other illustrative value', 'This fixed 2% teaching allocation groups unspecified other value; it is not a shank yield or price.');
       else if (primal) openPrimalModal(primal);
     });
 
@@ -1671,7 +1672,7 @@ function renderTreemap() {
     .attr('fill', '#fff').attr('fill-opacity', .8)
     .attr('font-family', 'Oswald').attr('font-size', '13px')
     .attr('pointer-events', 'none')
-    .text(d => `${d.data.value}%`);
+    .text(d => `${formatNumber(d.data.value)}%`);
 }
 
 // 6. FLOATING TOOLTIP
@@ -1703,11 +1704,16 @@ function fxLine(p) {
   if (!positiveNumber(p.fx_ars_per_usd)) return t("<br>USD conversion unavailable; FX provenance unknown");
   const date = p.fx_date || t('unknown date');
   const age = validPeriod(date) && date.length === 10 ? Math.floor((Date.now() - new Date(date + 'T00:00:00Z')) / 86400000) : null;
-  return t`<br>FX ${p.fx_ars_per_usd.toLocaleString(locale())} ARS/USD · ${escapeHtml(t(p.fx_basis || 'unknown basis'))} · ${escapeHtml(date)}${age != null ? t` · ${age} days old at viewing` : ''} · ${escapeHtml(t((p.fx_provenance || 'unknown').replaceAll('_',' ')))} provenance`;
+  return t`<br>FX ${formatNumber(p.fx_ars_per_usd)} ARS/USD · ${escapeHtml(t(p.fx_basis || 'unknown basis'))} · ${escapeHtml(date)}${age != null ? t` · ${age} days old at viewing` : ''} · ${escapeHtml(t((p.fx_provenance || 'unknown').replaceAll('_',' ')))} provenance`;
 }
 function priceBlock(cut) {
+  if (!PRICES) {
+    const message = priceLoadState === 'loading' ? t('Loading stored prices…')
+      : `${t('Stored price data could not be validated or loaded.')} ${t('The atlas remains usable; reload to retry.')}`;
+    return `<p>${message}</p>`;
+  }
   const {ar, us} = priceOf(cut);
-  const one = (country, p) => !p ? '' : `<div class="price-evidence"><b>${country}</b><div class="price-value">${p.unit_scale_unverified ? t('Price withheld') : validPrice(p) ? usd(p.usd_lb) + ' /lb' : t('USD unavailable')}</div>${p.unit_scale_unverified ? `<p class="reference-note">${escapeHtml(retainedPriceEvidence(p))}</p>` : positiveNumber(p.ars_kg) ? `<div>${t("Native")} ${p.ars_kg.toLocaleString(locale())} ARS/kg</div>` : ''}<p>${escapeHtml(recordContext(p))}${country === 'Argentina' ? fxLine(p) : ''}<br>${t("Retrieved:")} ${escapeHtml(p.retrieved_at || t('unknown; legacy receipt absent'))}<br>${t("Publication:")} ${escapeHtml(p.publication_date || t('unknown'))}${samplingContext(p) ? '<br>' + escapeHtml(samplingContext(p)) : ''}</p></div>`;
+  const one = (country, p) => !p ? '' : `<div class="price-evidence"><b>${country}</b><div class="price-value">${p.unit_scale_unverified ? t('Price withheld') : validPrice(p) ? usd(p.usd_lb) + ' /lb' : t('USD unavailable')}</div>${p.unit_scale_unverified ? `<p class="reference-note">${escapeHtml(retainedPriceEvidence(p))}</p>` : positiveNumber(p.ars_kg) ? `<div>${t("Native")} ${formatNumber(p.ars_kg)} ARS/kg</div>` : ''}<p>${escapeHtml(recordContext(p))}${country === 'Argentina' ? fxLine(p) : ''}<br>${t("Retrieved:")} ${escapeHtml(p.retrieved_at || t('unknown; legacy receipt absent'))}<br>${t("Publication:")} ${escapeHtml(p.publication_date || t('unknown'))}${samplingContext(p) ? '<br>' + escapeHtml(samplingContext(p)) : ''}</p></div>`;
   return one('Argentina',ar) + one(t('United States'),us) || `<p>${t('No verified price in this snapshot; another cut’s price is never substituted.')}</p>`;
 }
 
@@ -1728,7 +1734,7 @@ function openReferenceModal(title, explanation, cuts = []) {
   focusModal();
 }
 function openPrimalModal(primal) {
-  openReferenceModal(t`US primal: ${primal.n}`, t`${t(primal.desc)} Schematic teaching share: ${primal.share}/100 units; not a measured fabrication yield. These Argentine references overlap the broad region and are not equivalent purchasing specifications.`, RETAIL_CUTS.filter(c => c.us === primal.key));
+  openReferenceModal(t`US primal: ${primal.n}`, t`${t(primal.desc)} Schematic teaching share: ${formatNumber(primal.share)}/100 units; not a measured fabrication yield. These Argentine references overlap the broad region and are not equivalent purchasing specifications.`, RETAIL_CUTS.filter(c => c.us === primal.key));
   activeModal = () => openPrimalModal(primal);
 }
 function openCutModal(cut) {
@@ -1759,8 +1765,8 @@ function openCutModal(cut) {
         <p style="margin:0 0 8px;font-size:.92rem;line-height:1.5">${escapeHtml(t(cut.info))}</p>
         <div class="cut-traits">
           <div><b>${t("Cooking:")}</b> <span style="color:var(--red);text-transform:capitalize">${t(cut.how)}</span></div>
-          <div><b>${t("Editorial tenderness:")}</b> <span>${cut.tenderness}/10</span></div>
-          <div><b>${t("Editorial marbling:")}</b> <span>${cut.marbling}/5</span></div>
+          <div><b>${t("Editorial tenderness:")}</b> <span>${formatNumber(cut.tenderness)}/10</span></div>
+          <div><b>${t("Editorial marbling:")}</b> <span>${formatNumber(cut.marbling)}/5</span></div>
         </div>
       </div>
       <div>${priceBlock(cut)}</div>
@@ -1878,20 +1884,26 @@ const CUT_ALIASES = {
   'rinon': 'riñones rinones achuras',
   'lengua': 'achuras'
 };
+const normalizeSearch = value => value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+const CUT_SEARCH_INDEX = ALL_CUTS.map(cut => ({cut, text:normalizeSearch([
+  cut.n, cut.eq, SPANISH[cut.eq] || '', cut.id, CUT_ALIASES[cut.id] || ''
+].join(' '))}));
+function searchCuts(query) {
+  const normalized = normalizeSearch(query.trim());
+  return normalized ? CUT_SEARCH_INDEX.filter(entry => entry.text.includes(normalized)).map(entry => entry.cut) : [];
+}
 function cutButton(cut) {
   const button = document.createElement('button');
-  button.type = 'button'; button.className = 'directory-cut'; button.textContent = `${cut.n} · ${t(cut.eq)}`;
+  button.type = 'button'; button.className = 'directory-cut'; button.dataset.cut = cut.id; button.textContent = `${cut.n} · ${t(cut.eq)}`;
   button.addEventListener('click', () => openCutModal(cut));
   return button;
 }
 let lastSearch = null;
 function filterAndOpenCut(query, activate = true) {
   lastSearch = query;
-  const normalize = value => value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  const q = normalize(query.trim());
   const results = $('#cut-results'); results.replaceChildren();
-  if (!q) { $('#search-status').textContent = t('Enter a cut name, or browse the full directory.'); return; }
-  const matches = ALL_CUTS.filter(c => normalize(c.n + ' ' + c.eq + ' ' + t(c.eq) + ' ' + c.id + ' ' + (CUT_ALIASES[c.id] || '')).includes(q));
+  if (!query.trim()) { $('#search-status').textContent = t('Enter a cut name, or browse the full directory.'); return; }
+  const matches = searchCuts(query);
   $('#search-status').textContent = matches.length ? (matches.length === 1 ? t('One matching cut.') : t`${matches.length} matching cuts.`) : t('No matching cut. Try another name or browse the full directory.');
   if (matches.length === 1 && activate) openCutModal(matches[0]);
   else { matches.forEach(c => results.append(cutButton(c))); if (matches.length && activate) results.querySelector('button').focus(); }
@@ -1966,7 +1978,7 @@ function renderTable(id, caption, headers, rows) {
   const thead = table.createTHead(); thead.setAttribute('role','rowgroup'); const head = thead.insertRow(); head.setAttribute('role','row');
   for (const label of headers) { const th = document.createElement('th'); th.scope = 'col'; th.setAttribute('role','columnheader'); th.textContent = t(label); head.append(th); }
   const body = table.createTBody(); body.setAttribute('role','rowgroup');
-  for (const cells of rows) { const row = body.insertRow(); row.setAttribute('role','row'); cells.forEach((value,i) => { const cell = document.createElement(i === 0 ? 'th' : 'td'); cell.setAttribute('role',i === 0 ? 'rowheader' : 'cell'); if (i === 0) cell.scope = 'row'; else cell.dataset.label = t(headers[i]); cell.textContent = t(String(value)); row.append(cell); }); }
+  for (const cells of rows) { const row = body.insertRow(); row.setAttribute('role','row'); cells.forEach((value,i) => { const cell = document.createElement(i === 0 ? 'th' : 'td'); cell.setAttribute('role',i === 0 ? 'rowheader' : 'cell'); if (i === 0) cell.scope = 'row'; else cell.dataset.label = t(headers[i]); cell.textContent = typeof value === 'number' ? formatNumber(value) : t(String(value)); row.append(cell); }); }
   $('#'+id).replaceChildren(table);
 }
 function renderReferenceTables() {
@@ -1975,6 +1987,14 @@ function renderReferenceTables() {
 }
 function renderPrices() {
   if (!PRICES) {
+    if (priceLoadState === 'loading') {
+      $$('.cut-card-price').forEach(el => { el.textContent = t('Loading stored prices…'); });
+      $('#market-price').textContent = t('Loading stored prices…'); $('#market-change').textContent = '';
+      $('#market-sub').textContent = '';
+      $('#data-note').textContent = t('Loading stored price evidence. The atlas does not stream live prices.');
+      renderTable('price-table',t('Loading stored prices…'),[t('Status')],[[t('Loading stored prices…')]]);
+      renderScatter(); return;
+    }
     $$('.cut-card-price').forEach(el => { el.textContent = t('Price data unavailable'); });
     $('#market-price').textContent = t('Not available'); $('#market-change').textContent = '';
     $('#market-sub').textContent = t('Stored price data could not be validated or loaded.');
@@ -1984,17 +2004,52 @@ function renderPrices() {
   }
   const us = PRICES.us.ground_beef; const ar = PRICES.ar.ground_beef;
   $('#market-price').innerHTML = `${safeUsd(us)} <span>/ lb</span>`;
-  $('#market-change').textContent = validPrice(us) && positiveNumber(us.prev_usd_lb) ? t`${((us.usd_lb/us.prev_usd_lb-1)*100).toFixed(1)}% vs previous available observation (${us.prev_period || t('date unknown')})` : t('Previous observation unavailable');
+  $('#market-change').textContent = validPrice(us) && positiveNumber(us.prev_usd_lb) ? t`${formatNumber((us.usd_lb/us.prev_usd_lb-1)*100, {minimumFractionDigits:1, maximumFractionDigits:1})}% vs previous available observation (${us.prev_period || t('date unknown')})` : t('Previous observation unavailable');
   $('#market-sub').textContent = t`US ${safePeriod(us)} · Argentina ${safeUsd(ar)}/lb, ${safePeriod(ar)} · survey context, different geography`;
   $$('.cut-card-price').forEach(el => { el.innerHTML = priceLine(PRICES.ar[el.dataset.ar], PRICES.us[el.dataset.us]); });
   const rows = [];
-  for (const [region, records] of [['US',PRICES.us],['AR',PRICES.ar]]) for (const p of Object.values(records)) rows.push([`${region}: ${t(p.label || 'Unnamed')}`,p.unit_scale_unverified ? t('Price withheld') : validPrice(p) ? usd(p.usd_lb) + '/lb' : t('USD unavailable'),p.unit_scale_unverified ? retainedPriceEvidence(p) : positiveNumber(p.ars_kg) ? p.ars_kg + ' ARS/kg' : t('USD/lb native'),[recordContext(p),samplingContext(p)].filter(Boolean).join(' · '),region === 'AR' ? `${p.fx_ars_per_usd ?? t('unknown')} ARS/USD · ${p.fx_date || t('unknown date')} · ${t(p.fx_basis || 'unknown basis')} · ${t((p.fx_provenance || 'unknown').replaceAll('_',' '))}` : t('Native USD; no FX'),p.retrieved_at || t('Retrieval unknown')]);
+  for (const [region, records] of [['US',PRICES.us],['AR',PRICES.ar]]) for (const p of Object.values(records)) rows.push([`${region}: ${t(p.label || 'Unnamed')}`,p.unit_scale_unverified ? t('Price withheld') : validPrice(p) ? usd(p.usd_lb) + '/lb' : t('USD unavailable'),p.unit_scale_unverified ? retainedPriceEvidence(p) : positiveNumber(p.ars_kg) ? formatNumber(p.ars_kg) + ' ARS/kg' : t('USD/lb native'),[recordContext(p),samplingContext(p)].filter(Boolean).join(' · '),region === 'AR' ? `${formatNumber(p.fx_ars_per_usd)} ARS/USD · ${p.fx_date || t('unknown date')} · ${t(p.fx_basis || 'unknown basis')} · ${t((p.fx_provenance || 'unknown').replaceAll('_',' '))}` : t('Native USD; no FX'),p.retrieved_at || t('Retrieval unknown')]);
   renderTable('price-table',t('All stored observations; unverified unit scales are withheld from comparisons. Other comparisons require product, geography, method and interval qualifications.'),[t('Observation'),t('USD/lb'),t('Native / retained evidence'),t('Source and status'),t('FX lineage'),t('Retrieval')],rows);
   const attempts = Object.entries(PRICES.source_status || {}).map(([name,p]) => t`${name}: ${t(String(p.status || 'unknown').replaceAll('_',' '))}, attempt ${p.attempted_at || t('unknown')}`).join('; ');
   $('#data-note').textContent = t`Stored snapshot, legacy fetched label ${PRICES.fetched || t('unknown')}; metadata generated ${PRICES.generated_at || t('unknown')}. Generation is not retrieval. BLS monthly U.S. averages, INDEC GBA monthly averages, USDA advertised features and sampled Carrefour catalog offers differ in product, method, interval and geography. Read every qualification in the price table. Latest returned FX ${PRICES.fx.latest?.date || t('unknown date')} can lag. Inferred legacy FX is not original receipt proof. ${attempts}. Schematics, trait scores and value shares are illustrative. No current purchasing or conformance claim.`;
   renderScatter();
 }
 renderReferenceTables();
+function refreshActiveModal() {
+  if (!modalOverlay.open || !activeModal) return;
+  const focused = document.activeElement;
+  const controls = [...modalOverlay.querySelectorAll('button, a[href]')];
+  const identity = {id:focused?.id, cut:focused?.dataset?.cut, href:focused?.getAttribute('href')};
+  const card = $('#cut-modal-card');
+  const scrollTop = card.scrollTop;
+  activeModal();
+  const replacement = [...modalOverlay.querySelectorAll('button, a[href]')].find(el =>
+    (identity.id && el.id === identity.id) || (identity.cut && el.dataset.cut === identity.cut)
+    || (identity.href && el.getAttribute('href') === identity.href));
+  if (controls.includes(focused) && replacement) replacement.focus({preventScroll:true});
+  card.scrollTop = scrollTop;
+}
+function acceptPrices(prices) {
+  PRICES = prices;
+  priceLoadState = prices ? 'ready' : 'unavailable';
+  renderPrices();
+  refreshActiveModal();
+}
+function updateHeaderOffset() {
+  const height = $('.site-header').getBoundingClientRect().height;
+  document.documentElement.style.setProperty('--header-offset', `${Math.ceil(height) + 12}px`);
+}
+updateHeaderOffset();
+if (typeof ResizeObserver !== 'undefined') new ResizeObserver(updateHeaderOffset).observe($('.site-header'));
+else window.addEventListener('resize', updateHeaderOffset);
+
+const readerViewport = window.matchMedia('(max-width: 600px)');
+function syncReaderView() {
+  // Only open on entering the reader width; preserve choices within a viewport.
+  if (readerViewport.matches) $$('.chart-data').forEach(el => { el.open = true; });
+}
+syncReaderView();
+readerViewport.addEventListener('change', syncReaderView);
 // Switching language rerenders presentation only; filters, open details and prices survive.
 function setLanguage(next) {
   if (!['en', 'es-AR'].includes(next)) return;
@@ -2015,12 +2070,12 @@ function setLanguage(next) {
   renderReferenceTables();
   renderPrices();
   if (lastSearch !== null) filterAndOpenCut(lastSearch, false);
-  if (modalOverlay.open && activeModal) activeModal();
+  refreshActiveModal();
   if (focused?.isConnected) focused.focus({preventScroll:true});
 }
 $$('[data-language]').forEach(button => button.addEventListener('click', () => setLanguage(button.dataset.language)));
-if (window.innerWidth < 600) $$('.chart-data').forEach(el => { el.open = true; });
-fetch('data/prices.json').then(r => { if (!r.ok) throw new Error('Snapshot unavailable'); return r.json(); }).then(validatePrices).catch(() => null).then(p => { PRICES = p; renderPrices(); });
+renderPrices();
+fetch('data/prices.json').then(r => { if (!r.ok) throw new Error('Snapshot unavailable'); return r.json(); }).then(validatePrices).catch(() => null).then(acceptPrices);
 </script>
 </body>
 </html>
