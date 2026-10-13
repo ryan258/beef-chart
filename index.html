@@ -29,7 +29,7 @@ function showChartFallback(svgId, msg) {
   text.setAttribute('text-anchor', 'middle');
   text.setAttribute('fill', 'var(--mut)');
   text.setAttribute('font-size', '13');
-  text.textContent = msg || 'Chart library unavailable. Check network connection.';
+  text.textContent = t(msg || 'Chart library unavailable. Check network connection.');
   el.appendChild(text);
 }
 </script>
@@ -778,17 +778,31 @@ header.site-header{
   position:fixed;
   z-index:1000;
   pointer-events:none;
-  padding:10px 14px;
-  background:rgba(20,20,20,0.92);
+  width:max-content;
+  max-width:min(360px, calc(100vw - 24px));
+  padding:16px 18px;
+  background:rgba(32,33,30,0.97);
   color:#fff;
-  border-radius:8px;
+  border:1px solid rgba(255,255,255,0.16);
+  border-radius:10px;
   font-size:.82rem;
+  line-height:1.5;
+  overflow-wrap:anywhere;
   box-shadow:0 8px 24px rgba(0,0,0,0.3);
   backdrop-filter:blur(6px);
   opacity:0;
-  transform:translate(-50%, -115%);
   transition:opacity .15s;
 }
+#d3-floating-tooltip .tooltip-title{font:600 16px/1.3 'Space Grotesk',sans-serif}
+#d3-floating-tooltip .tooltip-description{margin-top:5px;color:#e1e2da;font-size:12px}
+#d3-floating-tooltip .tooltip-prices{display:grid;gap:12px;margin-top:14px}
+#d3-floating-tooltip .tooltip-price-row+.tooltip-price-row{border-top:1px solid #55574f;padding-top:12px}
+#d3-floating-tooltip .tooltip-price-heading{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:4px 16px}
+#d3-floating-tooltip .tooltip-market{font-weight:600}
+#d3-floating-tooltip .tooltip-price{font-size:16px;font-weight:600;font-variant-numeric:tabular-nums}
+#d3-floating-tooltip .tooltip-unit{font-size:11px;font-weight:400;color:#d4d6cd;white-space:nowrap}
+#d3-floating-tooltip .tooltip-note{margin:5px 0 0;color:#d4d6cd;font-size:11px;line-height:1.5}
+#d3-floating-tooltip .tooltip-date{display:block;margin-top:3px;color:#d4d6cd;font-size:11px}
 
 /* Cut Inspector Modal */
 .modal-overlay{
@@ -839,9 +853,10 @@ header.site-header{
 .legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
 </style>
 <link rel="stylesheet" href="assets/bauhaus.css">
+<script src="assets/i18n.js"></script>
 </head>
 <body>
-<a class="skip-link" href="#explore">Skip to the cut explorer</a>
+<a class="skip-link" href="#explore" data-i18n>Skip to the cut explorer</a>
 
 <!-- Header Navigation -->
 <header class="site-header">
@@ -850,43 +865,50 @@ header.site-header{
       <svg viewBox="40 130 830 425" aria-hidden="true">
         <path d="M 40,268 C 36,254 40,240 56,226 C 76,208 100,186 126,168 C 138,158 146,150 156,154 C 164,158 166,168 168,174 C 178,164 192,148 214,140 C 245,136 290,136 335,136 C 430,136 520,136 610,136 C 680,136 735,138 780,142 C 812,146 836,155 848,168 C 858,182 862,212 862,250 C 862,295 856,342 850,382 C 844,408 846,432 844,455 C 841,482 838,512 836,538 L 778,538 C 782,510 785,478 784,446 C 782,420 766,402 746,386 C 726,395 706,400 682,402 C 612,408 532,408 462,405 C 432,402 414,398 402,392 L 398,432 C 399,466 397,506 398,538 L 346,538 C 347,506 346,466 344,432 C 338,404 326,386 312,366 C 286,375 260,368 240,354 C 216,338 186,318 160,302 C 130,284 98,272 74,272 C 55,272 44,274 40,268 Z" fill="#141414"/>
       </svg>
-      The Cow, Two Ways
+      <span data-i18n>The Cow, Two Ways</span>
     </a>
     <nav class="nav-links">
-      <a href="#explore">Explore</a>
-      <a href="#explore">Compare</a>
-      <a href="#data-sankey">Data</a>
-      <a href="#data-scatter">Insights</a>
-      <a href="#about">About</a>
+      <a href="#explore" data-i18n>Explore</a>
+      <a href="#explore" data-i18n>Compare</a>
+      <a href="#data-sankey" data-i18n>Data</a>
+      <a href="#data-scatter" data-i18n>Insights</a>
+      <a href="#about" data-i18n>About</a>
     </nav>
     <div class="nav-search">
-      <input id="nav-search-input" type="search" placeholder="Search cuts or terms..." aria-label="Search cuts or terms">
+      <input id="nav-search-input" type="search" placeholder="Search cuts or terms..." aria-label="Search cuts or terms" data-i18n-aria-label="Search cuts or terms" data-i18n-placeholder="Search cuts or terms...">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="10" cy="10" r="6.5"/><path d="M15 15l6 6"/></svg>
+    </div>
+  </div>
+  <div class="language-bar">
+    <span class="language-caption" data-i18n>Language</span>
+    <div class="language-toggle" role="group" aria-label="Language" data-i18n-aria-label="Language">
+      <button type="button" data-language="en" lang="en" aria-pressed="true">English</button>
+      <button type="button" data-language="es-AR" lang="es-AR" aria-pressed="false">Castellano porteño</button>
     </div>
   </div>
 </header>
 
 <main class="wrap">
   <section class="hero" id="hero" aria-labelledby="hero-heading">
-    <div class="hero-meta"><span>An atlas of beef</span><span>From the whole animal to your table</span><span>US ↔ Argentina</span></div>
+    <div class="hero-meta"><span data-i18n>An atlas of beef</span><span data-i18n>From the whole animal to your table</span><span data-i18n>US ↔ Argentina</span></div>
     <div class="hero-grid">
       <div class="hero-content">
-        <p class="hero-kicker">One animal. A world of difference.</p>
-        <h1 class="hero-title" id="hero-heading">The cow.<br><span class="accent-two">Two ways.</span></h1>
-        <div class="hero-bottom"><p class="hero-desc">Every cut tells a story.<br>Explore the anatomy, follow the value, and see beef from a different perspective.</p>
-        <a class="hero-go" href="#explore" aria-label="Explore the cuts">↘</a></div>
+        <p class="hero-kicker" data-i18n>One animal. A world of difference.</p>
+        <h1 class="hero-title" id="hero-heading" data-i18n>The cow.<br><span class="accent-two">Two ways.</span></h1>
+        <div class="hero-bottom"><p class="hero-desc" data-i18n>Every cut tells a story.<br>Explore the anatomy, follow the value, and see beef from a different perspective.</p>
+        <a class="hero-go" href="#explore" aria-label="Explore the cuts" data-i18n-aria-label="Explore the cuts">↘</a></div>
       </div>
       <div class="hero-art">
         <div class="art-stripes" aria-hidden="true"></div>
-        <div class="cow-disc"><img src="assets/hero_cow.webp" alt="Halftone portrait of a horned, white-faced cow" fetchpriority="high"></div>
-        <span class="art-caption">Fig. 01 / The starting point</span>
+        <div class="cow-disc"><img src="assets/hero_cow.webp" alt="Halftone portrait of a horned, white-faced cow" fetchpriority="high" data-i18n-alt="Halftone portrait of a horned, white-faced cow"></div>
+        <span class="art-caption" data-i18n>Fig. 01 / The starting point</span>
         <span class="art-plus" aria-hidden="true">+</span>
         <div class="art-square" aria-hidden="true"><span>↗</span></div>
       </div>
     </div>
-    <div class="hero-index"><a href="#explore"><span>01 / Anatomy</span>Meet the cuts <b>↗</b></a><a href="#data-sankey"><span>02 / Connection</span>Follow the animal <b>↗</b></a><a href="#data-scatter"><span>03 / Perspective</span>Compare the markets <b>↗</b></a></div>
+    <div class="hero-index"><a href="#explore" data-i18n><span>01 / Anatomy</span>Meet the cuts <b>↗</b></a><a href="#data-sankey" data-i18n><span>02 / Connection</span>Follow the animal <b>↗</b></a><a href="#data-scatter" data-i18n><span>03 / Perspective</span>Compare the markets <b>↗</b></a></div>
   </section>
-  <div class="chapter-heading"><span class="eyebrow">The whole picture</span><h2>Start with the animal.</h2><p>Two ways to divide it.<br>A better way to understand it.</p></div>
+  <div class="chapter-heading"><span class="eyebrow" data-i18n>The whole picture</span><h2 data-i18n>Start with the animal.</h2><p data-i18n>Two ways to divide it.<br>A better way to understand it.</p></div>
 
   <!-- 2. ROW 1: EXPLORE THE COW + SIDEBAR -->
   <div class="grid-2col-main" id="explore">
@@ -894,38 +916,38 @@ header.site-header{
     <div class="card-box">
       <div class="red-tab-overhang"></div>
       <div class="section-tag">
-        <h3 class="section-title">One cow. Two maps.</h3>
+        <h3 class="section-title" data-i18n>One cow. Two maps.</h3>
       </div>
-      <p class="section-sub">Select a cut to explore its character</p>
+      <p class="section-sub" data-i18n>Select a cut to explore its character</p>
 
-      <p class="reference-note">Schematic regions, not cutting specifications. Translated names and price pairs require preparation and source qualifications. Hatching marks lomo, entraña and peceto as layered references.</p>
-      <details class="reference-directory"><summary>Browse all cuts and U.S. primals</summary><div id="cut-directory"></div><div id="primal-directory"></div></details>
+      <p class="reference-note" data-i18n>Schematic regions, not cutting specifications. Translated names and price pairs require preparation and source qualifications. Hatching marks lomo, entraña and peceto as layered references.</p>
+      <details class="reference-directory"><summary data-i18n>Browse all cuts and U.S. primals</summary><div id="cut-directory"></div><div id="primal-directory"></div></details>
       <div class="cows-compare-grid">
         <!-- Retail Cuts Cow -->
         <div class="cow-column">
-          <div class="cow-map-kicker"><span>01 / Argentina</span><span>20 cuts</span></div>
-          <svg class="cow-stage-svg" id="retail-cow-svg" viewBox="15 100 885 465" aria-label="Schematic Argentine cut map"></svg>
-          <p class="cow-map-readout" id="retail-map-label" aria-hidden="true">Explore the Argentine cuts</p>
+          <div class="cow-map-kicker"><span>01 / Argentina</span><span data-i18n>20 cuts</span></div>
+          <svg class="cow-stage-svg" id="retail-cow-svg" viewBox="15 100 885 465" aria-label="Schematic Argentine cut map" data-i18n-aria-label="Schematic Argentine cut map"></svg>
+          <p class="cow-map-readout" id="retail-map-label" aria-hidden="true" data-i18n>Explore the Argentine cuts</p>
           <div class="cow-col-footer">
             <div class="cow-col-info">
-              <h4>Retail Cuts</h4>
-              <p>What you buy at the counter.</p>
+              <h4 data-i18n>Retail Cuts</h4>
+              <p data-i18n>What you buy at the counter.</p>
             </div>
-            <button class="cow-btn-action" id="btn-retail-cow" title="Inspect Retail Cuts">→</button>
+            <button class="cow-btn-action" id="btn-retail-cow" title="Inspect Retail Cuts" data-i18n-title="Inspect Retail Cuts">→</button>
           </div>
         </div>
 
         <!-- Wholesale Cuts Cow -->
         <div class="cow-column">
-          <div class="cow-map-kicker"><span>02 / United States</span><span>9 regions</span></div>
-          <svg class="cow-stage-svg" id="wholesale-cow-svg" viewBox="15 100 885 465" aria-label="Schematic U.S. primal map"></svg>
-          <p class="cow-map-readout" id="wholesale-map-label" aria-hidden="true">Explore the U.S. regions</p>
+          <div class="cow-map-kicker"><span data-i18n>02 / United States</span><span data-i18n>9 regions</span></div>
+          <svg class="cow-stage-svg" id="wholesale-cow-svg" viewBox="15 100 885 465" aria-label="Schematic U.S. primal map" data-i18n-aria-label="Schematic U.S. primal map"></svg>
+          <p class="cow-map-readout" id="wholesale-map-label" aria-hidden="true" data-i18n>Explore the U.S. regions</p>
           <div class="cow-col-footer">
             <div class="cow-col-info">
-              <h4>Wholesale Cuts</h4>
-              <p>How the industry sees it.</p>
+              <h4 data-i18n>Wholesale Cuts</h4>
+              <p data-i18n>How the industry sees it.</p>
             </div>
-            <button class="cow-btn-action blue" id="btn-wholesale-cow" title="Inspect Wholesale Cuts">→</button>
+            <button class="cow-btn-action blue" id="btn-wholesale-cow" title="Inspect Wholesale Cuts" data-i18n-title="Inspect Wholesale Cuts">→</button>
           </div>
         </div>
       </div>
@@ -936,75 +958,75 @@ header.site-header{
       <!-- Card A: Today's Market -->
       <div class="card-box">
         <div class="market-header">
-          <h4>Stored Market Snapshot</h4>
+          <h4 data-i18n>Stored Market Snapshot</h4>
           <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="1 13 8 7 14 11 23 2"/>
           </svg>
         </div>
         <div class="market-body">
           <div>
-            <div class="market-name">Ground beef, US retail</div>
+            <div class="market-name" data-i18n>Ground beef, US retail</div>
             <div class="market-price" id="market-price">— <span>/ lb</span></div>
             <div class="market-change" id="market-change"></div>
           </div>
           <img class="market-steak-img" src="assets/cut_chuck.webp" alt="">
         </div>
         <div class="market-sub" id="market-sub"></div>
-        <a class="card-bottom-link" href="#data-scatter">View Market Data →</a>
+        <a class="card-bottom-link" href="#data-scatter" data-i18n>View Market Data →</a>
       </div>
 
       <!-- Card B: Explore A Cut (Light Blue Card) -->
       <div class="card-box blue-tint">
         <div class="section-tag blue" style="margin-bottom:12px">
-          <h4 style="margin:0;font-family:'Oswald',sans-serif;font-size:1.15rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase">
+          <h4 style="margin:0;font-family:'Oswald',sans-serif;font-size:1.15rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase" data-i18n>
             Explore A Cut
           </h4>
         </div>
         <div class="cut-search-box">
-          <input id="quick-cut-input" type="search" placeholder="e.g. Ribeye, Brisket, Chuck..." aria-label="Explore a cut">
-          <button id="quick-cut-btn" aria-label="Search cut">
+          <input id="quick-cut-input" type="search" placeholder="e.g. Ribeye, Brisket, Chuck..." aria-label="Explore a cut" data-i18n-aria-label="Explore a cut" data-i18n-placeholder="e.g. Ribeye, Brisket, Chuck...">
+          <button id="quick-cut-btn" aria-label="Search cut" data-i18n-aria-label="Search cut">
             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="10" cy="10" r="6"/><path d="M15 15l5 5"/></svg>
           </button>
         </div>
         <p id="search-status" role="status"></p><div id="cut-results"></div>
         <div class="cut-chips">
-          <button class="cut-chip" data-cut="bife-ancho">Ribeye</button>
-          <button class="cut-chip" data-cut="pecho">Brisket</button>
-          <button class="cut-chip" data-cut="lomo">Tenderloin</button>
-          <button class="cut-chip" data-cut="aguja">Chuck</button>
-          <button class="cut-chip" data-cut="cuadril">Sirloin</button>
-          <button class="cut-chip" data-cut="costillar">Short Rib</button>
+          <button class="cut-chip" data-cut="bife-ancho" data-i18n>Ribeye</button>
+          <button class="cut-chip" data-cut="pecho" data-i18n>Brisket</button>
+          <button class="cut-chip" data-cut="lomo" data-i18n>Tenderloin</button>
+          <button class="cut-chip" data-cut="aguja" data-i18n>Chuck</button>
+          <button class="cut-chip" data-cut="cuadril" data-i18n>Sirloin</button>
+          <button class="cut-chip" data-cut="costillar" data-i18n>Short Rib</button>
         </div>
       </div>
     </div>
   </div>
 
   <!-- 3. ROW 2: FROM ANIMAL TO TABLE + CUTS IN CONTEXT -->
-  <div class="chapter-heading"><span class="eyebrow">Beyond the butcher’s counter</span><h2>Follow the bigger story.</h2><p>Where it comes from.<br>What it becomes. What it’s worth.</p></div>
+  <div class="chapter-heading"><span class="eyebrow" data-i18n>Beyond the butcher’s counter</span><h2 data-i18n>Follow the bigger story.</h2><p data-i18n>Where it comes from.<br>What it becomes. What it’s worth.</p></div>
   <div class="grid-2col-split" id="data-sankey">
     <!-- Left Card: From Animal To Table (D3 Sankey) -->
     <div class="card-box">
       <div class="section-tag blue">
-        <h3 class="section-title">From Animal To Table</h3>
+        <h3 class="section-title" data-i18n>From Animal To Table</h3>
       </div>
-      <p class="section-sub">Illustrative allocation of 100 teaching units · not measured carcass yield</p>
+      <p class="section-sub" data-i18n>Illustrative allocation of 100 teaching units · not measured carcass yield</p>
 
-      <svg id="sankey-chart-svg" aria-hidden="true"></svg><details class="chart-data" id="flow-data"><summary>Read the flow as a table</summary><div id="flow-table"></div></details>
+      <svg id="sankey-chart-svg" aria-hidden="true"></svg><details class="chart-data" id="flow-data"><summary data-i18n>Read the flow as a table</summary><div id="flow-table"></div></details>
 
-      <a class="card-bottom-link" href="#flow-data">Explore The Flow →</a>
+      <a class="card-bottom-link" href="#flow-data" data-i18n>Explore The Flow →</a>
     </div>
 
     <!-- Right Card: Cuts In Context (D3 Scatterplot) -->
     <div class="card-box" id="data-scatter">
       <div class="section-tag ochre">
-        <h3 class="section-title">Cuts In Context</h3>
+        <h3 class="section-title" data-i18n>Cuts In Context</h3>
       </div>
-      <p class="section-sub">Stored retail context in USD/lb · sources, dates, and product specifications differ</p>
+      <p class="section-sub" data-i18n>Stored retail context in USD/lb · sources, dates, and product specifications differ</p>
 
       <div class="legend"><span><i style="background:var(--navy)"></i>Argentina</span><span><i style="background:var(--red)"></i>United States</span></div>
-      <svg id="scatter-chart-svg" aria-hidden="true"></svg><details class="chart-data" id="price-data"><summary>Read every price and qualification</summary><div id="price-table"></div></details>
+      <svg id="scatter-chart-svg" aria-hidden="true"></svg><details class="chart-data" id="price-data"><summary data-i18n>Read every price and qualification</summary><div id="price-table"></div></details>
 
-      <a class="card-bottom-link" href="#price-data">See The Data →</a>
+      <a class="card-bottom-link" href="#price-data" data-i18n>See The Data →</a>
     </div>
   </div>
 
@@ -1013,20 +1035,20 @@ header.site-header{
     <!-- Left Card: Where Value Lives (D3 Treemap) -->
     <div class="card-box">
       <div class="section-tag blue">
-        <h3 class="section-title">Where Value Lives</h3>
+        <h3 class="section-title" data-i18n>Where Value Lives</h3>
       </div>
-      <p class="section-sub">Fixed illustrative retail-value shares · not weight, yield, or current valuation</p>
+      <p class="section-sub" data-i18n>Fixed illustrative retail-value shares · not weight, yield, or current valuation</p>
 
-      <svg id="treemap-chart-svg" aria-hidden="true"></svg><details class="chart-data"><summary>Read the illustrative value shares</summary><div id="value-table"></div></details>
+      <svg id="treemap-chart-svg" aria-hidden="true"></svg><details class="chart-data"><summary data-i18n>Read the illustrative value shares</summary><div id="value-table"></div></details>
 
-      <a class="card-bottom-link" href="#explore">Explore Value →</a>
+      <a class="card-bottom-link" href="#explore" data-i18n>Explore Value →</a>
     </div>
 
     <!-- Right Card: Editorial Quote Card -->
     <div class="quote-card">
       <div>
         <div class="quote-mark">“</div>
-        <h3 class="quote-text">
+        <h3 class="quote-text" data-i18n>
           Same cow.<br>
           Different stories.<br>
           More understanding.
@@ -1034,7 +1056,7 @@ header.site-header{
         <div class="quote-rule"></div>
       </div>
       <div class="quote-graphic-bottom">
-        <img src="assets/pasture_fence.webp" alt="Halftone pasture scene with a fence leading toward distant farm buildings">
+        <img src="assets/pasture_fence.webp" alt="Halftone pasture scene with a fence leading toward distant farm buildings" data-i18n-alt="Halftone pasture scene with a fence leading toward distant farm buildings">
       </div>
     </div>
   </div>
@@ -1045,45 +1067,45 @@ header.site-header{
     <div class="card-box">
       <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px">
         <div class="section-tag blue">
-          <h3 class="section-title">Popular Cuts</h3>
+          <h3 class="section-title" data-i18n>Popular Cuts</h3>
         </div>
         <div style="display:flex;gap:6px">
-          <button style="width:28px;height:28px;border-radius:50%;border:1px solid var(--line-dark);background:#fff;display:flex;align-items:center;justify-content:center;font-size:.8rem" aria-label="Inspect previous cut" id="btn-prev-cut">‹</button>
-          <button style="width:28px;height:28px;border-radius:50%;border:1px solid var(--line-dark);background:#fff;display:flex;align-items:center;justify-content:center;font-size:.8rem" aria-label="Inspect next cut" id="btn-next-cut">›</button>
+          <button style="width:28px;height:28px;border-radius:50%;border:1px solid var(--line-dark);background:#fff;display:flex;align-items:center;justify-content:center;font-size:.8rem" aria-label="Inspect previous cut" id="btn-prev-cut" data-i18n-aria-label="Inspect previous cut">‹</button>
+          <button style="width:28px;height:28px;border-radius:50%;border:1px solid var(--line-dark);background:#fff;display:flex;align-items:center;justify-content:center;font-size:.8rem" aria-label="Inspect next cut" id="btn-next-cut" data-i18n-aria-label="Inspect next cut">›</button>
         </div>
       </div>
-      <p class="section-sub">Featured cuts · retail price per lb</p>
+      <p class="section-sub" data-i18n>Featured cuts · retail price per lb</p>
 
       <div class="popular-cuts-grid" id="popular-cuts-container">
         <!-- 6 Popular Cut Cards -->
         <div class="cut-card" role="button" tabindex="0" data-cut="bife-ancho">
-          <img src="assets/cut_ribeye.webp" alt="Ribeye">
-          <div class="cut-card-name">Ribeye</div>
+          <img src="assets/cut_ribeye.webp" alt="Ribeye" data-i18n-alt="Ribeye">
+          <div class="cut-card-name" data-i18n>Ribeye</div>
           <div class="cut-card-price" data-us="ribeye_bnls" data-ar="bife_ancho"></div>
         </div>
         <div class="cut-card" role="button" tabindex="0" data-cut="lomo">
-          <img src="assets/cut_tenderloin.webp" alt="Tenderloin">
-          <div class="cut-card-name">Tenderloin</div>
+          <img src="assets/cut_tenderloin.webp" alt="Tenderloin" data-i18n-alt="Tenderloin">
+          <div class="cut-card-name" data-i18n>Tenderloin</div>
           <div class="cut-card-price" data-us="tenderloin" data-ar="lomo"></div>
         </div>
         <div class="cut-card" role="button" tabindex="0" data-cut="bife-angosto">
-          <img src="assets/cut_nystrip.webp" alt="New York Strip">
-          <div class="cut-card-name">New York Strip</div>
+          <img src="assets/cut_nystrip.webp" alt="New York Strip" data-i18n-alt="New York Strip">
+          <div class="cut-card-name" data-i18n>New York Strip</div>
           <div class="cut-card-price" data-us="strip_bnls" data-ar="bife_angosto"></div>
         </div>
         <div class="cut-card" role="button" tabindex="0" data-cut="aguja">
-          <img src="assets/cut_chuck.webp" alt="Chuck Roast">
-          <div class="cut-card-name">Chuck Roast</div>
+          <img src="assets/cut_chuck.webp" alt="Chuck Roast" data-i18n-alt="Chuck Roast">
+          <div class="cut-card-name" data-i18n>Chuck Roast</div>
           <div class="cut-card-price" data-us="chuck_roast" data-ar="aguja"></div>
         </div>
         <div class="cut-card" role="button" tabindex="0" data-cut="pecho">
-          <img src="assets/cut_brisket.webp" alt="Brisket">
-          <div class="cut-card-name">Brisket</div>
+          <img src="assets/cut_brisket.webp" alt="Brisket" data-i18n-alt="Brisket">
+          <div class="cut-card-name" data-i18n>Brisket</div>
           <div class="cut-card-price" data-us="brisket_whole"></div>
         </div>
         <div class="cut-card" role="button" tabindex="0" data-cut="cuadril">
-          <img src="assets/cut_sirloin.webp" alt="Sirloin">
-          <div class="cut-card-name">Sirloin</div>
+          <img src="assets/cut_sirloin.webp" alt="Sirloin" data-i18n-alt="Sirloin">
+          <div class="cut-card-name" data-i18n>Sirloin</div>
           <div class="cut-card-price" data-us="sirloin_steak" data-ar="cuadril"></div>
         </div>
       </div>
@@ -1095,26 +1117,26 @@ header.site-header{
         <path d="M 40,268 C 36,254 40,240 56,226 C 76,208 100,186 126,168 C 138,158 146,150 156,154 C 164,158 166,168 168,174 C 178,164 192,148 214,140 C 245,136 290,136 335,136 C 430,136 520,136 610,136 C 680,136 735,138 780,142 C 812,146 836,155 848,168 C 858,182 862,212 862,250 C 862,295 856,342 850,382 C 844,408 846,432 844,455 C 841,482 838,512 836,538 L 778,538 C 782,510 785,478 784,446 C 782,420 766,402 746,386 C 726,395 706,400 682,402 C 612,408 532,408 462,405 C 432,402 414,398 402,392 L 398,432 C 399,466 397,506 398,538 L 346,538 C 347,506 346,466 344,432 C 338,404 326,386 312,366 C 286,375 260,368 240,354 C 216,338 186,318 160,302 C 130,284 98,272 74,272 C 55,272 44,274 40,268 Z"/>
       </svg>
       <div>
-        <h4 class="brand-callout-title">Better data.<br>A richer story.</h4>
-        <a class="btn-about" href="#explore">Back to the explorer &nbsp;↗</a>
+        <h4 class="brand-callout-title" data-i18n>Better data.<br>A richer story.</h4>
+        <a class="btn-about" href="#explore" data-i18n>Back to the explorer &nbsp;↗</a>
       </div>
     </div>
   </div>
 
   <section class="card-box extra-cuts" aria-labelledby="extra-heading">
-    <h2 id="extra-heading" class="section-title">Beyond the usual cuts</h2>
-    <p>Bone-in steak, sweetbreads, kidney, and tongue. Argentine retail listings; US prices are not yet connected.</p>
+    <h2 id="extra-heading" class="section-title" data-i18n>Beyond the usual cuts</h2>
+    <p data-i18n>Bone-in steak, sweetbreads, kidney, and tongue. Argentine retail listings; US prices are not yet connected.</p>
     <div class="extra-price-grid">
-      <button class="extra-cut" data-cut="bife-costilla"><img src="assets/cut_bife_costilla.webp" alt="Bife de costilla" class="extra-cut-img"><b>Bife de costilla</b><span>Bone-in steak</span><span class="cut-card-price" data-ar="bife_costilla">Not available</span></button>
-      <button class="extra-cut" data-cut="molleja"><img src="assets/cut_molleja.webp" alt="Mollejas" class="extra-cut-img"><b>Mollejas</b><span>Sweetbreads · gland unverified</span><span class="cut-card-price" data-ar="molleja">Not available</span></button>
-      <button class="extra-cut" data-cut="rinon"><img src="assets/cut_rinon.webp" alt="Riñón" class="extra-cut-img"><b>Riñón</b><span>Beef kidney</span><span class="cut-card-price" data-ar="rinon">Not available</span></button>
-      <button class="extra-cut" data-cut="lengua"><img src="assets/cut_lengua.webp" alt="Lengua" class="extra-cut-img"><b>Lengua</b><span>Beef tongue</span><span class="cut-card-price" data-ar="lengua">Not available</span></button>
+      <button class="extra-cut" data-cut="bife-costilla"><img src="assets/cut_bife_costilla.webp" alt="Bife de costilla" class="extra-cut-img"><b>Bife de costilla</b><span data-i18n>Bone-in steak</span><span class="cut-card-price" data-ar="bife_costilla" data-i18n>Not available</span></button>
+      <button class="extra-cut" data-cut="molleja"><img src="assets/cut_molleja.webp" alt="Mollejas" class="extra-cut-img"><b>Mollejas</b><span data-i18n>Sweetbreads · gland unverified</span><span class="cut-card-price" data-ar="molleja" data-i18n>Not available</span></button>
+      <button class="extra-cut" data-cut="rinon"><img src="assets/cut_rinon.webp" alt="Riñón" class="extra-cut-img"><b>Riñón</b><span data-i18n>Beef kidney</span><span class="cut-card-price" data-ar="rinon" data-i18n>Not available</span></button>
+      <button class="extra-cut" data-cut="lengua"><img src="assets/cut_lengua.webp" alt="Lengua" class="extra-cut-img"><b>Lengua</b><span data-i18n>Beef tongue</span><span class="cut-card-price" data-ar="lengua" data-i18n>Not available</span></button>
     </div>
-    <p class="extra-price-note">Stored catalog references in USD/lb. Availability and conversion dates belong to the observation; they do not establish today's offer. Missing prices are never borrowed from another cut.</p>
+    <p class="extra-price-note" data-i18n>Stored catalog references in USD/lb. Availability and conversion dates belong to the observation; they do not establish today's offer. Missing prices are never borrowed from another cut.</p>
   </section>
-  <p class="data-note" id="data-note" role="status">Loading stored price evidence. The atlas does not stream live prices.</p>
+  <p class="data-note" id="data-note" role="status" data-i18n>Loading stored price evidence. The atlas does not stream live prices.</p>
 </main>
-<footer class="site-footer"><a href="#hero">The cow.<br>Two ways.</a><p>Same animal.<br>Different perspective.</p><div class="footer-shapes" aria-hidden="true"><i></i><i></i><i></i></div><a class="back-top" href="#hero">Back to top ↑</a></footer>
+<footer class="site-footer"><a href="#hero" data-i18n>The cow.<br>Two ways.</a><p data-i18n>Same animal.<br>Different perspective.</p><div class="footer-shapes" aria-hidden="true"><i></i><i></i><i></i></div><a class="back-top" href="#hero" data-i18n>Back to top ↑</a></footer>
 
 <!-- Floating D3 Tooltip -->
 <div id="d3-floating-tooltip"></div>
@@ -1122,13 +1144,14 @@ header.site-header{
 <!-- Cut Inspector Modal -->
 <dialog class="modal-overlay" id="cut-modal-overlay" aria-labelledby="modal-cut-title">
   <div class="modal-card" id="cut-modal-card">
-    <button class="modal-close-btn" id="modal-close-btn" aria-label="Close cut details">✕</button>
+    <button class="modal-close-btn" id="modal-close-btn" aria-label="Close cut details" data-i18n-aria-label="Close cut details">✕</button>
     <div id="modal-content"></div>
   </div>
 </dialog>
 
 <!-- Visualization Logic & D3 Engine -->
 <script>
+translateStaticPage();
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
@@ -1219,22 +1242,29 @@ const BY_ID = Object.fromEntries(ALL_CUTS.map(c=>[c.id, c]));
 // 1b. LIVE PRICES: data/prices.json, written by ./fetch-prices.sh (BLS for US, INDEC for Argentina)
 let PRICES = null;
 const positiveNumber = n => typeof n === 'number' && Number.isFinite(n) && n > 0;
-const usd = n => positiveNumber(n) ? `$${n.toFixed(2)}` : 'Not available';
+const usd = n => positiveNumber(n) ? `${language === 'es-AR' ? 'US$' : '$'}${n.toLocaleString(locale(), {minimumFractionDigits:2, maximumFractionDigits:2})}` : t('Not available');
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const monthLabel = p => {
-  if (!validPeriod(p)) return 'date unknown';
+  if (!validPeriod(p)) return t('date unknown');
   const date = new Date(`${p.length === 7 ? p + '-15' : p}T12:00:00Z`);
-  return date.toLocaleDateString('en-US', {month:'short', ...(p.length === 10 ? {day:'numeric'} : {}), year:'numeric', timeZone:'UTC'});
+  return date.toLocaleDateString(locale(), {month:'short', ...(p.length === 10 ? {day:'numeric'} : {}), year:'numeric', timeZone:'UTC'});
 };
 // A positive stored conversion is not comparable while its unit scale is unresolved.
 const validPrice = p => p && !p.unit_scale_unverified && positiveNumber(p.usd_lb);
 const priceOf = c => ({ar:c?.arSeries ? PRICES?.ar?.[c.arSeries] ?? null : null, us:c?.usSeries ? PRICES?.us?.[c.usSeries] ?? null : null});
-const priceLine = (ar, us) => {
+const priceLine = (ar, us, layout = 'compact') => {
   const parts = [];
   for (const [country, p] of [['US',us],['AR',ar]]) {
-    if (p) parts.push(`${country} ${p.unit_scale_unverified ? 'Price withheld' : validPrice(p) ? usd(p.usd_lb) + '/lb' : positiveNumber(p.ars_kg) ? p.ars_kg.toLocaleString('en-US') + ' ARS/kg; USD unavailable' : 'Not available'}<small>${escapeHtml(recordStatus(p))} · ${escapeHtml(p.period || 'date unknown')}</small>`);
+    if (!p) continue;
+    const price = p.unit_scale_unverified ? t('Price withheld') : validPrice(p) ? usd(p.usd_lb) + '/lb' : positiveNumber(p.ars_kg) ? p.ars_kg.toLocaleString(locale()) + t(" ARS/kg; USD unavailable") : t('Not available');
+    if (layout === 'tooltip') {
+      parts.push(`<div class="tooltip-price-row"><div class="tooltip-price-heading"><span class="tooltip-market">${escapeHtml(t(country === 'US' ? 'United States' : 'Argentina'))}</span><strong class="tooltip-price">${escapeHtml(price).replace('/lb', '<span class="tooltip-unit"> / lb</span>')}</strong></div><p class="tooltip-note">${escapeHtml(recordStatus(p))}</p><span class="tooltip-date">${escapeHtml(monthLabel(p.period))}</span></div>`);
+    } else {
+      parts.push(`${country} ${price}<small>${escapeHtml(recordStatus(p))} · ${escapeHtml(p.period || t('date unknown'))}</small>`);
+    }
   }
-  return parts.join('<br>') || '<span class="na">Not available</span>';
+  if (layout === 'tooltip') return parts.length ? `<div class="tooltip-prices">${parts.join('')}</div>` : `<p class="tooltip-note">${t('Not available')}</p>`;
+  return parts.join('<br>') || `<span class="na">${t('Not available')}</span>`;
 };
 function validPeriod(value) {
   if (typeof value !== 'string' || !/^\d{4}-\d{2}(-\d{2})?$/.test(value)) return false;
@@ -1276,34 +1306,34 @@ function validatePrices(data) {
   return data;
 }
 function recordStatus(p) {
-  const status = p.observation_status === 'retained_no_match' ? 'Retained reference; no match in latest attempt'
-    : p.observation_status === 'retained_after_error' ? 'Retained reference; latest attempt failed'
-    : p.availability === 'out_of_stock' ? 'Out-of-stock catalog reference'
-    : p.adapter_status === 'unresolved_real_layout' ? 'USDA layout/effective dates unverified'
-    : p.source === 'Carrefour AR' && p.availability !== 'in_stock' ? 'Catalog reference; stock unknown'
-    : p.provenance_status === 'legacy_unverified' ? 'Legacy observation; original receipt unverified'
-    : p.source === 'Carrefour AR' ? 'In stock at observation; not today’s offer' : 'Dated reference observation';
-  return (p.unit_scale_unverified ? 'Unverified unit scale; price withheld · ' : '') + status;
+  const status = p.observation_status === 'retained_no_match' ? t('Retained reference; no match in latest attempt')
+    : p.observation_status === 'retained_after_error' ? t('Retained reference; latest attempt failed')
+    : p.availability === 'out_of_stock' ? t('Out-of-stock catalog reference')
+    : p.adapter_status === 'unresolved_real_layout' ? t('USDA layout/effective dates unverified')
+    : p.source === 'Carrefour AR' && p.availability !== 'in_stock' ? t('Catalog reference; stock unknown')
+    : p.provenance_status === 'legacy_unverified' ? t('Legacy observation; original receipt unverified')
+    : p.source === 'Carrefour AR' ? t('In stock at observation; not today’s offer') : t('Dated reference observation');
+  return (p.unit_scale_unverified ? t('Unverified unit scale; price withheld · ') : '') + status;
 }
 function retainedPriceEvidence(p) {
-  const native = positiveNumber(p.ars_kg) ? `${p.ars_kg.toLocaleString('en-US')} recorded as ARS/kg; ` : '';
-  const converted = positiveNumber(p.usd_lb) ? `${usd(p.usd_lb)}/lb recorded conversion` : 'USD conversion unavailable';
-  return `Stored evidence only: ${native}${converted}. Original sale unit / package-weight basis unverified. Excluded from price rankings, value comparisons and buying estimates until units and availability are verified.`;
+  const native = positiveNumber(p.ars_kg) ? t`${p.ars_kg.toLocaleString(locale())} recorded as ARS/kg; ` : '';
+  const converted = positiveNumber(p.usd_lb) ? t`${usd(p.usd_lb)}/lb recorded conversion` : t('USD conversion unavailable');
+  return t`Stored evidence only: ${native}${converted}. Original sale unit / package-weight basis unverified. Excluded from price rankings, value comparisons and buying estimates until units and availability are verified.`;
 }
 function recordContext(p) {
-  if (!p) return 'No observation in this snapshot';
-  const period = p.effective_period_status === 'unverified_report_date' ? `Stored report label ${p.period}; feature interval unverified` : `Observation ${p.period}`;
-  return `${p.source || 'Unknown source'} · ${p.method || 'method unknown'} · ${p.geography || 'region unknown'} · ${period} · ${recordStatus(p)}`;
+  if (!p) return t('No observation in this snapshot');
+  const period = p.effective_period_status === 'unverified_report_date' ? t`Stored report label ${p.period}; feature interval unverified` : t`Observation ${p.period}`;
+  return `${p.source || t('Unknown source')} · ${t(p.method || 'method unknown')} · ${t(p.geography || 'region unknown')} · ${period} · ${recordStatus(p)}`;
 }
 function samplingContext(p) {
   if (p.source !== 'Carrefour AR') return '';
   const s = p.sampling;
-  if (!s) return `Historical sample: ${Number.isSafeInteger(p.products) && p.products > 0 ? `recorded selected count ${p.products}; ` : ''}original query counts, limit hits and seller/region coverage unknown. ${typeof p.sampling_note === 'string' ? p.sampling_note + '. ' : ''}Not an exhaustive retailer sample.`;
-  const population = s.population === 'available_listings' ? 'listings available at observation' : 'out-of-stock references only';
+  if (!s) return t`Historical sample: ${Number.isSafeInteger(p.products) && p.products > 0 ? t`recorded selected count ${p.products}; ` : ''}original query counts, limit hits and seller/region coverage unknown. ${typeof p.sampling_note === 'string' ? t(p.sampling_note) + '. ' : ''}Not an exhaustive retailer sample.`;
+  const population = s.population === 'available_listings' ? t("listings available at observation") : t("out-of-stock references only");
   const queries = s.queries.map(q => `${q.query}: ${q.returned_products}`).join('; ');
-  const sellers = s.seller_ids.length ? s.seller_ids.join(', ') : 'unknown';
-  const coverage = s.coverage === 'possibly_truncated' ? 'Query limit reached; possibly truncated' : 'Query limit not reached; coverage still unknown';
-  return `Sample median: ${s.selected_count} ${population}, from ${s.eligible_count} eligible listings after alias deduplication. Products returned per query (${s.per_query_limit} requested maximum): ${queries}. First seller per SKU; selected seller IDs: ${sellers}${s.unknown_seller_count ? `; ${s.unknown_seller_count} selected listings lack a seller ID` : ''}. Delivery region: ${s.region || 'unknown'}. ${coverage}; no exhaustive retailer coverage claim.`;
+  const sellers = s.seller_ids.length ? s.seller_ids.join(', ') : t('unknown');
+  const coverage = s.coverage === 'possibly_truncated' ? t("Query limit reached; possibly truncated") : t("Query limit not reached; coverage still unknown");
+  return t`Sample median: ${s.selected_count} ${population}, from ${s.eligible_count} eligible listings after alias deduplication. Products returned per query (${s.per_query_limit} requested maximum): ${queries}. First seller per SKU; selected seller IDs: ${sellers}${s.unknown_seller_count ? t`; ${s.unknown_seller_count} selected listings lack a seller ID` : ''}. Delivery region: ${s.region || t('unknown')}. ${coverage}; no exhaustive retailer coverage claim.`;
 }
 const PRICE_ROWS = [
   {label:'Ribeye / Bife ancho', ar:'bife_ancho', us:'ribeye_bnls'},
@@ -1368,22 +1398,23 @@ function renderCowMaps() {
     {svg:'#retail-cow-svg', clip:'clip-retail-cow', label:'#retail-map-label', idle:'Explore the Argentine cuts',
       data:RETAIL_CUTS, key:d=>d.us, id:d=>d.id, path:d=>`M ${d.p} Z`,
       ink:d=>RETAIL_MAP_INKS[d.id] || 'url(#clip-retail-cow-hatch)',
-      name:d=>`${d.n} · ${d.eq}`, aria:d=>`Inspect ${d.n}, ${d.eq}`,
-      tooltip:d=>`<b>${d.n}</b> (${d.eq})<br>${priceLine(priceOf(d).ar, priceOf(d).us)}`, open:openCutModal},
+      name:d=>`${d.n} · ${t(d.eq)}`, aria:d=>t`Inspect ${d.n}, ${t(d.eq)}`,
+      tooltip:d=>`<div class="tooltip-title">${escapeHtml(d.n)}</div><div class="tooltip-description">${escapeHtml(t(d.eq))}</div>${priceLine(priceOf(d).ar, priceOf(d).us, 'tooltip')}`, open:openCutModal},
     {svg:'#wholesale-cow-svg', clip:'clip-wholesale-cow', label:'#wholesale-map-label', idle:'Explore the U.S. regions',
       data:WHOLESALE_PRIMALS, key:d=>d.key, id:d=>d.key, path:d=>d.ps.map(p=>`M ${p} Z`).join(' '),
-      ink:d=>PRIMAL_MAP_INKS[d.key], name:d=>`${d.n} · ${d.desc}`, aria:d=>`Inspect ${d.n} primal`,
-      tooltip:d=>`<b>${d.n} Primal</b><br>${d.share} of 100 illustrative teaching units`, open:openPrimalModal}
+      ink:d=>PRIMAL_MAP_INKS[d.key], name:d=>`${d.n} · ${t(d.desc)}`, aria:d=>t`Inspect US primal: ${d.n}`,
+      tooltip:d=>`<div class="tooltip-title">${escapeHtml(t`US primal: ${d.n}`)}</div><div class="tooltip-description">${t`${d.share} of 100 illustrative teaching units`}</div>`, open:openPrimalModal}
   ];
   for (const map of maps) {
     const svg = d3.select(map.svg);
     svg.selectAll('*').remove();
+    $(map.label).textContent=t(map.idle);
     renderCowSilhouette(svg,map.clip);
     const activate = d => { $(map.label).textContent=map.name(d); highlightPrimal(map.key(d),true); };
     const reset = e => {
       hideTooltip();
       if (document.activeElement === e.currentTarget) return;
-      $(map.label).textContent=map.idle;
+      $(map.label).textContent=t(map.idle);
       clearCowHighlight();
     };
     svg.append('g').attr('clip-path',`url(#${map.clip})`).selectAll('path.cut-path').data(map.data).join('path')
@@ -1478,7 +1509,7 @@ function renderSankey() {
   const sankey = d3.sankey()
     .nodeWidth(14)
     .nodePadding(10)
-    .extent([[60, 10], [width - 70, height - 15]]);
+    .extent([[language === 'es-AR' ? 110 : 60, 10], [width - 90, height - 15]]);
 
   const graph = sankey({
     nodes: FLOW_NODES.map(d => ({...d})),
@@ -1494,7 +1525,7 @@ function renderSankey() {
     .attr('d', d3.sankeyLinkHorizontal())
     .attr('stroke', d => d.source.color)
     .attr('stroke-width', d => Math.max(1.8, d.width))
-    .on('mouseover', (e, d) => showTooltip(e, `<b>${d.source.name} → ${d.target.name}</b><br>${d.value} of 100 illustrative teaching units`))
+    .on('mouseover', (e, d) => showTooltip(e, `<div class="tooltip-title">${escapeHtml(t(d.source.name))} → ${escapeHtml(t(d.target.name))}</div><div class="tooltip-description">${t`${d.value} of 100 illustrative teaching units`}</div>`))
     .on('mousemove', moveTooltip)
     .on('mouseout', hideTooltip);
 
@@ -1517,7 +1548,7 @@ function renderSankey() {
     .attr('y', d => (d.y1 - d.y0) / 2)
     .attr('dy', '0.35em')
     .attr('text-anchor', d => d.x0 < width / 2 ? 'end' : 'start')
-    .text(d => d.name);
+    .text(d => t(d.name));
 }
 
 // 4. D3 PRICE COMPARISON: "CUTS IN CONTEXT" (US retail vs Argentina retail, USD/lb)
@@ -1541,7 +1572,7 @@ function renderScatter() {
 
   const rows = PRICE_ROWS.map(r => ({...r, ar: validPrice(PRICES.ar[r.ar]) ? PRICES.ar[r.ar] : null, us: validPrice(PRICES.us[r.us]) ? PRICES.us[r.us] : null})).filter(r => r.ar || r.us);
   if (!rows.length) { showChartFallback('scatter-chart-svg','No converted prices; read native values in the table.'); return; }
-  const m = {top: 14, right: 30, bottom: 26, left: 128};
+  const m = {top: 14, right: 30, bottom: 26, left: language === 'es-AR' ? 245 : 128};
   const x = d3.scaleLinear()
     .domain([0, d3.max(rows, r => Math.max(r.ar?.usd_lb ?? 0, r.us?.usd_lb ?? 0)) * 1.1])
     .nice().range([m.left, width - m.right]);
@@ -1558,7 +1589,7 @@ function renderScatter() {
     .attr('transform', d => `translate(0, ${y(d.label) + y.bandwidth() / 2})`);
 
   row.append('text').attr('x', m.left - 12).attr('dy', '0.35em').attr('text-anchor', 'end')
-    .attr('font-family', 'Oswald').attr('font-size', '11px').attr('fill', 'var(--ink)').text(d => d.label);
+    .attr('font-family', 'Oswald').attr('font-size', '11px').attr('fill', 'var(--ink)').text(d => t(d.label));
 
   row.filter(d => d.ar && d.us).append('line')
     .attr('x1', d => x(Math.min(d.ar.usd_lb, d.us.usd_lb))).attr('x2', d => x(Math.max(d.ar.usd_lb, d.us.usd_lb)))
@@ -1568,7 +1599,7 @@ function renderScatter() {
     const pts = row.filter(d => d[k]);
     pts.append('circle').attr('cx', d => x(d[k].usd_lb)).attr('r', 5.5)
       .attr('fill', color).attr('stroke', '#fff').attr('stroke-width', 1.5)
-      .on('mouseover', (e, d) => showTooltip(e, `<b>${name}</b>: ${escapeHtml(d[k].label)}<br>${usd(d[k].usd_lb)}/lb · ${escapeHtml(recordContext(d[k]))}`))
+      .on('mouseover', (e, d) => showTooltip(e, `<div class="tooltip-title">${escapeHtml(t(name))}</div><div class="tooltip-description">${escapeHtml(t(d[k].label))}</div><div class="tooltip-prices"><div class="tooltip-price">${usd(d[k].usd_lb)}<span class="tooltip-unit"> / lb</span></div></div><p class="tooltip-note">${escapeHtml(recordContext(d[k]))}</p>`))
       .on('mousemove', moveTooltip)
       .on('mouseout', hideTooltip);
     const close = d => k === 'ar' && d.us && Math.abs(d.us.usd_lb - d.ar.usd_lb) < 1.2; // sit left of the dot so labels don't collide
@@ -1595,7 +1626,7 @@ const VALUE_MODEL = {
 // 5. D3 TREEMAP: "WHERE VALUE LIVES"
 function renderTreemap() {
   if (!d3Available()) {
-    showChartFallback('treemap-chart-svg', 'Value map unavailable. D3 library failed to load.');
+    showChartFallback('treemap-chart-svg', t('Value map unavailable. D3 library failed to load.'));
     return;
   }
   const svg = d3.select('#treemap-chart-svg');
@@ -1613,12 +1644,12 @@ function renderTreemap() {
     .join('g')
     .attr('class', 'treemap-node')
     .attr('transform', d => `translate(${d.x0}, ${d.y0})`)
-    .on('mouseover', (e, d) => showTooltip(e, `<b>${d.data.name}</b><br>${d.data.value}% of Carcass Retail Value`))
+    .on('mouseover', (e, d) => showTooltip(e, `<div class="tooltip-title">${escapeHtml(t(d.data.name))}</div><div class="tooltip-description">${t`${d.data.value}% of illustrative retail value`}</div>`))
     .on('mousemove', moveTooltip)
     .on('mouseout', hideTooltip)
     .on('click', (e, d) => {
       const primal = WHOLESALE_PRIMALS.find(p => p.key === d.data.key);
-      if (d.data.name === 'Other') openReferenceModal('Other illustrative value', 'This fixed 2% teaching allocation groups unspecified other value; it is not a shank yield or price.');
+      if (d.data.name === 'Other') openReferenceModal(t('Other illustrative value'), t('This fixed 2% teaching allocation groups unspecified other value; it is not a shank yield or price.'));
       else if (primal) openPrimalModal(primal);
     });
 
@@ -1632,7 +1663,7 @@ function renderTreemap() {
     .attr('class', 'treemap-label')
     .attr('x', 8)
     .attr('y', 20)
-    .text(d => d.data.name);
+    .text(d => t(d.data.name));
 
   leafG.filter(d => d.x1 - d.x0 > 50 && d.y1 - d.y0 > 44)
     .append('text')
@@ -1651,8 +1682,13 @@ function showTooltip(e, html) {
   moveTooltip(e);
 }
 function moveTooltip(e) {
-  tooltip.style.left = `${e.clientX}px`;
-  tooltip.style.top = `${e.clientY - 12}px`;
+  const {width, height} = tooltip.getBoundingClientRect();
+  const margin = 12, gap = 16;
+  const left = Math.min(Math.max(margin, e.clientX - width / 2), Math.max(margin, window.innerWidth - width - margin));
+  const above = e.clientY - height - gap;
+  const top = above >= margin ? above : Math.max(margin, Math.min(e.clientY + gap, window.innerHeight - height - margin));
+  tooltip.style.left = `${left}px`;
+  tooltip.style.top = `${top}px`;
 }
 function hideTooltip() {
   tooltip.style.opacity = 0;
@@ -1664,18 +1700,19 @@ const modalContent = $('#modal-content');
 
 function fxLine(p) {
   if (!p) return '';
-  if (!positiveNumber(p.fx_ars_per_usd)) return '<br>USD conversion unavailable; FX provenance unknown';
-  const date = p.fx_date || 'unknown date';
+  if (!positiveNumber(p.fx_ars_per_usd)) return t("<br>USD conversion unavailable; FX provenance unknown");
+  const date = p.fx_date || t('unknown date');
   const age = validPeriod(date) && date.length === 10 ? Math.floor((Date.now() - new Date(date + 'T00:00:00Z')) / 86400000) : null;
-  return `<br>FX ${p.fx_ars_per_usd.toLocaleString('en-US')} ARS/USD · ${escapeHtml(p.fx_basis || 'unknown basis')} · ${escapeHtml(date)}${age != null ? ` · ${age} days old at viewing` : ''} · ${escapeHtml((p.fx_provenance || 'unknown').replaceAll('_',' '))} provenance`;
+  return t`<br>FX ${p.fx_ars_per_usd.toLocaleString(locale())} ARS/USD · ${escapeHtml(t(p.fx_basis || 'unknown basis'))} · ${escapeHtml(date)}${age != null ? t` · ${age} days old at viewing` : ''} · ${escapeHtml(t((p.fx_provenance || 'unknown').replaceAll('_',' ')))} provenance`;
 }
 function priceBlock(cut) {
   const {ar, us} = priceOf(cut);
-  const one = (country, p) => !p ? '' : `<div class="price-evidence"><b>${country}</b><div class="price-value">${p.unit_scale_unverified ? 'Price withheld' : validPrice(p) ? usd(p.usd_lb) + ' /lb' : 'USD unavailable'}</div>${p.unit_scale_unverified ? `<p class="reference-note">${escapeHtml(retainedPriceEvidence(p))}</p>` : positiveNumber(p.ars_kg) ? `<div>Native ${p.ars_kg.toLocaleString('en-US')} ARS/kg</div>` : ''}<p>${escapeHtml(recordContext(p))}${country === 'Argentina' ? fxLine(p) : ''}<br>Retrieved: ${escapeHtml(p.retrieved_at || 'unknown; legacy receipt absent')}<br>Publication: ${escapeHtml(p.publication_date || 'unknown')}${samplingContext(p) ? '<br>' + escapeHtml(samplingContext(p)) : ''}</p></div>`;
-  return one('Argentina',ar) + one('United States',us) || '<p>No verified price in this snapshot; another cut’s price is never substituted.</p>';
+  const one = (country, p) => !p ? '' : `<div class="price-evidence"><b>${country}</b><div class="price-value">${p.unit_scale_unverified ? t('Price withheld') : validPrice(p) ? usd(p.usd_lb) + ' /lb' : t('USD unavailable')}</div>${p.unit_scale_unverified ? `<p class="reference-note">${escapeHtml(retainedPriceEvidence(p))}</p>` : positiveNumber(p.ars_kg) ? `<div>${t("Native")} ${p.ars_kg.toLocaleString(locale())} ARS/kg</div>` : ''}<p>${escapeHtml(recordContext(p))}${country === 'Argentina' ? fxLine(p) : ''}<br>${t("Retrieved:")} ${escapeHtml(p.retrieved_at || t('unknown; legacy receipt absent'))}<br>${t("Publication:")} ${escapeHtml(p.publication_date || t('unknown'))}${samplingContext(p) ? '<br>' + escapeHtml(samplingContext(p)) : ''}</p></div>`;
+  return one('Argentina',ar) + one(t('United States'),us) || `<p>${t('No verified price in this snapshot; another cut’s price is never substituted.')}</p>`;
 }
 
 let lastFocusedBeforeModal = null;
+let activeModal = null;
 function focusModal() {
   if (!modalOverlay.open) { lastFocusedBeforeModal = document.activeElement; modalOverlay.showModal(); }
   modalOverlay.classList.add('open');
@@ -1685,42 +1722,45 @@ function closeCutModal() {
   if (modalOverlay.open) modalOverlay.close();
 }
 function openReferenceModal(title, explanation, cuts = []) {
-  modalContent.innerHTML = `<h2 id="modal-cut-title">${escapeHtml(title)}</h2><p>${escapeHtml(explanation)}</p><div id="primal-cut-list"></div>`;
+  activeModal = () => openReferenceModal(title, explanation, cuts);
+  modalContent.innerHTML = `<h2 id="modal-cut-title">${escapeHtml(t(title))}</h2><p>${escapeHtml(t(explanation))}</p><div id="primal-cut-list"></div>`;
   for (const cut of cuts) $('#primal-cut-list').append(cutButton(cut));
   focusModal();
 }
 function openPrimalModal(primal) {
-  openReferenceModal(`${primal.n} primal`, `${primal.desc} Schematic teaching share: ${primal.share}/100 units; not a measured fabrication yield. These Argentine references overlap the broad region and are not equivalent purchasing specifications.`, RETAIL_CUTS.filter(c => c.us === primal.key));
+  openReferenceModal(t`US primal: ${primal.n}`, t`${t(primal.desc)} Schematic teaching share: ${primal.share}/100 units; not a measured fabrication yield. These Argentine references overlap the broad region and are not equivalent purchasing specifications.`, RETAIL_CUTS.filter(c => c.us === primal.key));
+  activeModal = () => openPrimalModal(primal);
 }
 function openCutModal(cut) {
   if (!cut) return;
+  activeModal = () => openCutModal(cut);
   if (typeof cutList !== "undefined" && cutList.includes(cut.id)) cutIndex = cutList.indexOf(cut.id);
   const cutImg = CUT_IMAGE_MAP[cut.id];
   const heroHtml = cutImg ? `<div class="modal-cut-hero"><img src="${cutImg}" alt="${escapeHtml(cut.n)}" class="modal-cut-illustration"></div>` : '';
   if (EXTRA_CUTS.includes(cut)) {
-    modalContent.innerHTML = `${heroHtml}<h2 id="modal-cut-title">${escapeHtml(cut.n)}</h2><p>${escapeHtml(cut.eq)}</p><p>${escapeHtml(cut.info)}</p><p class="reference-note">${escapeHtml(cut.relationship.type)}</p>${priceBlock(cut)}<p>US price is not connected for this entry. Argentine catalog observations retain their original availability and FX dates; they do not establish a current offer.</p>`;
+    modalContent.innerHTML = `${heroHtml}<h2 id="modal-cut-title">${escapeHtml(cut.n)}</h2><p>${escapeHtml(t(cut.eq))}</p><p>${escapeHtml(t(cut.info))}</p><p class="reference-note">${escapeHtml(t(cut.relationship.type))}</p>${priceBlock(cut)}<p>${t("US price is not connected for this entry. Argentine catalog observations retain their original availability and FX dates; they do not establish a current offer.")}</p>`;
     focusModal();
     return;
   }
   const primal = WHOLESALE_PRIMALS.find(p => p.key === cut.us) || WHOLESALE_PRIMALS[0];
   modalContent.innerHTML = `
     <div class="cut-dossier-heading" style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
-      <span style="font-family:'Oswald';font-size:.84rem;letter-spacing:.1em;text-transform:uppercase;color:var(--red);font-weight:700">Retail Cut Dossier</span>
-      <span style="font-size:.8rem;color:var(--mut)">• US ${primal.n} Primal</span>
+      <span style="font-family:'Oswald';font-size:.84rem;letter-spacing:.1em;text-transform:uppercase;color:var(--red);font-weight:700">${t("Retail Cut Dossier")}</span>
+      <span style="font-size:.8rem;color:var(--mut)">${t`US primal: ${primal.n}`}</span>
     </div>
     ${heroHtml}
     <h2 id="modal-cut-title" style="font-family:'Playfair Display',serif;font-size:2.4rem;margin:0 0 4px;color:var(--ink)">${escapeHtml(cut.n)}</h2>
     <div style="font-size:1.05rem;color:var(--navy);margin-bottom:16px">
-      Name / qualified relationship: <b>${cut.eq}</b><p class="reference-note">Anatomical overlap or cooking context does not establish interchangeable specifications. ${cut.relationship.type}.${cut.relationship.source ? ` <a href="${cut.relationship.source}" target="_blank" rel="noopener">Reference source</a>` : ''}</p>
+      ${t("Name / qualified relationship:")} <b>${escapeHtml(t(cut.eq))}</b><p class="reference-note">${t("Anatomical overlap or cooking context does not establish interchangeable specifications.")} ${escapeHtml(t(cut.relationship.type))}.${cut.relationship.source ? ` <a href="${cut.relationship.source}" target="_blank" rel="noopener">${t("Reference source")}</a>` : ''}</p>
     </div>
 
     <div class="cut-dossier-grid">
       <div>
-        <p style="margin:0 0 8px;font-size:.92rem;line-height:1.5">${cut.info}</p>
+        <p style="margin:0 0 8px;font-size:.92rem;line-height:1.5">${escapeHtml(t(cut.info))}</p>
         <div class="cut-traits">
-          <div><b>Cooking:</b> <span style="color:var(--red);text-transform:capitalize">${cut.how}</span></div>
-          <div><b>Editorial tenderness:</b> <span>${cut.tenderness}/10</span></div>
-          <div><b>Editorial marbling:</b> <span>${cut.marbling}/5</span></div>
+          <div><b>${t("Cooking:")}</b> <span style="color:var(--red);text-transform:capitalize">${t(cut.how)}</span></div>
+          <div><b>${t("Editorial tenderness:")}</b> <span>${cut.tenderness}/10</span></div>
+          <div><b>${t("Editorial marbling:")}</b> <span>${cut.marbling}/5</span></div>
         </div>
       </div>
       <div>${priceBlock(cut)}</div>
@@ -1729,14 +1769,14 @@ function openCutModal(cut) {
     <!-- D3 Radar Sensory Spider Chart inside Modal -->
     <div style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:20px">
       <div style="display:flex;justify-content:space-between;align-items:center;font-size:.82rem;font-family:'Oswald';text-transform:uppercase;margin-bottom:8px">
-        <b>Editorial trait illustration</b>
+        <b>${t("Editorial trait illustration")}</b>
         <span style="color:var(--red)">■ ${cut.n}</span>
       </div>
-      <p class="reference-note">Heuristic scores, not measured flavor, USDA grades, or safety guidance.</p><svg id="modal-radar-svg" aria-hidden="true" style="display:block;margin:0 auto;width:100%;max-width:260px;height:200px"></svg><div id="radar-table"></div>
+      <p class="reference-note">${t("Heuristic scores, not measured flavor, USDA grades, or safety guidance.")}</p><svg id="modal-radar-svg" aria-hidden="true" style="display:block;margin:0 auto;width:100%;max-width:260px;height:200px"></svg><div id="radar-table"></div>
     </div>
 
-    <a href="https://www.google.com/search?q=${encodeURIComponent(cut.n + ' ' + cut.eq + ' beef recipe')}" target="_blank" rel="noopener" style="display:block;text-align:center;padding:12px;background:var(--ink);color:#fff;border-radius:30px;font-family:'Oswald';font-size:.88rem;letter-spacing:.08em;text-transform:uppercase;text-decoration:none">
-      Search the web for ${cut.n} recipes →
+    <a href="https://www.google.com/search?q=${encodeURIComponent(language === 'es-AR' ? cut.n + ' recetas' : cut.n + ' ' + cut.eq + ' beef recipe')}" target="_blank" rel="noopener" style="display:block;text-align:center;padding:12px;background:var(--ink);color:#fff;border-radius:30px;font-family:'Oswald';font-size:.88rem;letter-spacing:.08em;text-transform:uppercase;text-decoration:none">
+      ${t`Search the web for ${cut.n} recipes →`}
     </a>
   `;
 
@@ -1749,16 +1789,16 @@ function renderModalRadar(cut) {
 
   const width = 260, height = 200, radius = 70;
   const axes = [
-    {label:'Tenderness', value:cut.tenderness},
-    {label:'Marbling', value:cut.marbling * 2},
-    {label:'Flavor', value:cut.how==='grill'?9:7.5},
-    {label:'Speed', value:cut.how==='grill'?8.5:3.5},
-    {label:'Sear Crust', value:cut.how==='grill'?9.5:5.5},
-    {label:'Gelatin', value:cut.how==='braise'?9:2}
+    {label:t('Tenderness'), value:cut.tenderness},
+    {label:t('Marbling'), value:cut.marbling * 2},
+    {label:t('Flavor'), value:cut.how==='grill'?9:7.5},
+    {label:t('Speed'), value:cut.how==='grill'?8.5:3.5},
+    {label:t('Sear Crust'), value:cut.how==='grill'?9.5:5.5},
+    {label:t('Gelatin'), value:cut.how==='braise'?9:2}
   ];
 
-  renderTable('radar-table','Editorial scores on a 0–10 teaching scale',['Trait','Heuristic score'],axes.map(a => [a.label,a.value]));
-  if (!d3Available()) { showChartFallback('modal-radar-svg','Read the trait table below.'); return; }
+  renderTable('radar-table',t('Editorial scores on a 0–10 teaching scale'),[t('Trait'),t('Heuristic score')],axes.map(a => [a.label,a.value]));
+  if (!d3Available()) { showChartFallback('modal-radar-svg',t('Read the trait table below.')); return; }
   const container = d3.select('#modal-radar-svg');
   container.selectAll('*').remove();
   const svg = container.append('g').attr('transform', `translate(${width/2}, ${height/2 + 6})`);
@@ -1791,7 +1831,7 @@ function renderModalRadar(cut) {
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'middle')
       .attr('fill', '#4a443e')
-      .text(a.label);
+      .text(t(a.label));
   });
 
   const radarLine = d3.lineRadial()
@@ -1812,6 +1852,7 @@ $('#modal-close-btn').addEventListener('click', closeCutModal);
 modalOverlay.addEventListener('cancel', e => { e.preventDefault(); closeCutModal(); });
 modalOverlay.addEventListener('close', () => {
   modalOverlay.classList.remove('open');
+  activeModal = null;
   if (lastFocusedBeforeModal?.isConnected) lastFocusedBeforeModal.focus();
 });
 modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeCutModal(); });
@@ -1827,24 +1868,40 @@ document.addEventListener('keydown', e => {
 
 
 // 8. INTERACTIVE ACTIONS & SEARCH
+const CUT_ALIASES = {
+  'bife-ancho': 'ojo de bife',
+  'brazuelo': 'osobuco caracú caracu',
+  'garron': 'osobuco caracú caracu',
+  'bife-costilla': 'bife de costilla costeleta chuleta',
+  'costillar': 'tira de asado costilla costillas',
+  'molleja': 'mollejas achuras',
+  'rinon': 'riñones rinones achuras',
+  'lengua': 'achuras'
+};
 function cutButton(cut) {
   const button = document.createElement('button');
-  button.type = 'button'; button.className = 'directory-cut'; button.textContent = `${cut.n} · ${cut.eq}`;
+  button.type = 'button'; button.className = 'directory-cut'; button.textContent = `${cut.n} · ${t(cut.eq)}`;
   button.addEventListener('click', () => openCutModal(cut));
   return button;
 }
-function filterAndOpenCut(query) {
+let lastSearch = null;
+function filterAndOpenCut(query, activate = true) {
+  lastSearch = query;
   const normalize = value => value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   const q = normalize(query.trim());
   const results = $('#cut-results'); results.replaceChildren();
-  if (!q) { $('#search-status').textContent = 'Enter a cut name, or browse the full directory.'; return; }
-  const matches = ALL_CUTS.filter(c => normalize(c.n + ' ' + c.eq + ' ' + c.id).includes(q));
-  $('#search-status').textContent = matches.length ? `${matches.length} matching ${matches.length === 1 ? 'cut' : 'cuts'}.` : 'No matching cut. Try another name or browse the full directory.';
-  if (matches.length === 1) openCutModal(matches[0]);
-  else { matches.forEach(c => results.append(cutButton(c))); if (matches.length) results.querySelector('button').focus(); }
+  if (!q) { $('#search-status').textContent = t('Enter a cut name, or browse the full directory.'); return; }
+  const matches = ALL_CUTS.filter(c => normalize(c.n + ' ' + c.eq + ' ' + t(c.eq) + ' ' + c.id + ' ' + (CUT_ALIASES[c.id] || '')).includes(q));
+  $('#search-status').textContent = matches.length ? (matches.length === 1 ? t('One matching cut.') : t`${matches.length} matching cuts.`) : t('No matching cut. Try another name or browse the full directory.');
+  if (matches.length === 1 && activate) openCutModal(matches[0]);
+  else { matches.forEach(c => results.append(cutButton(c))); if (matches.length && activate) results.querySelector('button').focus(); }
 }
-ALL_CUTS.forEach(c => $('#cut-directory').append(cutButton(c)));
-WHOLESALE_PRIMALS.forEach(p => { const b = document.createElement('button'); b.type = 'button'; b.className = 'directory-cut'; b.textContent = `${p.n} primal`; b.addEventListener('click',() => openPrimalModal(p)); $('#primal-directory').append(b); });
+function renderDirectories() {
+  $('#cut-directory').replaceChildren(...ALL_CUTS.map(cutButton));
+  $('#primal-directory').replaceChildren();
+  WHOLESALE_PRIMALS.forEach(p => { const b = document.createElement('button'); b.type = 'button'; b.className = 'directory-cut'; b.textContent = t`US primal: ${p.n}`; b.addEventListener('click',() => openPrimalModal(p)); $('#primal-directory').append(b); });
+}
+renderDirectories();
 $$('.cut-card').forEach(card => card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); } }));
 
 $('#quick-cut-btn').addEventListener('click', () => filterAndOpenCut($('#quick-cut-input').value));
@@ -1871,9 +1928,11 @@ $$('.cut-card').forEach(card => card.addEventListener('click', e => {
   openCutModal(cut);
 }));
 
-$('#btn-retail-cow').setAttribute('aria-label','Browse all retail cuts');
+$('#btn-retail-cow').setAttribute('data-i18n-aria-label','Browse all retail cuts');
+$('#btn-retail-cow').setAttribute('aria-label',t('Browse all retail cuts'));
 $('#btn-retail-cow').addEventListener('click', () => { $('.reference-directory').open = true; $('#cut-directory button').focus(); });
-$('#btn-wholesale-cow').setAttribute('aria-label','Browse all U.S. primals');
+$('#btn-wholesale-cow').setAttribute('data-i18n-aria-label','Browse all U.S. primals');
+$('#btn-wholesale-cow').setAttribute('aria-label',t('Browse all U.S. primals'));
 $('#btn-wholesale-cow').addEventListener('click', () => { $('.reference-directory').open = true; $('#primal-directory button').focus(); });
 
 // Carousel buttons
@@ -1900,42 +1959,66 @@ renderScatter();
 renderTreemap();
 
 // 10. STORED PRICE EVIDENCE AND TEXT ALTERNATIVES
-function safeUsd(p) { return validPrice(p) ? usd(p.usd_lb) : 'Not available'; }
-function safePeriod(p) { return p?.period ? monthLabel(p.period) : 'date unknown'; }
+function safeUsd(p) { return validPrice(p) ? usd(p.usd_lb) : t('Not available'); }
+function safePeriod(p) { return p?.period ? monthLabel(p.period) : t('date unknown'); }
 function renderTable(id, caption, headers, rows) {
-  const table = document.createElement('table'); table.setAttribute('role','table'); const cap = table.createCaption(); cap.textContent = caption;
+  const table = document.createElement('table'); table.setAttribute('role','table'); const cap = table.createCaption(); cap.textContent = t(caption);
   const thead = table.createTHead(); thead.setAttribute('role','rowgroup'); const head = thead.insertRow(); head.setAttribute('role','row');
-  for (const label of headers) { const th = document.createElement('th'); th.scope = 'col'; th.setAttribute('role','columnheader'); th.textContent = label; head.append(th); }
+  for (const label of headers) { const th = document.createElement('th'); th.scope = 'col'; th.setAttribute('role','columnheader'); th.textContent = t(label); head.append(th); }
   const body = table.createTBody(); body.setAttribute('role','rowgroup');
-  for (const cells of rows) { const row = body.insertRow(); row.setAttribute('role','row'); cells.forEach((value,i) => { const cell = document.createElement(i === 0 ? 'th' : 'td'); cell.setAttribute('role',i === 0 ? 'rowheader' : 'cell'); if (i === 0) cell.scope = 'row'; else cell.dataset.label = headers[i]; cell.textContent = String(value); row.append(cell); }); }
+  for (const cells of rows) { const row = body.insertRow(); row.setAttribute('role','row'); cells.forEach((value,i) => { const cell = document.createElement(i === 0 ? 'th' : 'td'); cell.setAttribute('role',i === 0 ? 'rowheader' : 'cell'); if (i === 0) cell.scope = 'row'; else cell.dataset.label = t(headers[i]); cell.textContent = t(String(value)); row.append(cell); }); }
   $('#'+id).replaceChildren(table);
 }
 function renderReferenceTables() {
-  renderTable('flow-table','100 illustrative teaching units; no measured carcass yield',['Region','Use','Units'],FLOW_LINKS.map(d => [FLOW_NODES[d.source].name,FLOW_NODES[d.target].name,d.value]));
-  renderTable('value-table','Fixed illustrative value allocation; no current price calculation',['Region','Value share %'],VALUE_MODEL.children.map(d => [d.name,d.value]));
+  renderTable('flow-table',t('100 illustrative teaching units; no measured carcass yield'),[t('Region'),t('Use'),t('Units')],FLOW_LINKS.map(d => [FLOW_NODES[d.source].name,FLOW_NODES[d.target].name,d.value]));
+  renderTable('value-table',t('Fixed illustrative value allocation; no current price calculation'),[t('Region'),t('Value share %')],VALUE_MODEL.children.map(d => [d.name,d.value]));
 }
 function renderPrices() {
   if (!PRICES) {
-    $$('.cut-card-price').forEach(el => { el.textContent = 'Price data unavailable'; });
-    $('#market-price').textContent = 'Not available'; $('#market-change').textContent = '';
-    $('#market-sub').textContent = 'Stored price data could not be validated or loaded.';
-    $('#data-note').textContent = 'Price data unavailable. The cut directory remains usable. Restart the public-file launcher and reload to retry.';
-    renderTable('price-table','Price data unavailable',['Status'],[['The atlas remains usable; reload to retry.']]);
+    $$('.cut-card-price').forEach(el => { el.textContent = t('Price data unavailable'); });
+    $('#market-price').textContent = t('Not available'); $('#market-change').textContent = '';
+    $('#market-sub').textContent = t('Stored price data could not be validated or loaded.');
+    $('#data-note').textContent = t('Price data unavailable. The cut directory remains usable. Restart the public-file launcher and reload to retry.');
+    renderTable('price-table',t('Price data unavailable'),[t('Status')],[[t('The atlas remains usable; reload to retry.')]]);
     renderScatter(); return;
   }
   const us = PRICES.us.ground_beef; const ar = PRICES.ar.ground_beef;
   $('#market-price').innerHTML = `${safeUsd(us)} <span>/ lb</span>`;
-  $('#market-change').textContent = validPrice(us) && positiveNumber(us.prev_usd_lb) ? `${((us.usd_lb/us.prev_usd_lb-1)*100).toFixed(1)}% vs previous available observation (${us.prev_period || 'date unknown'})` : 'Previous observation unavailable';
-  $('#market-sub').textContent = `US ${safePeriod(us)} · Argentina ${safeUsd(ar)}/lb, ${safePeriod(ar)} · survey context, different geography`;
+  $('#market-change').textContent = validPrice(us) && positiveNumber(us.prev_usd_lb) ? t`${((us.usd_lb/us.prev_usd_lb-1)*100).toFixed(1)}% vs previous available observation (${us.prev_period || t('date unknown')})` : t('Previous observation unavailable');
+  $('#market-sub').textContent = t`US ${safePeriod(us)} · Argentina ${safeUsd(ar)}/lb, ${safePeriod(ar)} · survey context, different geography`;
   $$('.cut-card-price').forEach(el => { el.innerHTML = priceLine(PRICES.ar[el.dataset.ar], PRICES.us[el.dataset.us]); });
   const rows = [];
-  for (const [region, records] of [['US',PRICES.us],['AR',PRICES.ar]]) for (const p of Object.values(records)) rows.push([`${region}: ${p.label || 'Unnamed'}`,p.unit_scale_unverified ? 'Price withheld' : validPrice(p) ? usd(p.usd_lb) + '/lb' : 'USD unavailable',p.unit_scale_unverified ? retainedPriceEvidence(p) : positiveNumber(p.ars_kg) ? p.ars_kg + ' ARS/kg' : 'USD/lb native',[recordContext(p),samplingContext(p)].filter(Boolean).join(' · '),region === 'AR' ? `${p.fx_ars_per_usd ?? 'unknown'} ARS/USD · ${p.fx_date || 'unknown date'} · ${p.fx_basis || 'unknown basis'} · ${(p.fx_provenance || 'unknown').replaceAll('_',' ')}` : 'Native USD; no FX',p.retrieved_at || 'Retrieval unknown']);
-  renderTable('price-table','All stored observations; unverified unit scales are withheld from comparisons. Other comparisons require product, geography, method and interval qualifications.',['Observation','USD/lb','Native / retained evidence','Source and status','FX lineage','Retrieval'],rows);
-  const attempts = Object.entries(PRICES.source_status || {}).map(([name,p]) => `${name}: ${String(p.status || 'unknown').replaceAll('_',' ')}, attempt ${p.attempted_at || 'unknown'}`).join('; ');
-  $('#data-note').textContent = `Stored snapshot, legacy fetched label ${PRICES.fetched || 'unknown'}; metadata generated ${PRICES.generated_at || 'unknown'}. Generation is not retrieval. BLS monthly U.S. averages, INDEC GBA monthly averages, USDA advertised features and sampled Carrefour catalog offers differ in product, method, interval and geography. Read every qualification in the price table. Latest returned FX ${PRICES.fx.latest?.date || 'unknown date'} can lag. Inferred legacy FX is not original receipt proof. ${attempts}. Schematics, trait scores and value shares are illustrative. No current purchasing or conformance claim.`;
+  for (const [region, records] of [['US',PRICES.us],['AR',PRICES.ar]]) for (const p of Object.values(records)) rows.push([`${region}: ${t(p.label || 'Unnamed')}`,p.unit_scale_unverified ? t('Price withheld') : validPrice(p) ? usd(p.usd_lb) + '/lb' : t('USD unavailable'),p.unit_scale_unverified ? retainedPriceEvidence(p) : positiveNumber(p.ars_kg) ? p.ars_kg + ' ARS/kg' : t('USD/lb native'),[recordContext(p),samplingContext(p)].filter(Boolean).join(' · '),region === 'AR' ? `${p.fx_ars_per_usd ?? t('unknown')} ARS/USD · ${p.fx_date || t('unknown date')} · ${t(p.fx_basis || 'unknown basis')} · ${t((p.fx_provenance || 'unknown').replaceAll('_',' '))}` : t('Native USD; no FX'),p.retrieved_at || t('Retrieval unknown')]);
+  renderTable('price-table',t('All stored observations; unverified unit scales are withheld from comparisons. Other comparisons require product, geography, method and interval qualifications.'),[t('Observation'),t('USD/lb'),t('Native / retained evidence'),t('Source and status'),t('FX lineage'),t('Retrieval')],rows);
+  const attempts = Object.entries(PRICES.source_status || {}).map(([name,p]) => t`${name}: ${t(String(p.status || 'unknown').replaceAll('_',' '))}, attempt ${p.attempted_at || t('unknown')}`).join('; ');
+  $('#data-note').textContent = t`Stored snapshot, legacy fetched label ${PRICES.fetched || t('unknown')}; metadata generated ${PRICES.generated_at || t('unknown')}. Generation is not retrieval. BLS monthly U.S. averages, INDEC GBA monthly averages, USDA advertised features and sampled Carrefour catalog offers differ in product, method, interval and geography. Read every qualification in the price table. Latest returned FX ${PRICES.fx.latest?.date || t('unknown date')} can lag. Inferred legacy FX is not original receipt proof. ${attempts}. Schematics, trait scores and value shares are illustrative. No current purchasing or conformance claim.`;
   renderScatter();
 }
 renderReferenceTables();
+// Switching language rerenders presentation only; filters, open details and prices survive.
+function setLanguage(next) {
+  if (!['en', 'es-AR'].includes(next)) return;
+  language = next;
+  try { localStorage.setItem('beef-chart-language', language); } catch { /* Optional preference storage. */ }
+  try {
+    const url = new URL(location.href);
+    url.searchParams.set('lang', language);
+    history.replaceState(null, '', url);
+  } catch { /* The toggle also works in restricted/file previews. */ }
+  const focused = document.activeElement;
+  translateStaticPage();
+  hideTooltip();
+  renderDirectories();
+  renderCowMaps();
+  renderSankey();
+  renderTreemap();
+  renderReferenceTables();
+  renderPrices();
+  if (lastSearch !== null) filterAndOpenCut(lastSearch, false);
+  if (modalOverlay.open && activeModal) activeModal();
+  if (focused?.isConnected) focused.focus({preventScroll:true});
+}
+$$('[data-language]').forEach(button => button.addEventListener('click', () => setLanguage(button.dataset.language)));
 if (window.innerWidth < 600) $$('.chart-data').forEach(el => { el.open = true; });
 fetch('data/prices.json').then(r => { if (!r.ok) throw new Error('Snapshot unavailable'); return r.json(); }).then(validatePrices).catch(() => null).then(p => { PRICES = p; renderPrices(); });
 </script>

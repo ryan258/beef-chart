@@ -27,6 +27,7 @@ const setup = () => {
   const context = vm.createContext({snapshot: structuredClone(snapshot), sample: structuredClone(sample),
     document: {querySelector: () => ({}), querySelectorAll: () => []},
     renderTable: (id, caption, headers, rows) => tables.set(id, rows), renderScatter: () => {}});
+  vm.runInContext(fs.readFileSync(path.join(root, 'assets/i18n.js'), 'utf8'), context);
   vm.runInContext(source + '\nPRICES = validatePrices(snapshot);', context);
   return {run: code => vm.runInContext(code, context), tables};
 };

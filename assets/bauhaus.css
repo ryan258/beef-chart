@@ -29,6 +29,15 @@ header.site-header{background:var(--bg);backdrop-filter:none;border-bottom:1px s
 .modal-cut-illustration{max-height:160px;width:auto;max-width:100%;object-fit:contain;mix-blend-mode:multiply}
 
 /* Truth-and-harmony additions retain the existing palette and geometry. */
+.language-bar{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:12px;padding:10px 48px;border-top:1px solid var(--line-dark)}
+.language-caption{font-size:12px;color:var(--mut)}
+.language-toggle{display:flex;flex-wrap:wrap;gap:4px}
+.language-toggle button{min-height:44px;padding:10px 16px;border:1px solid var(--ink);background:transparent;color:var(--ink);font:500 13px 'Space Grotesk',sans-serif;cursor:pointer}
+.language-toggle button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.language-toggle button:focus-visible{outline:3px solid var(--navy);outline-offset:3px}
+html[lang="es-AR"] .hero-title{font-size:clamp(60px,8.4vw,130px)}
+@media(max-width:800px){.language-bar{padding:10px 28px}.language-toggle button{padding:10px 12px}html[lang="es-AR"] .hero-title{font-size:clamp(56px,13vw,104px)}}
+@media(max-width:480px){.language-bar{padding:10px 18px;justify-content:flex-start}.language-caption{font-size:11px}html[lang="es-AR"] .hero-title{font-size:15vw}}
 .cow-map-kicker{display:flex;justify-content:space-between;gap:12px;width:100%;margin:0 0 18px;font:600 10px/1.4 'Space Grotesk',sans-serif;text-transform:uppercase;letter-spacing:1px}
 .cow-map-kicker span:last-child{color:var(--mut);font-weight:400}
 .cow-stage-svg{max-height:none;overflow:visible}

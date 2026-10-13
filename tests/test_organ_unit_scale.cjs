@@ -28,6 +28,7 @@ const setup = () => {
     }, querySelectorAll: () => cards},
     renderTable: (id, caption, headers, rows) => tables.set(id, {caption, headers, rows}),
     renderScatter: () => {}});
+  vm.runInContext(fs.readFileSync(path.join(root, 'assets/i18n.js'), 'utf8'), context);
   vm.runInContext(source + '\nPRICES = validatePrices(snapshot);', context);
   return {run: code => vm.runInContext(code, context), nodes, cards, tables};
 };

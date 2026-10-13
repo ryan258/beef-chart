@@ -9,7 +9,7 @@ mkdir -p "$public_dir/assets" "$public_dir/data"
 cp index.html "$public_dir/index.html"
 cp data/prices.json "$public_dir/data/prices.json"
 shopt -s nullglob
-for asset in assets/*.css assets/*.webp assets/*.png assets/*.jpg assets/*.svg; do
+for asset in assets/*.css assets/*.js assets/*.webp assets/*.png assets/*.jpg assets/*.svg; do
   [ ! -L "$asset" ] || { echo "Refusing symlink asset: $asset" >&2; exit 1; }
   cp "$asset" "$public_dir/assets/"
 done
