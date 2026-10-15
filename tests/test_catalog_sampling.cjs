@@ -6,7 +6,7 @@ const vm = require('node:vm');
 const {test} = require('node:test');
 const root = path.join(__dirname, '..');
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-const snapshot = JSON.parse(fs.readFileSync(path.join(root, 'data/prices.json'), 'utf8'));
+const snapshot = JSON.parse(fs.readFileSync(path.join(root, 'tests/fixtures/prices_legacy_2026_10_07.json'), 'utf8'));
 const section = (start, end) => {
   const from = html.indexOf(start), to = html.indexOf(end, from);
   assert.ok(from >= 0 && to > from);

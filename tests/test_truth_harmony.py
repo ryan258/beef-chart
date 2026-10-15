@@ -92,7 +92,7 @@ class TruthHarmony(unittest.TestCase):
     def test_cut_failures_do_not_block_healthy_cut_or_change_dates(self):
         with tempfile.TemporaryDirectory() as directory:
             path=Path(directory)/'prices.json';path.write_text(json.dumps(snapshot()))
-            newer={'lengua':{'label':'Lengua','source':'Carrefour AR','period':'2026-10-12','ars_kg':15000,'usd_lb':5,'availability':'in_stock'}}
+            newer={'lengua':{'label':'Lengua','source':'Carrefour AR','period':'2026-10-12','ars_kg':15000,'usd_lb':round(15000/1500/2.2046226,2),'availability':'in_stock'}}
             with patch.object(retail,'OUT',path),patch.object(retail.sys,'argv',['scraper','--cuts','rinon','lengua']),patch.object(retail,'get',return_value=b'{"data":[["2026-08-31",1500]]}'),patch.object(retail,'carrefour_prices',side_effect=[OSError('blocked'),newer]):
                 with self.assertRaises(RuntimeError):retail.main()
             result=json.loads(path.read_text())
@@ -103,7 +103,7 @@ class TruthHarmony(unittest.TestCase):
             self.assertEqual(result['catalog_attempts']['lengua']['status'],'ok')
 
     def test_bundled_observations_are_qualified_without_refresh(self):
-        root=Path(__file__).parents[1];data=json.loads((root/'data/prices.json').read_text());validate_snapshot(data)
+        root=Path(__file__).parents[1];data=json.loads((root/'tests/fixtures/prices_legacy_2026_10_07.json').read_text());validate_snapshot(data)
         self.assertEqual(data['fetched'],'2026-10-07T19:51:30Z')
         self.assertEqual((len(data['us']),len(data['ar'])),(17,19))
         self.assertEqual(data['ar']['rinon']['availability'],'out_of_stock')

@@ -1,0 +1,133 @@
+{
+  "finding": "Existing valuation series and original CSV stopped on 2026-08-31; direct BCRA USD quotes provide September. These are distinct rate bases.",
+  "valuation_metadata": {
+    "data": [],
+    "count": 0,
+    "meta": [
+      {
+        "frequency": "day"
+      },
+      {
+        "catalog": {
+          "identifier": "sspm",
+          "title": "Datos Programación Macroeconómica",
+          "description": "Catálogo de datos abiertos de la Subsecretaría de Programación Macroeconómica.",
+          "issued": "2017-09-28",
+          "modified": "2017-09-28",
+          "language": [
+            "SPA"
+          ],
+          "superThemeTaxonomy": "http://datos.gob.ar/superThemeTaxonomy.json",
+          "license": "Creative Commons Attribution 4.0",
+          "spatial": "ARG",
+          "publisher": {
+            "name": "Subsecretaría de Programación Macroeconómica.",
+            "mbox": "datoseconomicos@mecon.gov.ar"
+          }
+        },
+        "dataset": {
+          "identifier": "92",
+          "title": "Reservas internacionales y pasivos del BCRA",
+          "description": "Reservas internacionales y pasivos del BCRA. En millones de pesos (excepto las reservas internacionales que se expresan en millones de dólares). Datos mensuales (promedio del período)",
+          "superTheme": [
+            "ECON"
+          ],
+          "theme": [
+            {
+              "id": "moneda",
+              "label": "Dinero y Bancos",
+              "description": "Series monetarias y bancarias"
+            }
+          ],
+          "keyword": [
+            "moneda",
+            "dinero",
+            "bancos",
+            "reservas internacionales",
+            "reservas",
+            "rrii"
+          ],
+          "accrualPeriodicity": "R/P1D",
+          "issued": "2017-09-28",
+          "language": [
+            "SPA"
+          ],
+          "spatial": "ARG",
+          "temporal": "2003-01-01/2017-04-01",
+          "landingPage": "https://www.economia.gob.ar/datos/",
+          "license": "Creative Commons Attribution 4.0",
+          "source": "Banco Central de la República Argentina (BCRA)",
+          "accessLevel": "ABIERTO",
+          "publisher": {
+            "name": "Subsecretaría de Programación Macroeconómica",
+            "mbox": "datoseconomicos@mecon.gov.ar"
+          },
+          "contactPoint": {
+            "fn": "Subsecretaría de Programación Macroeconómica.",
+            "hasEmail": "datoseconomicos@mecon.gov.ar"
+          }
+        },
+        "distribution": {
+          "identifier": "92.2",
+          "title": "Reservas internacionales y pasivos financieros del BCRA",
+          "description": "Reservas internacionales y pasivos del BCRA, pasivos financieros, otros depósitos al gobierno, adelantos por liquidez y tipo de cambio de devaluación.  Datos diarios (promedio del período)",
+          "fileName": "reservas-internacionales-pasivos-financieros-bcra.csv",
+          "format": "CSV",
+          "accessURL": "https://www.economia.gob.ar/datos/",
+          "issued": "2017-09-28",
+          "downloadURL": "https://infra.datos.gob.ar/catalog/sspm/dataset/92/distribution/92.2/download/reservas-internacionales-pasivos-financieros-bcra.csv",
+          "frequency": "R/P1D",
+          "changed": "False",
+          "last_hash": "7ade0e5c0ba395cdbf5ca7c3e9f9dec47e8ba402fa59737d67364d2b58193c0aceecb627f4592d043efe5c4561f0334564083f3ca2f95b3aeefd45d57fc8562b"
+        },
+        "field": {
+          "title": "tipo_cambio_valuacion",
+          "type": "number",
+          "description": "Tipo de cambio de valuación (peso por dólar)",
+          "id": "92.2_TIPO_CAMBIION_0_0_21_24",
+          "units": "Pesos argentinos por dólar",
+          "time_index_start": "2003-01-02",
+          "time_index_end": "2026-08-31",
+          "frequency": "R/P1D",
+          "time_index_size": "8643",
+          "days_without_data": "40",
+          "last_value": "1509.4686",
+          "second_to_last_value": "1513.0352",
+          "last_pct_change": "-0.002357248529313849",
+          "is_updated": "False",
+          "max_value": "1514.1634",
+          "min_value": "2.7485",
+          "average": "163.7467144548575",
+          "significant_figures": "13",
+          "hits_total": "7427",
+          "hits_30_days": "0",
+          "hits_90_days": "0",
+          "hits_180_days": "0",
+          "available": "true",
+          "is_percentage": false,
+          "representation_mode": "value",
+          "representation_mode_units": "Pesos argentinos por dólar"
+        }
+      }
+    ],
+    "params": {
+      "ids": "92.2_TIPO_CAMBIION_0_0_21_24",
+      "last": "5",
+      "metadata": "full",
+      "format": "json",
+      "identifiers": [
+        {
+          "id": "92.2_TIPO_CAMBIION_0_0_21_24",
+          "distribution": "92.2",
+          "dataset": "92"
+        }
+      ]
+    }
+  },
+  "valuation_csv_url": "https://infra.datos.gob.ar/catalog/sspm/dataset/92/distribution/92.2/download/reservas-internacionales-pasivos-financieros-bcra.csv",
+  "valuation_csv_sha256": "f76d7983822928b83516e690c21fcf7633641fed9f9358cc06128466cd8a75d4",
+  "direct_usd_response_fixture": "tests/fixtures/bcra_usd_2026_08_09.json",
+  "direct_usd_fixture_sha256": "7c4658d95e68bc7e6f3ab0ac623bd9acf8a2857b8a66307625e1c2a4bad22739",
+  "direct_usd_url": "https://api.bcra.gob.ar/estadisticascambiarias/v1.0/Cotizaciones/USD?fechadesde=2026-08-01&fechahasta=2026-09-30&limit=1000&offset=0",
+  "documentation": "https://www.bcra.gob.ar/archivos/Catalogo/Content/files/pdf/estadisticascambiarias-v1.pdf"
+}

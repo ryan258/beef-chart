@@ -18,7 +18,7 @@ spec.loader.exec_module(retail)
 
 class OrganUnitScale(unittest.TestCase):
     def setUp(self):
-        self.data = json.loads((ROOT / 'data/prices.json').read_text())
+        self.data = json.loads((ROOT / 'tests/fixtures/prices_legacy_2026_10_07.json').read_text())
 
     def test_bundled_flags_preserve_original_values_dates_and_listings(self):
         validate_snapshot(self.data)

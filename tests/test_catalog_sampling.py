@@ -17,7 +17,7 @@ class CatalogSampling(unittest.TestCase):
         self.network = patch('urllib.request.urlopen', side_effect=AssertionError('Live request forbidden'))
         self.network.start()
         self.addCleanup(self.network.stop)
-        self.data = json.loads((ROOT / 'data/prices.json').read_text())
+        self.data = json.loads((ROOT / 'tests/fixtures/prices_legacy_2026_10_07.json').read_text())
 
     def fetch(self, responses, key='molleja'):
         with patch.object(m, 'get', side_effect=[json.dumps(p).encode() for p in responses]), patch.object(m.time, 'sleep'):
@@ -113,7 +113,8 @@ class CatalogSampling(unittest.TestCase):
                 self.assertEqual(retained, expected)
         data = qualify_snapshot(self.data)
         newer = self.fetch([[product('Lengua x kg', price=25000)]], 'lengua')
-        merge_records(data, 'ar', 'Carrefour AR', {'lengua': newer}, ['lengua'], '2026-10-12T00:00:00Z')
+        attempted = newer['period'] + 'T00:00:00Z'
+        merge_records(data, 'ar', 'Carrefour AR', {'lengua': newer}, ['lengua'], attempted)
         self.assertEqual(data['ar']['lengua']['previous_observation'], original)
         validate_snapshot(data)
 

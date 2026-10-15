@@ -4,22 +4,92 @@
   US: USDA AMS weekly grocery-store beef ad report (PDF, needs `pdftotext` from poppler: brew install poppler).
       Advertised prices, store-weighted across conventional fresh items; not shelf-price averages.
   AR: Carrefour Argentina public catalog search (butcher-section items sold by the kg), median per cut.
-  FX rule: INDEC records use BCRA monthly average matched to the price month.
+      IPCVA AMBA is the primary monthly source for covered cuts; Carrefour evidence is retained.
+  FX rule: INDEC uses the BCRA-derived valuation series' monthly average.
+      IPCVA uses the monthly arithmetic mean of BCRA's published USD quotes.
       Carrefour records use the latest returned BCRA observation, which can lag. Each AR record stores fx_ars_per_usd,
       fx_date, and fx_basis so the page can display provenance without mixing bases.
 """
-import argparse, os, math, json, re, statistics, subprocess, sys, tempfile, time, unicodedata, urllib.parse, urllib.request
+import argparse, os, math, json, re, statistics, subprocess, sys, tempfile, time, unicodedata, urllib.parse, urllib.request, hashlib
 from http.client import HTTPException
+from urllib.error import HTTPError
+from html.parser import HTMLParser
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from price_contract import positive, valid_period, qualify_snapshot, validate_snapshot, merge_records, write_snapshot, timestamp
+from price_contract import positive, valid_period, qualify_snapshot, validate_snapshot, merge_records, write_snapshot, timestamp, enable_ar_sources, source_records, select_ar_sources
 from official_prices import fetch_official, merge_official
+from ipcva_prices import refresh_ipcva
 
 OUT = Path(os.environ.get("BEEF_PRICES_OUT", Path(__file__).parent / "data" / "prices.json"))
 USDA_PDF = "https://www.ams.usda.gov/mnreports/AMS_3228.pdf"
+USDA_REPORT_PAGE = "https://mymarketnews.ams.usda.gov/viewReport/3228"
+USDA_END_WINDOW = 'advertisement_ending_dates_printed_in_pdf'
 FX_URL = "https://apis.datos.gob.ar/series/api/series/?ids=92.2_TIPO_CAMBIION_0_0_21_24&last=1&format=json"
 LB_PER_KG = 2.2046226
 RETAIL_ERRORS = (OSError, ValueError, KeyError, IndexError, TypeError, OverflowError, HTTPException)
+
+
+class PartialRefreshError(RuntimeError):
+    """Expected incomplete provider work after a validated snapshot was saved."""
+    def __init__(self, issues):
+        self.issues = list(issues)
+        super().__init__('Partial refresh: ' + ', '.join(self.issues))
+
+
+class USDARequestError(OSError):
+    def __init__(self, step, cause):
+        self.step = step
+        self.cause_type = type(cause).__name__
+        super().__init__(f'{step}: {self.cause_type}: {cause}')
+
+
+class USDAMissingInterval(ValueError):
+    pass
+
+
+def print_refresh_summary(data, issues, attempted_at):
+    print(f"Stored snapshot; {len(issues)} source issues, retained observations keep their original dates")
+    for source, state in data['source_status'].items():
+        if state.get('attempted_at') != attempted_at:
+            continue
+        details = [state['status']]
+        coverage = state.get('coverage', {})
+        if coverage:
+            accepted = sum(value in ('ok', 'observed', 'reference_only', 'unverified_layout') for value in coverage.values())
+            failed = sum(value == 'error' for value in coverage.values())
+            details.append(f'{accepted}/{len(coverage)} observations accepted')
+            if failed:
+                details.append(f'{failed} failed')
+        if source == 'IPCVA':
+            records = data.get('ar_sources', {}).get('IPCVA', {})
+            periods = sorted({record['period'] for record in records.values()})
+            if periods:
+                details.append('stored price month ' + ', '.join(periods))
+        if source == 'FX monthly' and data['fx'].get('period'):
+            details.append('stored FX month ' + data['fx']['period'])
+        if source == 'FX daily' and data['fx'].get('latest', {}).get('date'):
+            details.append('stored FX date ' + data['fx']['latest']['date'])
+        if source == 'IPCVA FX':
+            for period, evidence in sorted(state.get('monthly_rates', {}).items()):
+                details.append(f"{period}: {evidence['ars_per_usd']:.6f} ARS/USD from {evidence['quote_count']} published quotes")
+        if state.get('note'):
+            details.append(state['note'])
+        elif state.get('error_type'):
+            details.append(state['error_type'])
+        print(f"  {source}: " + '; '.join(details))
+    if data.get('carrefour_originals'):
+        print(f"  Original Carrefour archive: {len(data['carrefour_originals'])} observations preserved")
+
+
+def error_detail(error):
+    """Return a short diagnostic without exposing response bodies or request URLs."""
+    if isinstance(error, HTTPError):
+        detail = f'HTTP {error.code} {error.reason}'
+    else:
+        detail = f'{type(error).__name__}: {error}'
+    return ' '.join(detail.split())[:200]
+
+
 # not plain beef cuts, or premium/branded lines that would skew a "typical" price
 SKIP = re.compile(r"cerdo|pollo|cordero|guanaco|congel|milanesa|etiqueta negra|huella natural|cabana|holis|premium")
 
@@ -138,12 +208,13 @@ def usda_rows(text):
     """Yield (item, [cw_stores, cw_avg, pw_stores, pw_avg, py_stores, py_avg]) for conventional fresh rows."""
     cols = item_col = None
     for line in text.splitlines():
+        if re.match(r'^[A-Z][A-Z -]+ REGION\b', line.strip()):
+            break  # Regional price-range tables have a different column layout.
         if "Item" in line and "Environment" in line:
             item_col = line.index("Item")
         if "Stores" in line and "Wtd Avg" in line:
             found = [m.end() for m in re.finditer(r"Stores|Wtd Avg", line)]
-            if len(found) == 6:
-                cols = found
+            cols = found if len(found) == 6 else None
             continue
         m = re.search(r"Conventional\s+Fresh", line)
         if not (m and cols and item_col is not None):
@@ -160,8 +231,21 @@ def usda_rows(text):
         yield item, vals
 
 
-def usda_intervals(text):
-    """Only explicit feature ranges establish current/prior dates; never report-date arithmetic."""
+class VisibleText(HTMLParser):
+    """Collect visible text from an HTML source page without external dependencies."""
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.parts = []
+
+    def handle_data(self, data):
+        self.parts.append(data)
+
+    def text(self):
+        return " ".join(self.parts)
+
+
+def usda_intervals(text, release_listing=None):
+    """Resolve CW/PW from explicit PDF headings or USDA landing-page release ranges."""
     ranges = {}
     pattern = r"(This Week|Current Week|Prior Week|Previous Week)\s*:?\s*(\d{2}/\d{2}/\d{4})\s*(?:-|to)\s*(\d{2}/\d{2}/\d{4})"
     for label, start, end in re.findall(pattern, text, re.I):
@@ -170,23 +254,76 @@ def usda_intervals(text):
         if begin > finish:
             raise ValueError('Reversed USDA feature interval')
         ranges['prior' if label.lower().startswith(('prior', 'previous')) else 'current'] = (begin, finish)
-    if 'current' not in ranges or 'prior' not in ranges:
-        raise ValueError('USDA adapter unresolved: explicit current/prior feature intervals not recognized; retain old evidence')
-    if ranges['prior'][1] >= ranges['current'][0]:
+
+    # This report prints a window for advertisement ENDING dates, which is not
+    # a guarantee that each offer is valid throughout the complete window.
+    printed = re.search(r'Advertised Prices for Beef Products at Major Grocery Store Outlets\s+ending during the period of\s+(\d{1,2}/\d{1,2}/\d{4})\s+to\s+(\d{1,2}/\d{1,2}/\d{4})', text.split('\f', 1)[0], re.I)
+    if 'current' not in ranges and printed:
+        begin, finish = (datetime.strptime(value, '%m/%d/%Y').strftime('%Y-%m-%d') for value in printed.groups())
+        if begin > finish:
+            raise ValueError('Reversed USDA advertisement ending window')
+        ranges.update(current=(begin, finish), current_basis=USDA_END_WINDOW)
+
+    listing_ranges = []
+    if release_listing and ranges.get('current_basis') != USDA_END_WINDOW:
+        date_pattern = r"(?<!\d)(\d{1,2}/\d{1,2}/\d{4})\s*(?:-|\u2013|to)\s*(\d{1,2}/\d{1,2}/\d{4})(?!\d)"
+        for start, end in re.findall(date_pattern, release_listing, re.I):
+            begin = datetime.strptime(start, '%m/%d/%Y').strftime('%Y-%m-%d')
+            finish = datetime.strptime(end, '%m/%d/%Y').strftime('%Y-%m-%d')
+            if begin > finish:
+                raise ValueError('Reversed USDA release interval')
+            interval = (begin, finish)
+            if interval not in listing_ranges:
+                listing_ranges.append(interval)
+        listing_ranges.sort(key=lambda interval: interval[1], reverse=True)
+
+    # The current USDA PDF uses CW/PW/PY table labels and omits their dates.
+    # The official report landing page publishes the corresponding explicit
+    # release windows. If it exposes only the current release, omit PW dates.
+    if 'current' not in ranges and listing_ranges:
+        ranges['current'] = listing_ranges[0]
+    if 'current' in ranges and 'prior' not in ranges:
+        earlier = [interval for interval in listing_ranges if interval[1] < ranges['current'][0]]
+        if earlier:
+            ranges['prior'] = earlier[0]
+    if 'current' not in ranges:
+        raise USDAMissingInterval('USDA adapter unresolved: explicit current feature interval not recognized; retain old evidence')
+    if 'prior' in ranges and ranges['prior'][1] >= ranges['current'][0]:
         raise ValueError('Overlapping USDA feature intervals')
     return ranges
 
 
+def get_usda_resource(url, step):
+    try:
+        return get(url)
+    except (OSError, HTTPException) as error:
+        raise USDARequestError(step, error) from error
+
+
 def usda_prices():
+    pdf = get_usda_resource(USDA_PDF, 'PDF download')
     with tempfile.NamedTemporaryFile(suffix=".pdf") as f:
-        f.write(get(USDA_PDF)); f.flush()
+        f.write(pdf); f.flush()
         text = subprocess.run(["pdftotext", "-layout", f.name, "-"], capture_output=True, text=True, check=True, timeout=20).stdout
     d = re.search(r"(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun) (\w{3}) (\d+), (\d{4})", text)
     if not d:
         raise ValueError('USDA report publication date missing')
     publication = datetime.strptime(" ".join(d.groups()), "%b %d %Y").strftime("%Y-%m-%d")
-    intervals = usda_intervals(text)
+    try:
+        intervals = usda_intervals(text)
+    except USDAMissingInterval:
+        listing = VisibleText()
+        listing.feed(get_usda_resource(USDA_REPORT_PAGE, 'Release-date page').decode('utf-8', errors='replace'))
+        intervals = usda_intervals(text, listing.text())
     rows = list(usda_rows(text))
+    printed_window = intervals.get('current_basis') == USDA_END_WINDOW
+    if printed_window:
+        if not re.search(r'(?m)^\s*NATIONAL\s*$', text) or not re.search(r'\bCW\s+CW\s+PW\s+PW\s+PY\s+PY\b', text):
+            raise ValueError('USDA national CW/PW/PY table not recognized')
+        for _, values in rows:
+            for si, ai in ((0, 1), (2, 3), (4, 5)):
+                if (values[si] is None) != (values[ai] is None) or (values[si] is not None and (not positive(values[si]) or not values[si].is_integer() or not positive(values[ai]))):
+                    raise ValueError('USDA national store/price pair incomplete or invalid')
     def wavg(prefix, si, ai):
         pts = [(v[si], v[ai]) for item, v in rows if item.startswith(prefix) and "Lbs" not in item and positive(v[si]) and positive(v[ai])]
         n = sum(s for s, _ in pts)
@@ -195,21 +332,53 @@ def usda_prices():
     for key, (label, prefix) in US_ITEMS.items():
         cur, n = wavg(prefix, 0, 1)
         prev, pn = wavg(prefix, 2, 3)
-        fallback = cur is None
+        fallback = cur is None and 'prior' in intervals
         if fallback:
             cur, n = prev, pn
         if cur is None:
             continue
         start, end = intervals['prior' if fallback else 'current']
-        out[key] = {"label":label, "usd_lb":round(cur,2), "prev_usd_lb":round(prev,2) if prev and not fallback else None,
-                    "prev_period":intervals['prior'][1] if prev and not fallback else None,
+        prior_value = round(prev,2) if prev and not fallback and 'prior' in intervals else None
+        out[key] = {"label":label, "usd_lb":round(cur,2), "prev_usd_lb":prior_value,
+                    "prev_period":intervals['prior'][1] if prior_value is not None else None,
                     "period":end, "effective_start":start, "effective_end":end, "publication_date":publication,
                     "fallback_reason":"not_advertised_current_interval" if fallback else None,
                     "stores":int(n), "source":"USDA ad survey", "adapter_status":"unresolved_real_layout",
                     "provenance_status":"parsed_unverified", "observation_status":"unverified_layout"}
+        out[key]['source_receipt'] = {'url':USDA_PDF, 'sha256':hashlib.sha256(pdf).hexdigest()}
+        if printed_window:
+            out[key].update(interval_basis=USDA_END_WINDOW, adapter_status='unknown', observation_status='observed',
+                            method='Store-count-weighted national advertised features', geography='United States',
+                            interval_note='Dates identify advertisements ending in this window; individual offer dates vary')
     if not out:
         raise ValueError('No verified USDA numeric rows; adapter unresolved')
     return out
+
+
+def refresh_usda(data, attempted_at):
+    data['sources']['us_ads'] = 'USDA AMS Weekly Grocery Store Beef Feature Activity'
+    try:
+        records = usda_prices()
+        validate_retail_records('us', 'USDA ad survey', records, list(US_ITEMS))
+        merge_records(data, 'us', 'USDA ad survey', records, list(US_ITEMS), attempted_at)
+        status = data['source_status']['USDA ad survey']['status']
+        if status == 'no_match':
+            return ['USDA: no match']
+        if status == 'partial':
+            return ['USDA: older observations retained']
+        return []
+    except (*RETAIL_ERRORS, subprocess.SubprocessError) as error:
+        state = {'status':'error', 'attempted_at':attempted_at,
+                 'error_type':getattr(error, 'cause_type', type(error).__name__), 'note':error_detail(error)}
+        if isinstance(error, USDARequestError):
+            state['step'] = error.step
+        elif isinstance(error, subprocess.SubprocessError):
+            state['step'] = 'PDF text extraction'
+        data['source_status']['USDA ad survey'] = state
+        for record in data['us'].values():
+            if record.get('source') == 'USDA ad survey':
+                record.update(observation_status='retained_after_error', last_attempt_at=attempted_at)
+        return ['USDA: ' + error_detail(error)]
 
 
 def carrefour_prices(fx, keys=None):
@@ -271,12 +440,32 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--cuts", nargs="+", choices=sorted(AR_ITEMS))
     official_mode = parser.add_mutually_exclusive_group()
-    official_mode.add_argument("--official", action="store_true", help="Attempt BLS, INDEC and monthly FX independently")
+    official_mode.add_argument("--official", action="store_true", help="Attempt BLS, INDEC, monthly FX and IPCVA independently")
     official_mode.add_argument("--official-snapshot", type=Path, help="Merge a local staged official snapshot by source")
+    official_mode.add_argument("--ipcva-only", action="store_true", help="Refresh IPCVA AMBA and matching direct-BCRA USD quote means; preserve other sources")
+    official_mode.add_argument("--usda-only", action="store_true", help="Refresh USDA advertised features only; preserve other sources")
     args = parser.parse_args()
+    if args.cuts and (args.ipcva_only or args.usda_only):
+        parser.error(('--ipcva-only' if args.ipcva_only else '--usda-only') + ' cannot be combined with --cuts')
     data = qualify_snapshot(json.loads(OUT.read_text()))
     attempted = timestamp()
     errors = []
+    if args.usda_only:
+        errors.extend(refresh_usda(data, attempted))
+        write_snapshot(OUT, data)
+        print_refresh_summary(data, errors, attempted)
+        if errors:
+            raise PartialRefreshError(errors)
+        return
+    if args.official or args.ipcva_only or 'ar_sources' in data:
+        enable_ar_sources(data)
+    if args.ipcva_only:
+        errors.extend(refresh_ipcva(data, attempted))
+        write_snapshot(OUT, data)
+        print_refresh_summary(data, errors, attempted)
+        if errors:
+            raise SystemExit('Partial refresh: ' + ', '.join(errors))
+        return
     if args.official or args.official_snapshot:
         if args.official:
             official = fetch_official(attempted)
@@ -286,18 +475,46 @@ def main():
             except (OSError, ValueError):
                 official = None  # Classify all official sources as failed; retail still runs.
         errors.extend(merge_official(data, official, attempted))
+        if args.official:
+            errors.extend(refresh_ipcva(data, attempted))
     fx_row = None
     try:
-        fx_row = json.loads(get(FX_URL))["data"][0]
-        if not positive(fx_row[1]) or not valid_period(fx_row[0]) or fx_row[0] > attempted[:10]:
+        incoming_fx = json.loads(get(FX_URL))["data"][0]
+        if not positive(incoming_fx[1]) or not valid_period(incoming_fx[0]) or len(incoming_fx[0]) != 10 or incoming_fx[0] > attempted[:10]:
             raise ValueError("Invalid/future FX observation")
-        data["fx"]["latest"] = {"ars_per_usd":fx_row[1], "date":fx_row[0], "basis":"Latest returned daily observation (BCRA via datos.gob.ar)"}
-        data['source_status']['FX daily'] = {'status':'ok', 'attempted_at':attempted, 'observation_date':fx_row[0]}
+        retained_fx = data['fx'].get('latest')
+        if retained_fx and retained_fx.get('date') and incoming_fx[0] < retained_fx['date']:
+            data['source_status']['FX daily'] = {
+                'status': 'partial',
+                'attempted_at': attempted,
+                'observation_date': retained_fx['date'],
+                'stale_observations': {
+                    'FX daily': {
+                        'received_period': incoming_fx[0],
+                        'retained_period': retained_fx['date'],
+                    }
+                },
+            }
+            errors.append('FX daily: older observation retained')
+            if positive(retained_fx.get('ars_per_usd')):
+                # This rate was already accepted from the same source and is
+                # newer than the current response, so it remains the best FX
+                # evidence available for fresh catalog conversions.
+                fx_row = [retained_fx['date'], retained_fx['ars_per_usd']]
+        else:
+            fx_row = incoming_fx
+            data['fx']['latest'] = {
+                'ars_per_usd': fx_row[1],
+                'date': fx_row[0],
+                'basis': 'Latest returned daily observation (BCRA via datos.gob.ar)',
+            }
+            data['source_status']['FX daily'] = {'status':'ok', 'attempted_at':attempted, 'observation_date':fx_row[0]}
     except RETAIL_ERRORS as error:
         fx_row = None
         errors.append('FX daily')
-        data['source_status']['FX daily'] = {'status':'error', 'attempted_at':attempted, 'error_type':type(error).__name__}
+        data['source_status']['FX daily'] = {'status':'error', 'attempted_at':attempted, 'error_type':type(error).__name__, 'note':error_detail(error)}
     keys = args.cuts or list(AR_ITEMS)
+    catalog_failures = {}
     # Each cut is independent: one blocked request cannot erase or block other observations.
     for key in keys:
         try:
@@ -312,37 +529,50 @@ def main():
             validate_retail_records('ar', 'Carrefour AR', records, [key])
             merge_records(data, 'ar', 'Carrefour AR', records, [key], attempted)
             data.setdefault('catalog_attempts', {})[key] = data['source_status']['Carrefour AR']
+            if data['source_status']['Carrefour AR']['status'] == 'partial':
+                errors.append('Carrefour ' + key + ': older observation retained')
         except RETAIL_ERRORS as error:
-            errors.append('Carrefour ' + key)
-            data.setdefault('catalog_attempts', {})[key] = {'status':'error', 'attempted_at':attempted, 'error_type':type(error).__name__}
-            if key in data['ar']:
-                data['ar'][key]['observation_status'] = 'retained_after_error'
+            catalog_failures.setdefault(error_detail(error), []).append(key)
+            data.setdefault('catalog_attempts', {})[key] = {'status':'error', 'attempted_at':attempted, 'error_type':type(error).__name__, 'note':error_detail(error)}
+            catalog_records = source_records(data, 'ar', 'Carrefour AR')
+            if key in catalog_records:
+                catalog_records[key]['observation_status'] = 'retained_after_error'
+    for detail, failed_keys in catalog_failures.items():
+        errors.append('Carrefour ' + ', '.join(failed_keys) + ': ' + detail)
     coverage = {k:data['catalog_attempts'][k]['status'] for k in keys}
     outcomes = set(coverage.values())
     catalog_status = ('error' if outcomes == {'error'} else 'partial_error' if 'error' in outcomes
-                      else 'no_match' if outcomes == {'no_match'} else 'partial' if 'no_match' in outcomes else 'ok')
-    data['source_status']['Carrefour AR'] = {'status':catalog_status, 'attempted_at':attempted, 'coverage':coverage}
+                      else 'no_match' if outcomes == {'no_match'} else 'partial' if 'no_match' in outcomes or 'partial' in outcomes else 'ok')
+    catalog_summary = {'status':catalog_status, 'attempted_at':attempted, 'coverage':coverage}
+    if catalog_failures:
+        catalog_summary['note'] = '; '.join(catalog_failures)
+    stale_catalog = {
+        key: data['catalog_attempts'][key]['stale_observations'][key]
+        for key in keys
+        if key in data.get('catalog_attempts', {})
+        and key in data['catalog_attempts'][key].get('stale_observations', {})
+    }
+    if stale_catalog:
+        catalog_summary['stale_observations'] = stale_catalog
+    data['source_status']['Carrefour AR'] = catalog_summary
     if 'no_match' in outcomes:
         errors.append('Carrefour AR: no match for ' + ', '.join(k for k, state in coverage.items() if state == 'no_match'))
     if not args.cuts:
-        try:
-            us = usda_prices()
-            validate_retail_records('us', 'USDA ad survey', us, list(US_ITEMS))
-            merge_records(data, 'us', 'USDA ad survey', us, list(US_ITEMS), attempted)
-            if data['source_status']['USDA ad survey']['status'] == 'no_match':
-                errors.append('USDA: no match')
-        except (*RETAIL_ERRORS, subprocess.SubprocessError) as error:
-            errors.append('USDA')
-            data['source_status']['USDA ad survey'] = {'status':'error', 'attempted_at':attempted, 'error_type':type(error).__name__}
-            for record in data['us'].values():
-                if record.get('source') == 'USDA ad survey':
-                    record['observation_status'] = 'retained_after_error'
+        errors.extend(refresh_usda(data, attempted))
     data['sources'].update(us_ads='USDA AMS Weekly Grocery Store Beef Feature Activity', ar_retail='Carrefour Argentina online catalog')
+    select_ar_sources(data)
     write_snapshot(OUT, data)
-    print(f"Stored snapshot; {len(errors)} source issues, retained observations keep their original dates")
+    print_refresh_summary(data, errors, attempted)
     if errors:
-        raise RuntimeError('Partial refresh: ' + ', '.join(errors))
+        raise PartialRefreshError(errors)
+
+
+def cli():
+    try:
+        main()
+    except PartialRefreshError as error:
+        raise SystemExit(f'Partial refresh: {len(error.issues)} source issues; see results above.') from None
 
 
 if __name__ == "__main__":
-    main()
+    cli()

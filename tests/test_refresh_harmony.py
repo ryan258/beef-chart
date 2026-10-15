@@ -19,7 +19,7 @@ ATTEMPT = '2026-10-13T20:00:00Z'
 
 class RefreshHarmony(unittest.TestCase):
     def setUp(self):
-        self.original = json.loads((ROOT / 'data/prices.json').read_text())
+        self.original = json.loads((ROOT / 'tests/fixtures/prices_legacy_2026_10_07.json').read_text())
         blocker = patch('urllib.request.urlopen', side_effect=AssertionError('Live network forbidden'))
         blocker.start()
         self.addCleanup(blocker.stop)

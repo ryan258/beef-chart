@@ -1,0 +1,2302 @@
+{
+  "as_of": "2026-10-14T23:00:00Z",
+  "bundled_sha256": "8456a7dc30742a9d0d1492a0fd44dcb94923df3685e2887364d8bfc14a09db65",
+  "base": {
+    "schema_version": 2,
+    "us": {
+      "sample": {
+        "source": "USDA ad survey",
+        "period": "2026-10-02",
+        "usd_lb": 12,
+        "retrieved_at": null,
+        "provenance_status": "legacy_unverified",
+        "effective_period_status": "unverified_report_date"
+      }
+    },
+    "ar": {
+      "sample": {
+        "source": "Carrefour AR",
+        "period": "2026-10-07",
+        "ars_kg": 30000,
+        "usd_lb": 9.07,
+        "fx_ars_per_usd": 1500,
+        "fx_date": "2026-08-31",
+        "fx_provenance": "recorded",
+        "retrieved_at": null
+      }
+    },
+    "fx": {},
+    "source_status": {
+      "BLS": {
+        "status": "legacy_unverified",
+        "attempted_at": null
+      }
+    }
+  },
+  "cases": [
+    {
+      "name": "rounded_catalog_and_unknown_legacy_dates",
+      "accept": true,
+      "set": [],
+      "unset": []
+    },
+    {
+      "name": "catalog_half_cent_boundary",
+      "accept": true,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "usd_lb"
+          ],
+          9.076847489905983
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "catalog_outside_rounding_tolerance",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "usd_lb"
+          ],
+          9.076947489905983
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "arbitrary_conversion_rejected",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "usd_lb"
+          ],
+          9999
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "small_conversion_contradiction",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "usd_lb"
+          ],
+          8
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "unrounded_indec",
+      "accept": true,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "source"
+          ],
+          "INDEC"
+        ],
+        [
+          [
+            "ar",
+            "sample",
+            "usd_lb"
+          ],
+          9.071847489905982
+        ],
+        [
+          [
+            "ar",
+            "sample",
+            "period"
+          ],
+          "2026-09"
+        ],
+        [
+          [
+            "ar",
+            "sample",
+            "fx_date"
+          ],
+          "2026-09-01"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "indec_cannot_use_catalog_rounding",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "source"
+          ],
+          "INDEC"
+        ],
+        [
+          [
+            "ar",
+            "sample",
+            "period"
+          ],
+          "2026-09"
+        ],
+        [
+          [
+            "ar",
+            "sample",
+            "fx_date"
+          ],
+          "2026-09-01"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "native_only_indec",
+      "accept": true,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "source"
+          ],
+          "INDEC"
+        ],
+        [
+          [
+            "ar",
+            "sample",
+            "usd_lb"
+          ],
+          null
+        ],
+        [
+          [
+            "ar",
+            "sample",
+            "fx_ars_per_usd"
+          ],
+          null
+        ],
+        [
+          [
+            "ar",
+            "sample",
+            "fx_date"
+          ],
+          null
+        ],
+        [
+          [
+            "ar",
+            "sample",
+            "fx_provenance"
+          ],
+          "unknown"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "legacy_unknown_fx_does_not_borrow_global_rate",
+      "accept": true,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "fx_provenance"
+          ],
+          "unknown"
+        ],
+        [
+          [
+            "fx",
+            "ars_per_usd"
+          ],
+          999
+        ]
+      ],
+      "unset": [
+        [
+          "ar",
+          "sample",
+          "fx_ars_per_usd"
+        ],
+        [
+          "ar",
+          "sample",
+          "fx_date"
+        ]
+      ]
+    },
+    {
+      "name": "null_legacy_evidence",
+      "accept": true,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "fx_provenance"
+          ],
+          null
+        ],
+        [
+          [
+            "ar",
+            "sample",
+            "fx_ars_per_usd"
+          ],
+          null
+        ],
+        [
+          [
+            "ar",
+            "sample",
+            "fx_date"
+          ],
+          null
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "effective_start"
+          ],
+          null
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "effective_end"
+          ],
+          null
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "missing_legacy_fx_fields",
+      "accept": true,
+      "set": [],
+      "unset": [
+        [
+          "ar",
+          "sample",
+          "fx_ars_per_usd"
+        ],
+        [
+          "ar",
+          "sample",
+          "fx_date"
+        ],
+        [
+          "ar",
+          "sample",
+          "fx_provenance"
+        ]
+      ]
+    },
+    {
+      "name": "withheld_organs_are_not_requalified",
+      "accept": true,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "unit_scale_unverified"
+          ],
+          true
+        ],
+        [
+          [
+            "ar",
+            "sample",
+            "availability"
+          ],
+          "out_of_stock"
+        ],
+        [
+          [
+            "ar",
+            "sample",
+            "observation_status"
+          ],
+          "reference_only"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "withheld_still_checks_arithmetic",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "usd_lb"
+          ],
+          9999
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "withheld_bad_arithmetic",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "usd_lb"
+          ],
+          9999
+        ],
+        [
+          [
+            "ar",
+            "sample",
+            "unit_scale_unverified"
+          ],
+          true
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "claimed_lineage_requires_date",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "fx_date"
+          ],
+          null
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "claimed_lineage_requires_rate",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "fx_ars_per_usd"
+          ],
+          null
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "boolean_native_amount",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "ars_kg"
+          ],
+          true
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "negative_fx",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "fx_ars_per_usd"
+          ],
+          -1
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "unknown_previous_conversion_period",
+      "accept": true,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "prev_usd_lb"
+          ],
+          10
+        ],
+        [
+          [
+            "ar",
+            "sample",
+            "prev_period"
+          ],
+          null
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "valid_previous_legacy",
+      "accept": true,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "previous_observation"
+          ],
+          {
+            "period": "2026-08",
+            "ars_kg": 10000,
+            "usd_lb": null,
+            "retrieved_at": null,
+            "unit_scale_unverified": true
+          }
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "null_previous_is_unknown",
+      "accept": true,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "previous_observation"
+          ],
+          null
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "previous_array",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "previous_observation"
+          ],
+          []
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "previous_bad_native",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "previous_observation"
+          ],
+          {
+            "period": "2026-08",
+            "ars_kg": -1
+          }
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "previous_bad_period",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "previous_observation"
+          ],
+          {
+            "period": "no date",
+            "ars_kg": 1000
+          }
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "previous_bad_timestamp",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "previous_observation"
+          ],
+          {
+            "period": "2026-08",
+            "ars_kg": 1000,
+            "retrieved_at": "yesterday"
+          }
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "previous_conversion_contradiction",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "previous_observation"
+          ],
+          {
+            "source": "Carrefour AR",
+            "period": "2026-10-07",
+            "ars_kg": 30000,
+            "usd_lb": 9999,
+            "fx_ars_per_usd": 1500,
+            "fx_date": "2026-08-31",
+            "fx_provenance": "recorded",
+            "retrieved_at": null
+          }
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "nested_previous_chain",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "previous_observation"
+          ],
+          {
+            "period": "2026-08",
+            "ars_kg": 1000,
+            "previous_observation": {
+              "period": "2026-07",
+              "ars_kg": 999
+            }
+          }
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "nullable_previous_leaf",
+      "accept": true,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "previous_observation"
+          ],
+          {
+            "period": "2026-08",
+            "ars_kg": 1000,
+            "previous_observation": null
+          }
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "future_advertised_week",
+      "accept": true,
+      "set": [
+        [
+          [
+            "us",
+            "sample",
+            "period"
+          ],
+          "2026-10-18"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "effective_start"
+          ],
+          "2026-10-12"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "effective_end"
+          ],
+          "2026-10-18"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "publication_date"
+          ],
+          "2026-10-14"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "retrieved_at"
+          ],
+          "2026-10-14T20:00:00Z"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "next_advertised_week",
+      "accept": true,
+      "set": [
+        [
+          [
+            "us",
+            "sample",
+            "period"
+          ],
+          "2026-10-26"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "effective_start"
+          ],
+          "2026-10-20"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "effective_end"
+          ],
+          "2026-10-26"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "publication_date"
+          ],
+          "2026-10-14"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "retrieved_at"
+          ],
+          "2026-10-14T20:00:00Z"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "future_generic_without_advertisement",
+      "accept": false,
+      "set": [
+        [
+          [
+            "us",
+            "sample",
+            "period"
+          ],
+          "2099-01-01"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "future_monthly_bls",
+      "accept": false,
+      "set": [
+        [
+          [
+            "us",
+            "sample",
+            "source"
+          ],
+          "BLS"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "period"
+          ],
+          "2026-11"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "current_month_bls",
+      "accept": true,
+      "set": [
+        [
+          [
+            "us",
+            "sample",
+            "source"
+          ],
+          "BLS"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "period"
+          ],
+          "2026-10"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "future_non_usda_interval",
+      "accept": false,
+      "set": [
+        [
+          [
+            "us",
+            "sample",
+            "period"
+          ],
+          "2026-10-18"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "effective_start"
+          ],
+          "2026-10-12"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "effective_end"
+          ],
+          "2026-10-18"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "publication_date"
+          ],
+          "2026-10-14"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "retrieved_at"
+          ],
+          "2026-10-14T20:00:00Z"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "source"
+          ],
+          "BLS"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "future_without_publication",
+      "accept": false,
+      "set": [
+        [
+          [
+            "us",
+            "sample",
+            "period"
+          ],
+          "2026-10-18"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "effective_start"
+          ],
+          "2026-10-12"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "effective_end"
+          ],
+          "2026-10-18"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "publication_date"
+          ],
+          null
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "retrieved_at"
+          ],
+          "2026-10-14T20:00:00Z"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "future_without_start",
+      "accept": false,
+      "set": [
+        [
+          [
+            "us",
+            "sample",
+            "period"
+          ],
+          "2026-10-18"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "effective_start"
+          ],
+          null
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "effective_end"
+          ],
+          "2026-10-18"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "publication_date"
+          ],
+          "2026-10-14"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "retrieved_at"
+          ],
+          "2026-10-14T20:00:00Z"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "future_without_end",
+      "accept": false,
+      "set": [
+        [
+          [
+            "us",
+            "sample",
+            "period"
+          ],
+          "2026-10-18"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "effective_start"
+          ],
+          "2026-10-12"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "effective_end"
+          ],
+          null
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "publication_date"
+          ],
+          "2026-10-14"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "retrieved_at"
+          ],
+          "2026-10-14T20:00:00Z"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "future_window_too_long",
+      "accept": false,
+      "set": [
+        [
+          [
+            "us",
+            "sample",
+            "period"
+          ],
+          "2026-10-18"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "effective_start"
+          ],
+          "2026-10-01"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "effective_end"
+          ],
+          "2026-10-18"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "publication_date"
+          ],
+          "2026-10-14"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "retrieved_at"
+          ],
+          "2026-10-14T20:00:00Z"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "future_window_too_far",
+      "accept": false,
+      "set": [
+        [
+          [
+            "us",
+            "sample",
+            "period"
+          ],
+          "2026-11-07"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "effective_start"
+          ],
+          "2026-11-01"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "effective_end"
+          ],
+          "2026-11-07"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "publication_date"
+          ],
+          "2026-10-14"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "retrieved_at"
+          ],
+          "2026-10-14T20:00:00Z"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "future_publication",
+      "accept": false,
+      "set": [
+        [
+          [
+            "us",
+            "sample",
+            "publication_date"
+          ],
+          "2026-10-15"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "future_at_original_retrieval",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "retrieved_at"
+          ],
+          "2026-10-06T23:00:00Z"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "offset_uses_utc_day",
+      "accept": true,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "retrieved_at"
+          ],
+          "2026-10-08T00:30:00+01:00"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "prior_usda_interval",
+      "accept": true,
+      "set": [
+        [
+          [
+            "us",
+            "sample",
+            "period"
+          ],
+          "2026-09-25"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "effective_start"
+          ],
+          "2026-09-19"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "effective_end"
+          ],
+          "2026-09-25"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "publication_date"
+          ],
+          "2026-10-02"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "partial_known_start",
+      "accept": true,
+      "set": [
+        [
+          [
+            "us",
+            "sample",
+            "effective_start"
+          ],
+          "2026-09-26"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "partial_known_end",
+      "accept": true,
+      "set": [
+        [
+          [
+            "us",
+            "sample",
+            "effective_end"
+          ],
+          "2026-10-02"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "monthly_effective_interval",
+      "accept": true,
+      "set": [
+        [
+          [
+            "us",
+            "sample",
+            "source"
+          ],
+          "BLS"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "period"
+          ],
+          "2026-08"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "effective_start"
+          ],
+          "2026-08-01"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "effective_end"
+          ],
+          "2026-08-31"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "reversed_interval",
+      "accept": false,
+      "set": [
+        [
+          [
+            "us",
+            "sample",
+            "effective_start"
+          ],
+          "2026-10-03"
+        ],
+        [
+          [
+            "us",
+            "sample",
+            "effective_end"
+          ],
+          "2026-10-02"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "effective_end_mismatch",
+      "accept": false,
+      "set": [
+        [
+          [
+            "us",
+            "sample",
+            "effective_end"
+          ],
+          "2026-10-01"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "invalid_effective_calendar",
+      "accept": false,
+      "set": [
+        [
+          [
+            "us",
+            "sample",
+            "effective_start"
+          ],
+          "2026-02-31"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "monthly_effective_not_day",
+      "accept": false,
+      "set": [
+        [
+          [
+            "us",
+            "sample",
+            "effective_end"
+          ],
+          "2026-10"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "invalid_publication_precision",
+      "accept": false,
+      "set": [
+        [
+          [
+            "us",
+            "sample",
+            "publication_date"
+          ],
+          "2026-10"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "previous_period_later",
+      "accept": false,
+      "set": [
+        [
+          [
+            "us",
+            "sample",
+            "prev_period"
+          ],
+          "2026-10-03"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "future_fx_day",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "fx_date"
+          ],
+          "2026-10-08"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "future_top_fx",
+      "accept": false,
+      "set": [
+        [
+          [
+            "fx",
+            "latest"
+          ],
+          {
+            "date": "2099-01-01",
+            "ars_per_usd": 1500
+          }
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "invalid_calendar",
+      "accept": false,
+      "set": [
+        [
+          [
+            "us",
+            "sample",
+            "period"
+          ],
+          "2026-02-31"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "zero_year",
+      "accept": false,
+      "set": [
+        [
+          [
+            "us",
+            "sample",
+            "period"
+          ],
+          "0000-01-01"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_timestamp_yesterday",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "retrieved_at"
+          ],
+          "yesterday"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_timestamp_2026-10-07",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "retrieved_at"
+          ],
+          "2026-10-07"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_timestamp_2026-02-31T00:00:00Z",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "retrieved_at"
+          ],
+          "2026-02-31T00:00:00Z"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_timestamp_2026-10-07T24:00:00Z",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "retrieved_at"
+          ],
+          "2026-10-07T24:00:00Z"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_timestamp_2026-10-07T00:00:60Z",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "retrieved_at"
+          ],
+          "2026-10-07T00:00:60Z"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_timestamp_2026-10-07T00:00:00",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "retrieved_at"
+          ],
+          "2026-10-07T00:00:00"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_timestamp_2026-10-07T00:00:00+24:00",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "retrieved_at"
+          ],
+          "2026-10-07T00:00:00+24:00"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_timestamp_2026-10-07T00:00:00Z\n",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "retrieved_at"
+          ],
+          "2026-10-07T00:00:00Z\n"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_timestamp_42",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "retrieved_at"
+          ],
+          42
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "microsecond_offset_timestamp",
+      "accept": true,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "retrieved_at"
+          ],
+          "2026-10-07T02:03:04.123456+02:00"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_last_attempt_at",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "last_attempt_at"
+          ],
+          "yesterday"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_availability_as_of",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "availability_as_of"
+          ],
+          "yesterday"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_top_fetched",
+      "accept": false,
+      "set": [
+        [
+          [
+            "fetched"
+          ],
+          "yesterday"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_top_generated_at",
+      "accept": false,
+      "set": [
+        [
+          [
+            "generated_at"
+          ],
+          "yesterday"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_enum_provenance_status",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "provenance_status"
+          ],
+          "gibberish"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_enum_observation_status",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "observation_status"
+          ],
+          "gibberish"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_enum_availability",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "availability"
+          ],
+          "gibberish"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_enum_fx_provenance",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "fx_provenance"
+          ],
+          "gibberish"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_enum_adapter_status",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "adapter_status"
+          ],
+          "gibberish"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_enum_effective_period_status",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "effective_period_status"
+          ],
+          "gibberish"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "unknown_explicit_status",
+      "accept": true,
+      "set": [
+        [
+          [
+            "us",
+            "sample",
+            "observation_status"
+          ],
+          "unknown"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_status",
+      "accept": false,
+      "set": [
+        [
+          [
+            "source_status",
+            "BLS"
+          ],
+          {
+            "status": "gibberish"
+          }
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_attempt_time",
+      "accept": false,
+      "set": [
+        [
+          [
+            "source_status",
+            "BLS"
+          ],
+          {
+            "status": "error",
+            "attempted_at": 42
+          }
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_coverage",
+      "accept": false,
+      "set": [
+        [
+          [
+            "source_status",
+            "BLS"
+          ],
+          {
+            "status": "partial",
+            "coverage": {
+              "sample": {}
+            }
+          }
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_native_only",
+      "accept": false,
+      "set": [
+        [
+          [
+            "source_status",
+            "BLS"
+          ],
+          {
+            "status": "partial",
+            "native_only": [
+              "sample",
+              "sample"
+            ]
+          }
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_state_array",
+      "accept": false,
+      "set": [
+        [
+          [
+            "source_status",
+            "BLS"
+          ],
+          []
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "partial_attempts",
+      "accept": true,
+      "set": [
+        [
+          [
+            "source_status",
+            "BLS"
+          ],
+          {
+            "status": "partial",
+            "attempted_at": "2026-10-14T10:00:00Z",
+            "coverage": {
+              "sample": "retained_no_match"
+            },
+            "native_only": [
+              "sample"
+            ]
+          }
+        ],
+        [
+          [
+            "catalog_attempts"
+          ],
+          {
+            "sample": {
+              "status": "no_match",
+              "attempted_at": null,
+              "coverage": {
+                "sample": "no_match"
+              }
+            }
+          }
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_catalog_attempt",
+      "accept": false,
+      "set": [
+        [
+          [
+            "catalog_attempts"
+          ],
+          {
+            "sample": {
+              "status": "pretend"
+            }
+          }
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_fx_array",
+      "accept": false,
+      "set": [
+        [
+          [
+            "fx"
+          ],
+          []
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_latest_fx_array",
+      "accept": false,
+      "set": [
+        [
+          [
+            "fx",
+            "latest"
+          ],
+          []
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_monthly_fx_date",
+      "accept": false,
+      "set": [
+        [
+          [
+            "fx",
+            "period"
+          ],
+          "2026-02-31"
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_source_description",
+      "accept": false,
+      "set": [
+        [
+          [
+            "sources"
+          ],
+          {
+            "us": {}
+          }
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_record_array",
+      "accept": false,
+      "set": [
+        [
+          [
+            "us",
+            "sample"
+          ],
+          []
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_listings_array",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "listings"
+          ],
+          {}
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_listing_row",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "listings"
+          ],
+          [
+            null
+          ]
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_listing_amount",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "listings"
+          ],
+          [
+            {
+              "ars_kg": -1
+            }
+          ]
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bad_listing_stock",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "listings"
+          ],
+          [
+            {
+              "available": "yes"
+            }
+          ]
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "legacy_partial_listing",
+      "accept": true,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "listings"
+          ],
+          [
+            {
+              "name": "Reference listing",
+              "available": null,
+              "sku_id": 12,
+              "measurement_unit": null
+            }
+          ]
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "unknown_extension_is_retained",
+      "accept": true,
+      "set": [
+        [
+          [
+            "extension"
+          ],
+          {
+            "method_version": "candidate",
+            "unknown": null
+          }
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "bounded_depth",
+      "accept": false,
+      "set": [],
+      "unset": [],
+      "build": "depth"
+    },
+    {
+      "name": "bounded_nodes",
+      "accept": false,
+      "set": [],
+      "unset": [],
+      "build": "nodes"
+    },
+    {
+      "name": "bounded_collection",
+      "accept": false,
+      "set": [],
+      "unset": [],
+      "build": "collection"
+    },
+    {
+      "name": "bounded_text",
+      "accept": false,
+      "set": [],
+      "unset": [],
+      "build": "text"
+    },
+    {
+      "name": "bounded_cycle",
+      "accept": false,
+      "set": [],
+      "unset": [],
+      "build": "cycle"
+    },
+    {
+      "name": "bounded_unsafe_number",
+      "accept": false,
+      "set": [],
+      "unset": [],
+      "build": "unsafe_number"
+    },
+    {
+      "name": "null_root",
+      "accept": false,
+      "set": [],
+      "unset": [],
+      "root": null
+    },
+    {
+      "name": "array_root",
+      "accept": false,
+      "set": [],
+      "unset": [],
+      "root": []
+    },
+    {
+      "name": "indec_requires_matching_fx_month",
+      "accept": false,
+      "set": [
+        [
+          [
+            "ar",
+            "sample",
+            "source"
+          ],
+          "INDEC"
+        ],
+        [
+          [
+            "ar",
+            "sample",
+            "period"
+          ],
+          "2026-09"
+        ],
+        [
+          [
+            "ar",
+            "sample",
+            "usd_lb"
+          ],
+          9.071847489905982
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "printed_usda_ending_window_future_at_retrieval",
+      "accept": true,
+      "set": [
+        [
+          [
+            "us",
+            "sample"
+          ],
+          {
+            "source": "USDA ad survey",
+            "period": "2026-10-15",
+            "usd_lb": 19.24,
+            "publication_date": "2026-10-09",
+            "effective_start": "2026-10-03",
+            "effective_end": "2026-10-15",
+            "retrieved_at": "2026-10-09T20:00:00Z",
+            "interval_basis": "advertisement_ending_dates_printed_in_pdf"
+          }
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "printed_usda_ending_window_fourteen_days",
+      "accept": true,
+      "set": [
+        [
+          [
+            "us",
+            "sample"
+          ],
+          {
+            "source": "USDA ad survey",
+            "period": "2026-10-15",
+            "usd_lb": 19.24,
+            "publication_date": "2026-10-09",
+            "effective_start": "2026-10-02",
+            "effective_end": "2026-10-15",
+            "retrieved_at": "2026-10-09T20:00:00Z",
+            "interval_basis": "advertisement_ending_dates_printed_in_pdf"
+          }
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "printed_usda_ending_window_too_long",
+      "accept": false,
+      "set": [
+        [
+          [
+            "us",
+            "sample"
+          ],
+          {
+            "source": "USDA ad survey",
+            "period": "2026-10-15",
+            "usd_lb": 19.24,
+            "publication_date": "2026-10-09",
+            "effective_start": "2026-10-01",
+            "effective_end": "2026-10-15",
+            "retrieved_at": "2026-10-09T20:00:00Z",
+            "interval_basis": "advertisement_ending_dates_printed_in_pdf"
+          }
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "printed_usda_ending_window_wrong_source",
+      "accept": false,
+      "set": [
+        [
+          [
+            "us",
+            "sample"
+          ],
+          {
+            "source": "BLS",
+            "period": "2026-10-15",
+            "usd_lb": 19.24,
+            "publication_date": "2026-10-09",
+            "effective_start": "2026-10-03",
+            "effective_end": "2026-10-15",
+            "retrieved_at": "2026-10-09T20:00:00Z",
+            "interval_basis": "advertisement_ending_dates_printed_in_pdf"
+          }
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "printed_usda_ending_window_publication_outside",
+      "accept": false,
+      "set": [
+        [
+          [
+            "us",
+            "sample"
+          ],
+          {
+            "source": "USDA ad survey",
+            "period": "2026-10-15",
+            "usd_lb": 19.24,
+            "publication_date": "2026-10-02",
+            "effective_start": "2026-10-03",
+            "effective_end": "2026-10-15",
+            "retrieved_at": "2026-10-09T20:00:00Z",
+            "interval_basis": "advertisement_ending_dates_printed_in_pdf"
+          }
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "printed_usda_ending_window_missing_end",
+      "accept": false,
+      "set": [
+        [
+          [
+            "us",
+            "sample"
+          ],
+          {
+            "source": "USDA ad survey",
+            "period": "2026-10-15",
+            "usd_lb": 19.24,
+            "publication_date": "2026-10-09",
+            "effective_start": "2026-10-03",
+            "retrieved_at": "2026-10-09T20:00:00Z",
+            "interval_basis": "advertisement_ending_dates_printed_in_pdf"
+          }
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "printed_usda_ending_window_missing_publication",
+      "accept": false,
+      "set": [
+        [
+          [
+            "us",
+            "sample"
+          ],
+          {
+            "source": "USDA ad survey",
+            "period": "2026-10-15",
+            "usd_lb": 19.24,
+            "effective_start": "2026-10-03",
+            "effective_end": "2026-10-15",
+            "retrieved_at": "2026-10-09T20:00:00Z",
+            "interval_basis": "advertisement_ending_dates_printed_in_pdf"
+          }
+        ]
+      ],
+      "unset": []
+    },
+    {
+      "name": "wide_future_window_without_printed_evidence",
+      "accept": false,
+      "set": [
+        [
+          [
+            "us",
+            "sample"
+          ],
+          {
+            "source": "USDA ad survey",
+            "period": "2026-10-15",
+            "usd_lb": 19.24,
+            "publication_date": "2026-10-09",
+            "effective_start": "2026-10-03",
+            "effective_end": "2026-10-15",
+            "retrieved_at": "2026-10-09T20:00:00Z"
+          }
+        ]
+      ],
+      "unset": []
+    }
+  ],
+  "semantic_revision": "v2-2026-10-14"
+}

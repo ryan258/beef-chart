@@ -7,7 +7,7 @@ const {test} = require('node:test');
 const root = path.join(__dirname, '..');
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const organs = ['molleja', 'rinon', 'lengua'];
-const snapshot = JSON.parse(fs.readFileSync(path.join(root, 'data/prices.json'), 'utf8'));
+const snapshot = JSON.parse(fs.readFileSync(path.join(root, 'tests/fixtures/prices_legacy_2026_10_07.json'), 'utf8'));
 const section = (start, end) => {
   const from = html.indexOf(start), to = html.indexOf(end, from);
   assert.ok(from >= 0 && to > from, `Inline test boundary missing: ${start}`);
@@ -45,7 +45,7 @@ test('flag blocks comparison prices and native fallback regardless of stock or a
     assert.match(run(`recordStatus(PRICES.ar.${key})`), /Unverified unit scale.*latest attempt failed/);
   }
   assert.equal(run('safeUsd(PRICES.ar.bife_angosto)'), '$7.36');
-  assert.match(run('priceLine(null, null)'), /Not available/);
+  assert.match(run('priceLine(null, null)'), /US · Missing.*AR · Missing/s);
 });
 
 test('dossiers keep original numbers as evidence below a withheld-price heading', () => {

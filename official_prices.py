@@ -5,7 +5,7 @@ import re
 import urllib.request
 from http.client import HTTPException
 
-from price_contract import merge_records, positive, qualify_snapshot, valid_period, validate_snapshot
+from price_contract import merge_records, period_after, positive, qualify_snapshot, valid_period, validate_snapshot, source_records, select_ar_sources
 
 US_SERIES = {
     'ground_beef': ('APU0000703112', 'Ground beef, 100% beef'),
@@ -23,7 +23,7 @@ AR_SERIES = {
     'paleta': ('105.1_I2P_2016_M_15', 'Paleta'),
 }
 FX_ID = '92.2_TIPO_CAMBIION_0_0_21_24'
-BLS_URL = 'https://api.bls.gov/publicAPI/v2/timeseries/data/'
+BLS_URL = 'https://api.bls.gov/publicAPI/v1/timeseries/data/'
 SERIES_URL = 'https://apis.datos.gob.ar/series/api/series/'
 INDEC_URL = SERIES_URL + '?ids=' + ','.join(sid for sid, _ in AR_SERIES.values()) + '&last=2&format=json'
 MONTHLY_FX_URL = SERIES_URL + f'?ids={FX_ID}&collapse=month&collapse_aggregation=avg&last=12&format=json'
@@ -145,6 +145,7 @@ def fetch_official(attempted_at):
         except SOURCE_ERRORS as error:
             state.update(status='error', error_type=type(error).__name__)
         stage['source_status'][source] = state
+    stage['monthly_rates'] = rates
     return stage
 
 
@@ -174,8 +175,23 @@ def merge_official(data, stage, attempted_at):
                         raise ValueError('Invalid monthly FX observation')
                     if any(not isinstance(records.get(key), str) for key in ('source', 'basis')):
                         raise ValueError('Invalid monthly FX context')
-                    data['fx'].update(records, monthly_retrieved_at=attempted_at)
-                state['status'] = 'ok' if records else 'no_match'
+                    retained_period = data['fx'].get('period')
+                    if retained_period and period_after(retained_period, records['period']):
+                        state.update(
+                            status='partial',
+                            coverage={'FX monthly': 'unknown'},
+                            stale_observations={
+                                'FX monthly': {
+                                    'received_period': records['period'],
+                                    'retained_period': retained_period,
+                                }
+                            },
+                        )
+                    else:
+                        data['fx'].update(records, monthly_retrieved_at=attempted_at)
+                        state['status'] = 'ok'
+                else:
+                    state['status'] = 'no_match'
             else:
                 if set(records) - set(series) or any(not isinstance(p, dict) or p.get('source') != source for p in records.values()):
                     raise ValueError('Unexpected official series/source')
@@ -185,9 +201,13 @@ def merge_official(data, stage, attempted_at):
                 if any(p['period'] > attempted_at[:7] for p in records.values()):
                     raise ValueError('Future official observation')
                 merge_records(data, region, source, records, list(series), attempted_at)
-                state['coverage'] = data['source_status'][source]['coverage']
+                merge_state = data['source_status'][source]
+                state['coverage'] = merge_state['coverage']
+                stale_observations = merge_state.get('stale_observations', {})
+                if stale_observations:
+                    state['stale_observations'] = stale_observations
                 missing_fx = [key for key, p in records.items() if region == 'ar' and p.get('usd_lb') is None]
-                state['status'] = 'no_match' if not records else 'partial' if len(records) < len(series) or missing_fx else 'ok'
+                state['status'] = 'no_match' if not records else 'partial' if len(records) < len(series) or missing_fx or stale_observations else 'ok'
                 if missing_fx:
                     state['native_only'] = missing_fx
         except (AttributeError, *SOURCE_ERRORS) as error:
@@ -195,10 +215,11 @@ def merge_official(data, stage, attempted_at):
             if series is not None:
                 state['coverage'] = {key: 'error' for key in series}
                 for key in series:
-                    old = data[region].get(key)
+                    old = source_records(data, region, source).get(key)
                     if old and old.get('source') == source:
                         old.update(observation_status='retained_after_error', last_attempt_at=attempted_at)
         data['source_status'][source] = state
         if state['status'] != 'ok':
             issues.append(source)
+    select_ar_sources(data)
     return issues

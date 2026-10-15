@@ -1,0 +1,1322 @@
+{
+  "source": "IPCVA",
+  "retrieved_at": "2026-10-15T17:47:56.402322+00:00",
+  "status": "research_only_not_promoted",
+  "dashboard_geography": "AMBA, established by agreement with September report table 3",
+  "periods": {
+    "2026-08": {
+      "Asado": 17650.0,
+      "Bife Ancho": 17796.0,
+      "Bife angosto": 18567.0,
+      "Bola de Lomo": 19245.0,
+      "Carnaza Común": 11848.0,
+      "Carne picada": null,
+      "Colita de cuadril": 23855.0,
+      "Cuadrada": 19572.0,
+      "Cuadril": 20958.0,
+      "Falda": 11599.0,
+      "Hamburguesas": null,
+      "Hamburguesas caseras": 14800.0,
+      "Hamburguesas cong 4u": 8795.0,
+      "Lomo": 28712.0,
+      "Matambre": 18249.0,
+      "Nalga": 21853.0,
+      "Osobuco": 11636.0,
+      "Paleta": 17394.0,
+      "Peceto": 23232.0,
+      "Pechito de cerdo": 9235.0,
+      "Picada Común": 10847.0,
+      "Picada Especial": 14831.0,
+      "Pollo entero": 4934.0,
+      "Roast Beef": 16526.0,
+      "Tapa de asado": 17185.0,
+      "Tapa de Nalga": 18210.0,
+      "Tortuguita": 16863.0,
+      "Vacío": 21205.0
+    },
+    "2026-09": {
+      "Asado": 17869.0,
+      "Bife Ancho": 17803.0,
+      "Bife angosto": 18617.0,
+      "Bola de Lomo": 19332.0,
+      "Carnaza Común": 12145.0,
+      "Carne picada": null,
+      "Colita de cuadril": 23939.0,
+      "Cuadrada": 19536.0,
+      "Cuadril": 21601.0,
+      "Falda": 11344.0,
+      "Hamburguesas": null,
+      "Hamburguesas caseras": 14787.0,
+      "Hamburguesas cong 4u": 8971.0,
+      "Lomo": 28017.0,
+      "Matambre": 17905.0,
+      "Nalga": 21784.0,
+      "Osobuco": 11720.0,
+      "Paleta": 17484.0,
+      "Peceto": 23737.0,
+      "Pechito de cerdo": 9388.0,
+      "Picada Común": 10839.0,
+      "Picada Especial": 15036.0,
+      "Pollo entero": 4954.0,
+      "Roast Beef": 16779.0,
+      "Tapa de asado": 17257.0,
+      "Tapa de Nalga": 18357.0,
+      "Tortuguita": 17235.0,
+      "Vacío": 21331.0
+    }
+  },
+  "product_ids": {
+    "10": "Asado",
+    "70": "Bife Ancho",
+    "15": "Bife angosto",
+    "71": "Bola de Lomo",
+    "72": "Carnaza Común",
+    "12": "Carne picada",
+    "86": "Colita de cuadril",
+    "73": "Cuadrada",
+    "14": "Cuadril",
+    "74": "Falda",
+    "16": "Hamburguesas",
+    "75": "Hamburguesas caseras",
+    "76": "Hamburguesas cong 4u",
+    "77": "Lomo",
+    "87": "Matambre",
+    "13": "Nalga",
+    "78": "Osobuco",
+    "11": "Paleta",
+    "79": "Peceto",
+    "80": "Pechito de cerdo",
+    "81": "Picada Común",
+    "82": "Picada Especial",
+    "17": "Pollo entero",
+    "83": "Roast Beef",
+    "88": "Tapa de asado",
+    "84": "Tapa de Nalga",
+    "89": "Tortuguita",
+    "85": "Vacío"
+  },
+  "pdf_regions": {
+    "AMBA": [
+      {
+        "label": "Asado de tira",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 11542,
+          "2026-08": 17650,
+          "2026-09": 17869
+        },
+        "change_percent": {
+          "monthly": 1.2,
+          "year_to_date": 9.5,
+          "year_on_year": 54.8
+        }
+      },
+      {
+        "label": "Bife ancho",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 11587,
+          "2026-08": 17796,
+          "2026-09": 17803
+        },
+        "change_percent": {
+          "monthly": 0.0,
+          "year_to_date": 15.7,
+          "year_on_year": 53.7
+        }
+      },
+      {
+        "label": "Bife angosto",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 12397,
+          "2026-08": 18567,
+          "2026-09": 18617
+        },
+        "change_percent": {
+          "monthly": 0.3,
+          "year_to_date": 15.7,
+          "year_on_year": 50.2
+        }
+      },
+      {
+        "label": "Bola de lomo",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 13216,
+          "2026-08": 19245,
+          "2026-09": 19332
+        },
+        "change_percent": {
+          "monthly": 0.5,
+          "year_to_date": 16.5,
+          "year_on_year": 46.3
+        }
+      },
+      {
+        "label": "Carnaza común",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 8354,
+          "2026-08": 11848,
+          "2026-09": 12145
+        },
+        "change_percent": {
+          "monthly": 2.5,
+          "year_to_date": 22.2,
+          "year_on_year": 45.4
+        }
+      },
+      {
+        "label": "Cuadrada",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 13451,
+          "2026-08": 19572,
+          "2026-09": 19536
+        },
+        "change_percent": {
+          "monthly": -0.2,
+          "year_to_date": 16.5,
+          "year_on_year": 45.2
+        }
+      },
+      {
+        "label": "Cuadril",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 14337,
+          "2026-08": 20958,
+          "2026-09": 21601
+        },
+        "change_percent": {
+          "monthly": 3.1,
+          "year_to_date": 19.3,
+          "year_on_year": 50.7
+        }
+      },
+      {
+        "label": "Falda",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 7404,
+          "2026-08": 11599,
+          "2026-09": 11344
+        },
+        "change_percent": {
+          "monthly": -2.2,
+          "year_to_date": 15.4,
+          "year_on_year": 53.2
+        }
+      },
+      {
+        "label": "Lomo",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 19154,
+          "2026-08": 28712,
+          "2026-09": 28017
+        },
+        "change_percent": {
+          "monthly": -2.4,
+          "year_to_date": 14.5,
+          "year_on_year": 46.3
+        }
+      },
+      {
+        "label": "Nalga",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 14771,
+          "2026-08": 21853,
+          "2026-09": 21784
+        },
+        "change_percent": {
+          "monthly": -0.3,
+          "year_to_date": 17.0,
+          "year_on_year": 47.5
+        }
+      },
+      {
+        "label": "Osobuco",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 8162,
+          "2026-08": 11636,
+          "2026-09": 11720
+        },
+        "change_percent": {
+          "monthly": 0.7,
+          "year_to_date": 25.0,
+          "year_on_year": 43.6
+        }
+      },
+      {
+        "label": "Paleta",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 11831,
+          "2026-08": 17394,
+          "2026-09": 17484
+        },
+        "change_percent": {
+          "monthly": 0.5,
+          "year_to_date": 19.3,
+          "year_on_year": 47.8
+        }
+      },
+      {
+        "label": "Peceto",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 15982,
+          "2026-08": 23232,
+          "2026-09": 23737
+        },
+        "change_percent": {
+          "monthly": 2.2,
+          "year_to_date": 13.9,
+          "year_on_year": 48.5
+        }
+      },
+      {
+        "label": "Picada común",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 6756,
+          "2026-08": 10847,
+          "2026-09": 10839
+        },
+        "change_percent": {
+          "monthly": -0.1,
+          "year_to_date": 26.9,
+          "year_on_year": 60.4
+        }
+      },
+      {
+        "label": "Picada especial",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 9847,
+          "2026-08": 14831,
+          "2026-09": 15036
+        },
+        "change_percent": {
+          "monthly": 1.4,
+          "year_to_date": 20.3,
+          "year_on_year": 52.7
+        }
+      },
+      {
+        "label": "Roast beef",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 11150,
+          "2026-08": 16526,
+          "2026-09": 16779
+        },
+        "change_percent": {
+          "monthly": 1.5,
+          "year_to_date": 21.6,
+          "year_on_year": 50.5
+        }
+      },
+      {
+        "label": "Tapa de Nalga",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 12241,
+          "2026-08": 18210,
+          "2026-09": 18357
+        },
+        "change_percent": {
+          "monthly": 0.8,
+          "year_to_date": 16.2,
+          "year_on_year": 50.0
+        }
+      },
+      {
+        "label": "Vacío",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 14424,
+          "2026-08": 21205,
+          "2026-09": 21331
+        },
+        "change_percent": {
+          "monthly": 0.6,
+          "year_to_date": 9.7,
+          "year_on_year": 47.9
+        }
+      },
+      {
+        "label": "Colita de cuadril",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 15749,
+          "2026-08": 23855,
+          "2026-09": 23939
+        },
+        "change_percent": {
+          "monthly": 0.4,
+          "year_to_date": 15.9,
+          "year_on_year": 52.0
+        }
+      },
+      {
+        "label": "Matambre",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 11843,
+          "2026-08": 18249,
+          "2026-09": 17905
+        },
+        "change_percent": {
+          "monthly": -1.9,
+          "year_to_date": 6.3,
+          "year_on_year": 51.2
+        }
+      },
+      {
+        "label": "Tapa de Asado",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 11358,
+          "2026-08": 17185,
+          "2026-09": 17257
+        },
+        "change_percent": {
+          "monthly": 0.4,
+          "year_to_date": 13.5,
+          "year_on_year": 51.9
+        }
+      },
+      {
+        "label": "Tortuguita",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 11104,
+          "2026-08": 16863,
+          "2026-09": 17235
+        },
+        "change_percent": {
+          "monthly": 2.2,
+          "year_to_date": 21.6,
+          "year_on_year": 55.2
+        }
+      },
+      {
+        "label": "Promedio Carne",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 12357,
+          "2026-08": 18431,
+          "2026-09": 18514
+        },
+        "change_percent": {
+          "monthly": 0.5,
+          "year_to_date": 15.6,
+          "year_on_year": 49.8
+        }
+      },
+      {
+        "label": "Pollo",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 3808,
+          "2026-08": 4934,
+          "2026-09": 4954
+        },
+        "change_percent": {
+          "monthly": 0.4,
+          "year_to_date": 21.7,
+          "year_on_year": 30.1
+        }
+      },
+      {
+        "label": "Pechito de Cerdo",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 7394,
+          "2026-08": 9235,
+          "2026-09": 9388
+        },
+        "change_percent": {
+          "monthly": 1.7,
+          "year_to_date": 13.9,
+          "year_on_year": 27.0
+        }
+      },
+      {
+        "label": "Hamb.caseras (kg)",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 10960,
+          "2026-08": 14800,
+          "2026-09": 14787
+        },
+        "change_percent": {
+          "monthly": -0.1,
+          "year_to_date": 16.5,
+          "year_on_year": 34.9
+        }
+      },
+      {
+        "label": "Hamb. congel (4u.)",
+        "unit": "ARS/4_units",
+        "prices": {
+          "2025-09": 6301,
+          "2026-08": 8795,
+          "2026-09": 8971
+        },
+        "change_percent": {
+          "monthly": 2.0,
+          "year_to_date": 16.5,
+          "year_on_year": 42.4
+        }
+      },
+      {
+        "label": "Media Res",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 7005,
+          "2026-08": 10595,
+          "2026-09": 10630
+        },
+        "change_percent": {
+          "monthly": 0.3,
+          "year_to_date": 16.7,
+          "year_on_year": 51.8
+        }
+      }
+    ],
+    "Rosario": [
+      {
+        "label": "Asado de tira",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 13957,
+          "2026-08": 21556,
+          "2026-09": 21305
+        },
+        "change_percent": {
+          "monthly": -1.2,
+          "year_to_date": 15.5,
+          "year_on_year": 52.7
+        }
+      },
+      {
+        "label": "Bife ancho",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 10752,
+          "2026-08": 17086,
+          "2026-09": 17004
+        },
+        "change_percent": {
+          "monthly": -0.5,
+          "year_to_date": 20.8,
+          "year_on_year": 58.1
+        }
+      },
+      {
+        "label": "Bife angosto",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 12060,
+          "2026-08": 19390,
+          "2026-09": 19200
+        },
+        "change_percent": {
+          "monthly": -1.0,
+          "year_to_date": 24.4,
+          "year_on_year": 59.2
+        }
+      },
+      {
+        "label": "Bola de lomo",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 13556,
+          "2026-08": 20295,
+          "2026-09": 20200
+        },
+        "change_percent": {
+          "monthly": -0.5,
+          "year_to_date": 19.2,
+          "year_on_year": 49.0
+        }
+      },
+      {
+        "label": "Carnaza común",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 11206,
+          "2026-08": 17203,
+          "2026-09": 17091
+        },
+        "change_percent": {
+          "monthly": -0.7,
+          "year_to_date": 22.2,
+          "year_on_year": 52.5
+        }
+      },
+      {
+        "label": "Cuadrada",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 13642,
+          "2026-08": 20497,
+          "2026-09": 20431
+        },
+        "change_percent": {
+          "monthly": -0.3,
+          "year_to_date": 19.1,
+          "year_on_year": 49.8
+        }
+      },
+      {
+        "label": "Cuadril",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 14318,
+          "2026-08": 22333,
+          "2026-09": 22125
+        },
+        "change_percent": {
+          "monthly": -0.9,
+          "year_to_date": 21.0,
+          "year_on_year": 54.5
+        }
+      },
+      {
+        "label": "Falda",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 8702,
+          "2026-08": 13458,
+          "2026-09": 13502
+        },
+        "change_percent": {
+          "monthly": 0.3,
+          "year_to_date": 19.4,
+          "year_on_year": 55.2
+        }
+      },
+      {
+        "label": "Lomo",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 17122,
+          "2026-08": 26481,
+          "2026-09": 26587
+        },
+        "change_percent": {
+          "monthly": 0.4,
+          "year_to_date": 24.0,
+          "year_on_year": 55.3
+        }
+      },
+      {
+        "label": "Nalga",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 14275,
+          "2026-08": 22022,
+          "2026-09": 22020
+        },
+        "change_percent": {
+          "monthly": 0.0,
+          "year_to_date": 22.1,
+          "year_on_year": 54.3
+        }
+      },
+      {
+        "label": "Osobuco",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 7366,
+          "2026-08": 11114,
+          "2026-09": 11050
+        },
+        "change_percent": {
+          "monthly": -0.6,
+          "year_to_date": 23.6,
+          "year_on_year": 50.0
+        }
+      },
+      {
+        "label": "Paleta",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 12206,
+          "2026-08": 19196,
+          "2026-09": 19021
+        },
+        "change_percent": {
+          "monthly": -0.9,
+          "year_to_date": 24.3,
+          "year_on_year": 55.8
+        }
+      },
+      {
+        "label": "Peceto",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 15185,
+          "2026-08": 23154,
+          "2026-09": 23173
+        },
+        "change_percent": {
+          "monthly": 0.1,
+          "year_to_date": 16.9,
+          "year_on_year": 52.6
+        }
+      },
+      {
+        "label": "Picada común",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 7582,
+          "2026-08": 10224,
+          "2026-09": 10223
+        },
+        "change_percent": {
+          "monthly": 0.0,
+          "year_to_date": 16.0,
+          "year_on_year": 34.8
+        }
+      },
+      {
+        "label": "Picada especial",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 10748,
+          "2026-08": 16263,
+          "2026-09": 16293
+        },
+        "change_percent": {
+          "monthly": 0.2,
+          "year_to_date": 21.3,
+          "year_on_year": 51.6
+        }
+      },
+      {
+        "label": "Roast beef",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 12376,
+          "2026-08": 17738,
+          "2026-09": 17747
+        },
+        "change_percent": {
+          "monthly": 0.1,
+          "year_to_date": 17.7,
+          "year_on_year": 43.4
+        }
+      },
+      {
+        "label": "Tapa de Nalga",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 12614,
+          "2026-08": 19572,
+          "2026-09": 19457
+        },
+        "change_percent": {
+          "monthly": -0.6,
+          "year_to_date": 22.1,
+          "year_on_year": 54.3
+        }
+      },
+      {
+        "label": "Vacío",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 15218,
+          "2026-08": 23237,
+          "2026-09": 23018
+        },
+        "change_percent": {
+          "monthly": -0.9,
+          "year_to_date": 14.5,
+          "year_on_year": 51.3
+        }
+      },
+      {
+        "label": "Colita de cuadril",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 14935,
+          "2026-08": 23116,
+          "2026-09": 22999
+        },
+        "change_percent": {
+          "monthly": -0.5,
+          "year_to_date": 19.5,
+          "year_on_year": 54.0
+        }
+      },
+      {
+        "label": "Matambre",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 13245,
+          "2026-08": 20239,
+          "2026-09": 19904
+        },
+        "change_percent": {
+          "monthly": -1.7,
+          "year_to_date": 13.7,
+          "year_on_year": 50.3
+        }
+      },
+      {
+        "label": "Tapa de Asado",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 11986,
+          "2026-08": 18481,
+          "2026-09": 18321
+        },
+        "change_percent": {
+          "monthly": -0.9,
+          "year_to_date": 17.0,
+          "year_on_year": 52.9
+        }
+      },
+      {
+        "label": "Tortuguita",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 11756,
+          "2026-08": 17769,
+          "2026-09": 17779
+        },
+        "change_percent": {
+          "monthly": 0.1,
+          "year_to_date": 23.3,
+          "year_on_year": 51.2
+        }
+      },
+      {
+        "label": "Promedio Carne",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 12556,
+          "2026-08": 19192,
+          "2026-09": 19106
+        },
+        "change_percent": {
+          "monthly": -0.4,
+          "year_to_date": 19.9,
+          "year_on_year": 52.2
+        }
+      },
+      {
+        "label": "Pollo",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 4037,
+          "2026-08": 4870,
+          "2026-09": 4956
+        },
+        "change_percent": {
+          "monthly": 1.8,
+          "year_to_date": 18.2,
+          "year_on_year": 22.7
+        }
+      },
+      {
+        "label": "Pechito de Cerdo",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 7684,
+          "2026-08": 9237,
+          "2026-09": 9295
+        },
+        "change_percent": {
+          "monthly": 0.6,
+          "year_to_date": 15.4,
+          "year_on_year": 21.0
+        }
+      },
+      {
+        "label": "Hamb caseras (kg)",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 12155,
+          "2026-08": 17750,
+          "2026-09": 17736
+        },
+        "change_percent": {
+          "monthly": -0.1,
+          "year_to_date": 15.1,
+          "year_on_year": 45.9
+        }
+      },
+      {
+        "label": "Hamburg cong. (4u.)",
+        "unit": "ARS/4_units",
+        "prices": {
+          "2025-09": 5773,
+          "2026-08": 8868,
+          "2026-09": 9016
+        },
+        "change_percent": {
+          "monthly": 1.7,
+          "year_to_date": 27.2,
+          "year_on_year": 56.2
+        }
+      },
+      {
+        "label": "Media Res",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 6908,
+          "2026-08": 10227,
+          "2026-09": 10208
+        },
+        "change_percent": {
+          "monthly": -0.2,
+          "year_to_date": 18.4,
+          "year_on_year": 47.8
+        }
+      }
+    ],
+    "Córdoba": [
+      {
+        "label": "Asado de tira",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 13046,
+          "2026-08": 20379,
+          "2026-09": 20475
+        },
+        "change_percent": {
+          "monthly": 0.5,
+          "year_to_date": 12.5,
+          "year_on_year": 56.9
+        }
+      },
+      {
+        "label": "Bife ancho",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 11014,
+          "2026-08": 17573,
+          "2026-09": 17583
+        },
+        "change_percent": {
+          "monthly": 0.1,
+          "year_to_date": 20.6,
+          "year_on_year": 59.6
+        }
+      },
+      {
+        "label": "Bife angosto",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 11488,
+          "2026-08": 17902,
+          "2026-09": 18071
+        },
+        "change_percent": {
+          "monthly": 0.9,
+          "year_to_date": 20.5,
+          "year_on_year": 57.3
+        }
+      },
+      {
+        "label": "Bola de lomo",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 13813,
+          "2026-08": 20821,
+          "2026-09": 20701
+        },
+        "change_percent": {
+          "monthly": -0.6,
+          "year_to_date": 16.0,
+          "year_on_year": 49.9
+        }
+      },
+      {
+        "label": "Carnaza común",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 11030,
+          "2026-08": 17149,
+          "2026-09": 16868
+        },
+        "change_percent": {
+          "monthly": -1.6,
+          "year_to_date": 16.6,
+          "year_on_year": 52.9
+        }
+      },
+      {
+        "label": "Cuadrada",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 13842,
+          "2026-08": 20833,
+          "2026-09": 20721
+        },
+        "change_percent": {
+          "monthly": -0.5,
+          "year_to_date": 15.7,
+          "year_on_year": 49.7
+        }
+      },
+      {
+        "label": "Cuadril",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 14484,
+          "2026-08": 22211,
+          "2026-09": 22411
+        },
+        "change_percent": {
+          "monthly": 0.9,
+          "year_to_date": 17.6,
+          "year_on_year": 54.7
+        }
+      },
+      {
+        "label": "Falda",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 9025,
+          "2026-08": 14578,
+          "2026-09": 14330
+        },
+        "change_percent": {
+          "monthly": -1.7,
+          "year_to_date": 17.2,
+          "year_on_year": 58.8
+        }
+      },
+      {
+        "label": "Lomo",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 16927,
+          "2026-08": 25548,
+          "2026-09": 25386
+        },
+        "change_percent": {
+          "monthly": -0.6,
+          "year_to_date": 16.1,
+          "year_on_year": 50.0
+        }
+      },
+      {
+        "label": "Nalga",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 14607,
+          "2026-08": 22318,
+          "2026-09": 22290
+        },
+        "change_percent": {
+          "monthly": -0.1,
+          "year_to_date": 17.3,
+          "year_on_year": 52.6
+        }
+      },
+      {
+        "label": "Osobuco",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 8027,
+          "2026-08": 11685,
+          "2026-09": 11851
+        },
+        "change_percent": {
+          "monthly": 1.4,
+          "year_to_date": 21.2,
+          "year_on_year": 47.6
+        }
+      },
+      {
+        "label": "Paleta",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 12416,
+          "2026-08": 19017,
+          "2026-09": 19066
+        },
+        "change_percent": {
+          "monthly": 0.3,
+          "year_to_date": 17.2,
+          "year_on_year": 53.6
+        }
+      },
+      {
+        "label": "Peceto",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 15141,
+          "2026-08": 23194,
+          "2026-09": 23419
+        },
+        "change_percent": {
+          "monthly": 1.0,
+          "year_to_date": 15.6,
+          "year_on_year": 54.7
+        }
+      },
+      {
+        "label": "Picada común",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 7922,
+          "2026-08": 11598,
+          "2026-09": 11524
+        },
+        "change_percent": {
+          "monthly": -0.6,
+          "year_to_date": 17.4,
+          "year_on_year": 45.5
+        }
+      },
+      {
+        "label": "Picada especial",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 11152,
+          "2026-08": 16824,
+          "2026-09": 16843
+        },
+        "change_percent": {
+          "monthly": 0.1,
+          "year_to_date": 18.1,
+          "year_on_year": 51.0
+        }
+      },
+      {
+        "label": "Roast beef",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 11367,
+          "2026-08": 17375,
+          "2026-09": 17418
+        },
+        "change_percent": {
+          "monthly": 0.3,
+          "year_to_date": 19.5,
+          "year_on_year": 53.2
+        }
+      },
+      {
+        "label": "Tapa de Nalga",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 13597,
+          "2026-08": 20931,
+          "2026-09": 21118
+        },
+        "change_percent": {
+          "monthly": 0.9,
+          "year_to_date": 15.5,
+          "year_on_year": 55.3
+        }
+      },
+      {
+        "label": "Vacío",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 14379,
+          "2026-08": 22140,
+          "2026-09": 22214
+        },
+        "change_percent": {
+          "monthly": 0.3,
+          "year_to_date": 12.6,
+          "year_on_year": 54.5
+        }
+      },
+      {
+        "label": "Colita de cuadril",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 14514,
+          "2026-08": 22859,
+          "2026-09": 22882
+        },
+        "change_percent": {
+          "monthly": 0.1,
+          "year_to_date": 16.5,
+          "year_on_year": 57.7
+        }
+      },
+      {
+        "label": "Matambre",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 14438,
+          "2026-08": 21970,
+          "2026-09": 21799
+        },
+        "change_percent": {
+          "monthly": -0.8,
+          "year_to_date": 11.2,
+          "year_on_year": 51.0
+        }
+      },
+      {
+        "label": "Tapa de Asado",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 13552,
+          "2026-08": 21070,
+          "2026-09": 20981
+        },
+        "change_percent": {
+          "monthly": -0.4,
+          "year_to_date": 11.2,
+          "year_on_year": 54.8
+        }
+      },
+      {
+        "label": "Tortuguita",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 11454,
+          "2026-08": 17640,
+          "2026-09": 17564
+        },
+        "change_percent": {
+          "monthly": -0.4,
+          "year_to_date": 16.8,
+          "year_on_year": 53.3
+        }
+      },
+      {
+        "label": "Promedio Carne",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 12722,
+          "2026-08": 19578,
+          "2026-09": 19528
+        },
+        "change_percent": {
+          "monthly": -0.3,
+          "year_to_date": 16.0,
+          "year_on_year": 53.5
+        }
+      },
+      {
+        "label": "Pollo",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 3825,
+          "2026-08": 4908,
+          "2026-09": 4941
+        },
+        "change_percent": {
+          "monthly": 0.7,
+          "year_to_date": 18.5,
+          "year_on_year": 29.2
+        }
+      },
+      {
+        "label": "Pechito de Cerdo",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 7541,
+          "2026-08": 9357,
+          "2026-09": 9405
+        },
+        "change_percent": {
+          "monthly": 0.5,
+          "year_to_date": 14.9,
+          "year_on_year": 24.7
+        }
+      },
+      {
+        "label": "Hamburg caseras (kg)",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 10115,
+          "2026-08": 14539,
+          "2026-09": 14722
+        },
+        "change_percent": {
+          "monthly": 1.3,
+          "year_to_date": 12.3,
+          "year_on_year": 45.5
+        }
+      },
+      {
+        "label": "Hamburg cong (4u.)",
+        "unit": "ARS/4_units",
+        "prices": {
+          "2025-09": 5709,
+          "2026-08": 8383,
+          "2026-09": 8546
+        },
+        "change_percent": {
+          "monthly": 1.9,
+          "year_to_date": 28.5,
+          "year_on_year": 49.7
+        }
+      },
+      {
+        "label": "Media Res",
+        "unit": "ARS/kg",
+        "prices": {
+          "2025-09": 6797,
+          "2026-08": 10650,
+          "2026-09": 10685
+        },
+        "change_percent": {
+          "monthly": 0.3,
+          "year_to_date": 16.5,
+          "year_on_year": 57.2
+        }
+      }
+    ]
+  },
+  "comparison": {
+    "matched_beef_cuts": 22,
+    "matched_periods": [
+      "2026-08",
+      "2026-09"
+    ],
+    "differences": []
+  },
+  "candidate_replacements_for_carrefour": {
+    "bife_ancho": "Bife Ancho",
+    "bife_angosto": "Bife angosto",
+    "lomo": "Lomo",
+    "vacio": "Vacío",
+    "matambre": "Matambre",
+    "colita": "Colita de cuadril",
+    "peceto": "Peceto",
+    "osobuco": "Osobuco",
+    "cuadrada": "Cuadrada"
+  },
+  "not_covered_or_mapping_unresolved": [
+    "bife_costilla",
+    "molleja",
+    "rinon",
+    "lengua",
+    "entrana",
+    "tapa",
+    "pecho",
+    "aguja"
+  ],
+  "unit_notes": {
+    "beef_cuts": "ARS/kg, confirmed against report table 3; nominal current pesos",
+    "Hamburguesas cong 4u": "ARS per four units; never normalize as ARS/kg",
+    "S/D": "Missing data, never zero"
+  },
+  "receipt_sha256": {
+    "consumer-prices-export.html": "47bc0c89162eb60c13476acdc64e614950d14a20f29574d8265d027d3498e40f",
+    "monthly-prices-2026-09.pdf": "49bc2c14fd56224d759536e548668f832bde94c5625c4f93204aa69de0b007aa",
+    "monthly-prices-2026-09.txt": "39a0f903546a62070e566d7fd99b9c3b339b3725694a49b048b66006122d17d5",
+    "dashboard-form.html": "392dd7b26ddb3a5e6bd7b344a5202f3f6b20f4d4b6da1c8f3a67ef44ac799124"
+  }
+}

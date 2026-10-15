@@ -20,7 +20,11 @@ spec.loader.exec_module(retail)
 
 class OfficialIsolation(unittest.TestCase):
     def setUp(self):
-        self.original = json.loads((ROOT / 'data/prices.json').read_text())
+        self.original = json.loads((ROOT / 'tests/fixtures/prices_legacy_2026_10_07.json').read_text())
+        # This suite isolates BLS/INDEC/FX. IPCVA has its own real-export suite.
+        ipcva = patch.object(retail, 'refresh_ipcva', return_value=[])
+        ipcva.start()
+        self.addCleanup(ipcva.stop)
         self.payloads = {
             official.BLS_URL: {'status': 'REQUEST_SUCCEEDED', 'Results': {'series': [
                 {'seriesID': sid, 'data': [{'year': '2026', 'period': 'M07', 'value': '8.50'},

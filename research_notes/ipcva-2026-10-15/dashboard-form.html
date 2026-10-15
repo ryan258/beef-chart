@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=100%, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+    <link rel="icon" href="images/favicon.png" type="image/png">
+    <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+    <meta name="description" content="" />
+    <title>IPCVA</title>
+    <!--Le CSS-->
+     <link href="../css/bootstrap.css" type="text/css" rel="stylesheet"/>
+    <link href="../css/style.css" type="text/css" rel="stylesheet"/>
+    <link href="../css/prettyPhoto.css" type="text/css" rel="stylesheet"/>
+
+
+
+	<meta property="og:url" content="https://ipcva.agrositio.com/estadisticas.php" />
+	<meta property="og:type" content="article" />
+	<meta property="og:title" content="Estadísticas" />
+	<meta property="og:description" content="Estadísticas IPCVA" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="Estadísticas IPCVA" />
+	<meta name="twitter:site" content=" @IPCVA" />
+	<meta name="twitter:description" content="Estadísticas IPCVA" />
+
+    <!--Le Java Script-->
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.easing.1.3.js"></script>
+    <script type="text/javascript" src="../js/jquery.quicksand.js"></script>
+    <script type="text/javascript" src="../js/superfish.js"></script>
+    <script type="text/javascript" src="../js/hoverIntent.js"></script>
+    <script type="text/javascript" src="../js/jquery.hoverdir.js"></script>
+    <script type="text/javascript" src="../js/jquery.flexslider.js"></script>
+    <script type="text/javascript" src="../js/jflickrfeed.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.prettyPhoto.js"></script>
+    <script type="text/javascript" src="../js/smoothscroll.js"></script>
+    <script type="text/javascript" src="../js/jquery.ui.totop.js"></script>
+    <script type="text/javascript" src="../js/main.js"></script>
+    <script type="text/javascript" src="../js/ajax-mail.js"></script>
+    <script type="text/javascript" src="../js/accordion.settings.js"></script>
+    <script type="text/javascript" src="../js/jquery.elastislide.js"></script>
+    <script type="text/javascript" src="../js/jquery.eislideshow.js"></script>
+
+    <!--Le google fonts-->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'>
+	<!--[if lt IE 9]>
+		<script type="text/javascript" src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <link href="css/ie8.css" type="text/css" rel="stylesheet"/>
+	<![endif]-->
+    <script language="JavaScript" type="text/JavaScript">
+	function blinkExecute(target,color){
+		eval("document.datos."+target+".style.backgroundColor=color");
+	}
+	function blinkBlink (target){
+		color1 = "#990000"; // blinking color
+		color2 = "#FFFFFF"; // background color
+		setTimeout('blinkExecute("'+target+'","'+color1+'")',0);
+		setTimeout('blinkExecute("'+target+'","'+color2+'")',500);
+		setTimeout('blinkExecute("'+target+'","'+color1+'")',1000);
+		setTimeout('blinkExecute("'+target+'","'+color2+'")',1500);
+		setTimeout('blinkExecute("'+target+'","'+color1+'")',2000);
+		setTimeout('blinkExecute("'+target+'","'+color2+'")',2500);
+		setTimeout('blinkExecute("'+target+'","'+color1+'")',3000);
+		setTimeout('blinkExecute("'+target+'","'+color2+'")',3500);
+		setTimeout('blinkExecute("'+target+'","'+color1+'")',4000);
+		setTimeout('blinkExecute("'+target+'","'+color2+'")',4500);
+	}
+	function check (){
+		b=document.datos.ano_desde.value;
+		d=document.datos.ano_hasta.value;
+		var checkeado=0;
+		var cantidad;
+		if (b==""){
+			alert ("Debe indicar desde que año desea ver datos");
+			document.datos.ano_desde.focus();
+			blinkBlink('ano_desde');
+			return false;
+		}
+		if (d==""){
+			alert ("Debe indicar hasta que año desea ver datos");
+			blinkBlink('ano_hasta');
+			document.datos.ano_hasta.focus();
+			return false;
+		}
+		
+		cantidad=document.forms["datos"].elements["productos[]"].length;
+		cantidad_chequeados=0;
+		for(i=0; i<cantidad; i++){
+			if (document.forms["datos"].elements["productos[]"][i].checked){
+				checkeado=true;
+				cantidad_chequeados++;
+			}
+		}
+		if (! checkeado){
+			alert ("Seleccione una Categoria!");
+			return false;
+		}
+		if (cantidad_chequeados > 10){
+			alert ("Seleccione como maximo 10 productos");
+			return false;
+		}
+
+	}
+</script>
+</head>
+<body>
+<header id="header">
+    <div class="container">
+        <div class="row">
+            <div class="span3 logo">
+                <a href="https://ipcva.com.ar/"><img src="images/logo2.png" alt="logo"/></a>
+            </div>
+
+            <div class="span12 pull-right sociax">
+
+           <div class="seguinos" style="margin-top:0px; margin-left:20px; float:right;">
+
+            <div id="social" class="pull-right" style="margin-bottom:10px;">
+                <div id="youtube"> <a href="https://www.youtube.com/user/MicrosIPCVA" id="youtube_img" target="_blank">Youtube</a></div>
+                <div id="twitter"> <a href="https://x.com/IPCVA" id="twitter_img" target="_blank">Twitter</a></div>
+                <div id="facebook"> <a href="https://www.facebook.com/ipcva" id="facebook_img" target="_blank" >Facebook</a></div>
+            </div>
+
+
+            </div>
+
+            <!--<div class="span6 pull-right" style="text-align:right;">
+                  <a href="registracion.php" style="margin-left:10px;"><i class="icon-pencil"></i>Suscripción al Newsletter</a>
+            </div>-->
+        </div>
+        <nav id="menu" class="pull-right">
+            <ul>
+                <li><a href="https://ipcva.com.ar/" >INICIO</a></li>
+                <li><a href="https://ipcva.com.ar/institucional" >INSTITUCIONAL</a> </li>
+                <li><a href="https://ipcva.com.ar/material-de-consulta" >MATERIAL DE CONSULTA</a></li>
+                <li><a href="https://ipcva.com.ar/contacto" >CONTACTO</a></li>
+            </ul>
+        </nav>
+    </div>
+    </div>
+</header>
+<!--titulero gris-->
+
+
+<div class="titulero">
+	<section id="welcome" class="container">
+		<div class="row">
+			<div class="span6" style="text-align:left;">
+				<h1>Estadísticas</h1>
+				<p>Estadísticas del Instituto de Promoción de la Carne Vacuna Argentina.</p>
+			</div>
+		</div>
+	</section>
+</div>
+<!--container-->
+<section id="container">
+	<div class="container">
+		<div class="row">
+			<!--sidebar izquierda -->
+			<!--<aside id="sidebar" class="alignleft span3">
+			</aside>-->
+			<!--col derecha-->
+			<section id="page" class=" span12">
+				<div class="row">
+					<div class="span12">
+						<h1 class="celeste"></h1>
+						<h5 style="font-weight:normal;"></h5>
+						<article class="blog-post">
+							<!-- Inicio Contenido -->
+                            <table border="0" width="100%%" cellspacing="0" cellpadding="0" style="border-collapse: collapse" class="copete">
+	<tr>
+		<td align="center" valign="top">
+
+			<table border="0" align="center" width="650" cellspacing="1" cellpadding="1" style="border-collapse: collapse" class="copete">
+				<tr>
+
+					<td width="100%" height="25"colspan="2" align="center" bgcolor="#E1EEDD"><b>Precios al Consumidor</b></td>
+				</tr>
+				<tr>
+					<td width="100%" height="20" colspan="2" align="center" bgcolor="#E1EEDD"><b>Por Fecha</b></td>
+				</tr>
+				<tr>
+					<td width="50%" height="20" align="center" bgcolor="#E1EEDD"><b>Desde</b></td>
+					<td width="50%" align="center" bgcolor="#E1EEDD"><b>Hasta</b></td>
+				</tr>
+				<form name="datos" action="vista_precios_consumidor2.php" method="post" onSubmit="return check()">
+				<tr>
+										<td width="50%" height="36" align="center" bgcolor="#F2F8F1">
+						<select name="mes_desde" class="formus" id="mes_desde">
+							<option value="" selected>Mes</option>
+							<option value="01-01" >Ene</option>
+							<option value="02-01" >Feb</option>
+							<option value="03-01" >Mar</option>
+							<option value="04-01" >Abr</option>
+							<option value="05-01" >May</option>
+							<option value="06-01" >Jun</option>
+							<option value="07-01" >Jul</option>
+							<option value="08-01" >Ago</option>
+							<option value="09-01" >Sep</option>
+							<option value="10-01" >Oct</option>
+							<option value="11-01" >Nov</option>
+							<option value="12-01" >Dic</option>
+						</select>&nbsp;
+						<select name="ano_desde" class="formus" id="desde">
+							<option value="" selected>Año</option>
+							<option value="1990" >1990</option><option value="1991" >1991</option><option value="1992" >1992</option><option value="1993" >1993</option><option value="1994" >1994</option><option value="1995" >1995</option><option value="1996" >1996</option><option value="1997" >1997</option><option value="1998" >1998</option><option value="1999" >1999</option><option value="2000" >2000</option><option value="2001" >2001</option><option value="2002" >2002</option><option value="2003" >2003</option><option value="2004" >2004</option><option value="2005" >2005</option><option value="2006" >2006</option><option value="2007" >2007</option><option value="2008" >2008</option><option value="2009" >2009</option><option value="2010" >2010</option><option value="2011" >2011</option><option value="2012" >2012</option><option value="2013" >2013</option><option value="2014" >2014</option><option value="2015" >2015</option><option value="2016" >2016</option><option value="2017" >2017</option><option value="2018" >2018</option><option value="2019" >2019</option><option value="2020" >2020</option><option value="2021" >2021</option><option value="2022" >2022</option><option value="2023" >2023</option><option value="2024" >2024</option><option value="2025" >2025</option><option value="2026" >2026</option>						</select>
+					</td>
+					<td width="50%" align="center" bgcolor="#F2F8F1">
+						<select name="mes_hasta" class="formus" id="mes_hsta">
+							<option value="" selected>Mes</option>
+							<option value="01-01" >Ene</option>
+							<option value="02-01" >Feb</option>
+							<option value="03-01" >Mar</option>
+							<option value="04-01" >Abr</option>
+							<option value="05-01" >May</option>
+							<option value="06-01" >Jun</option>
+							<option value="07-01" >Jul</option>
+							<option value="08-01" >Ago</option>
+							<option value="09-01" >Sep</option>
+							<option value="10-01" >Oct</option>
+							<option value="11-01" >Nov</option>
+							<option value="12-01" >Dic</option>
+						</select>&nbsp;
+						<select name="ano_hasta" class="formus" id="hasta">
+							<option value="" selected>Año</option>
+							<option value="2026" >2026</option><option value="2025" >2025</option><option value="2024" >2024</option><option value="2023" >2023</option><option value="2022" >2022</option><option value="2021" >2021</option><option value="2020" >2020</option><option value="2019" >2019</option><option value="2018" >2018</option><option value="2017" >2017</option><option value="2016" >2016</option><option value="2015" >2015</option><option value="2014" >2014</option><option value="2013" >2013</option><option value="2012" >2012</option><option value="2011" >2011</option><option value="2010" >2010</option><option value="2009" >2009</option><option value="2008" >2008</option><option value="2007" >2007</option><option value="2006" >2006</option><option value="2005" >2005</option><option value="2004" >2004</option><option value="2003" >2003</option><option value="2002" >2002</option><option value="2001" >2001</option><option value="2000" >2000</option><option value="1999" >1999</option><option value="1998" >1998</option><option value="1997" >1997</option><option value="1996" >1996</option><option value="1995" >1995</option><option value="1994" >1994</option><option value="1993" >1993</option><option value="1992" >1992</option><option value="1991" >1991</option><option value="1990" >1990</option>						</select>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" align="right" valign="top" bgcolor="#F2F8F1">
+						<table border="0" width="100%" cellspacing="0" cellpadding="0" style="border-collapse: collapse" class="copete">
+							<tr><td width="25%" align="right" valign="top">									Asado&nbsp;<input type="checkbox" id="productos[]" name="productos[]" value="10" ><br>
+																Bife Ancho&nbsp;<input type="checkbox" id="productos[]" name="productos[]" value="70" ><br>
+																Bife angosto&nbsp;<input type="checkbox" id="productos[]" name="productos[]" value="15" ><br>
+																Bola de Lomo&nbsp;<input type="checkbox" id="productos[]" name="productos[]" value="71" ><br>
+																Carnaza Común&nbsp;<input type="checkbox" id="productos[]" name="productos[]" value="72" ><br>
+																Carne picada&nbsp;<input type="checkbox" id="productos[]" name="productos[]" value="12" ><br>
+																Colita de cuadril&nbsp;<input type="checkbox" id="productos[]" name="productos[]" value="86" ><br>
+																Cuadrada&nbsp;<input type="checkbox" id="productos[]" name="productos[]" value="73" ><br>
+							</td><td width="25%" align="right" valign="top">									Cuadril&nbsp;<input type="checkbox" id="productos[]" name="productos[]" value="14" ><br>
+																Falda&nbsp;<input type="checkbox" id="productos[]" name="productos[]" value="74" ><br>
+																Hamburguesas&nbsp;<input type="checkbox" id="productos[]" name="productos[]" value="16" ><br>
+																Hamburguesas caseras&nbsp;<input type="checkbox" id="productos[]" name="productos[]" value="75" ><br>
+																Hamburguesas cong 4u&nbsp;<input type="checkbox" id="productos[]" name="productos[]" value="76" ><br>
+																Lomo&nbsp;<input type="checkbox" id="productos[]" name="productos[]" value="77" ><br>
+																Matambre&nbsp;<input type="checkbox" id="productos[]" name="productos[]" value="87" ><br>
+																Nalga&nbsp;<input type="checkbox" id="productos[]" name="productos[]" value="13" ><br>
+							</td><td width="25%" align="right" valign="top">									Osobuco&nbsp;<input type="checkbox" id="productos[]" name="productos[]" value="78" ><br>
+																Paleta&nbsp;<input type="checkbox" id="productos[]" name="productos[]" value="11" ><br>
+																Peceto&nbsp;<input type="checkbox" id="productos[]" name="productos[]" value="79" ><br>
+																Pechito de cerdo&nbsp;<input type="checkbox" id="productos[]" name="productos[]" value="80" ><br>
+																Picada Común&nbsp;<input type="checkbox" id="productos[]" name="productos[]" value="81" ><br>
+																Picada Especial&nbsp;<input type="checkbox" id="productos[]" name="productos[]" value="82" ><br>
+																Pollo entero&nbsp;<input type="checkbox" id="productos[]" name="productos[]" value="17" ><br>
+																Roast Beef&nbsp;<input type="checkbox" id="productos[]" name="productos[]" value="83" ><br>
+							</td><td width="25%" align="right" valign="top">									Tapa de asado&nbsp;<input type="checkbox" id="productos[]" name="productos[]" value="88" ><br>
+																Tapa de Nalga&nbsp;<input type="checkbox" id="productos[]" name="productos[]" value="84" ><br>
+																Tortuguita&nbsp;<input type="checkbox" id="productos[]" name="productos[]" value="89" ><br>
+																Vacío&nbsp;<input type="checkbox" id="productos[]" name="productos[]" value="85" ><br>
+							</td></tr>						</table>
+					</td>
+				</tr>
+				<tr>
+					<td width="100%" colspan="2" align="center" bgcolor="#F2F8F1"><input name="procesar" type="submit" class="formus" value="Procesar"></td>
+				</tr>
+				<tr>
+					<td colspan="2" align="right" bgcolor="#F2F8F1">Fuente: INDEC e IPCVA</td>
+				</tr>
+				</form>
+			</table>
+		
+					</td>
+	</tr>
+</table>
+
+<br><br>
+							<!-- Fin Contenido -->
+						</article>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+</section>
+<!-- Footer -->
+<footer id="footer">
+    <div class="container">
+        <div class="row">
+            <div class="span12 texto_footer">
+                <div class="clear"></div>
+                <address>
+                    Esmeralda 130, Piso 22 (C1035ABD)<br>
+                    Buenos Aires, Argentina <br>
+                    <i class="myicon-phone"></i>(54-11) 4328-8152/3 
+                    <i class="myicon-mail"></i>info@ipcva.com.ar
+                </address>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Footer Menu -->
+<section id="footer-menu">
+    <div class="container">
+        <div class="row">
+            <div class="span8 hidden-phone" style="padding: 7px 0;">
+                <img src="images/logo_footer.png" alt="logo">
+            </div>
+            <p class="span4"><span class="pull-right">IPCVA 2026 © Todos los derechos reservados</span></p>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-1458873-4']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'https://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
+</script></body>
+</html>
