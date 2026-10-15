@@ -1,0 +1,85 @@
+{
+  "ar": [
+    {
+      "date": null,
+      "item": "Cogote",
+      "machine_name": "cogote",
+      "price": null,
+      "currency": "ARS",
+      "unit": "kg"
+    },
+    {
+      "date": null,
+      "item": "Pecho",
+      "machine_name": "pecho",
+      "price": null,
+      "currency": "ARS",
+      "unit": "kg"
+    },
+    {
+      "date": null,
+      "item": "Garrón",
+      "machine_name": "garron",
+      "price": null,
+      "currency": "ARS",
+      "unit": "kg"
+    },
+    {
+      "date": null,
+      "item": "Bife de costilla",
+      "machine_name": "bife_costilla",
+      "price": null,
+      "currency": "ARS",
+      "unit": "kg"
+    },
+    {
+      "date": null,
+      "item": "Mollejas",
+      "machine_name": "molleja",
+      "price": null,
+      "currency": "ARS",
+      "unit": "kg"
+    },
+    {
+      "date": null,
+      "item": "Riñón",
+      "machine_name": "rinon",
+      "price": null,
+      "currency": "ARS",
+      "unit": "kg"
+    },
+    {
+      "date": null,
+      "item": "Lengua",
+      "machine_name": "lengua",
+      "price": null,
+      "currency": "ARS",
+      "unit": "kg"
+    },
+    {
+      "date": null,
+      "item": "Aguja",
+      "machine_name": "aguja",
+      "price": null,
+      "currency": "ARS",
+      "unit": "kg"
+    },
+    {
+      "date": null,
+      "item": "Entraña",
+      "machine_name": "entrana",
+      "price": null,
+      "currency": "ARS",
+      "unit": "kg"
+    },
+    {
+      "date": null,
+      "item": "Tapa de cuadril",
+      "machine_name": "tapa",
+      "price": null,
+      "currency": "ARS",
+      "unit": "kg"
+    }
+  ],
+  "us": []
+}
