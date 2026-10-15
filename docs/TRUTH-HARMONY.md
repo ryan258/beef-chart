@@ -1,6 +1,13 @@
 # Truth and harmony — local correction record
 
-October 12, 2026. Records the first correction phase, C06/C14 follow-ups, and the illustrated atlas update. The sections below preserve the evidence and limits of each pass; historical statements about uncommitted work or earlier visuals describe that pass, not the current repository state. The final review and documentation reconciliation prepare this work for Ryan-authorized local commits. No push, deployment, live price refresh, new feed, account, or costing engine is included.
+Records October 12–15, 2026. Each section preserves the scope, revision and evidence of its own pass. Historical statements about counts, hashes, source availability, uncommitted work and checks do not describe every later revision. The original October 12 scope excluded new feeds and price refreshes; later October 15 entries record IPCVA/BCRA integration, USDA repair, cut coverage, owner-entered quotes and reload-only manual edits. No passage authorizes staging, commits, pushing, deployment or publication.
+
+## Current operating pointers — October 15
+
+- Edit the ten prefilled cuts in [the active manual-price file](../data/manual-prices.json); date and price can be filled gradually. Unfinished rows are skipped. Numeric amount, currency and unit are separate fields.
+- Save and reload for manual-price changes. A running pre-update server needs one restart to adopt the live route; copied HTML/assets/automatic-snapshot changes still need restarting.
+- [Manual entry instructions](manual-prices.md), [architecture](architecture.md), [pipeline contract](data-pipeline.md), [cut qualifications](cuts-guide.md) and the [README](../README.md) describe current behavior.
+- The most recent implementation checks were 18 manual-price cases plus seven HTTP-handler cases. The earlier 46-case display pass and browser evidence below remain dated results. The documentation reconciliation records static checks only; it does not rerun application acceptance.
 
 ## October 12 review and visual state
 
@@ -184,7 +191,7 @@ Actual targeted verification:
 - A delayed JSON browser fixture showed a loading message, then updated the open Lomo dossier to its stored price while preserving recipe-link focus and a 200px dossier scroll position. Invalid JSON produced a translated unavailable-chart/recovery state; runtime D3 absence retained search, directory and dialog access. No console errors/warnings were reported in these bounded checks.
 - Inline/external JavaScript and shell syntax, bundled snapshot validation, current relative documentation links and whitespace checks passed. The bundled snapshot and artwork remain byte-for-byte unchanged. No full suite, live price refresh, paid provider run, staging, commit, push, deployment or publication was performed.
 
-Repeat only the affected checks when needed; the README contains the combined targeted command. Current provider/real-USDA-layout compatibility, specialist anatomy/rights review, physical-device/screen-reader acceptance, print and cold-offline acceptance remain open. The preview is copy-based and must be restarted after source edits.
+Repeat only the affected checks when needed; the README contains the combined targeted command. Current provider/real-USDA-layout compatibility, specialist anatomy/rights review, physical-device/screen-reader acceptance, print and cold-offline acceptance remain open. That pass used a copy-based preview. Current manual-price edits use the live reload route; copied HTML/assets/automatic-snapshot edits still require restarting.
 
 ## October 13 final working-tree review
 
@@ -207,3 +214,83 @@ Final targeted verification:
 - Final source syntax, snapshot validation, documentation-link and whitespace gates passed. Stored price data and artwork remain unchanged; the staged diff is empty and all implementation/docs/test changes remain uncommitted. The review preview was stopped after verification.
 
 GitNexus change review still flags the combined pricing diff HIGH across nine flows. Inline UI symbols and untracked test methods remain UNKNOWN/not resolved; direct source callers and bounded regressions cover the reviewed paths. No reanalysis, staging, commits, push, deployment or publication occurred. No further blocking inconsistency was found in this correction scope; the provider, specialist and human/device acceptance boundaries above remain open.
+
+## October 14 R01 ambiguous search correction
+
+Both header and quick-search Enter handlers now cancel the native key default before calling `filterAndOpenCut`. An ambiguous search can focus its first result without the same Enter activating that button. A separate Enter on a chosen result still opens its dossier. Matching, result order, translations, styling and stored price data are unchanged.
+
+Pre-edit GitNexus impact ran through the recorded local CLI/runtime: `index.html` reported LOW file-level risk with one historical research-note reference and no reported processes. `filterAndOpenCut` was not found and reported UNKNOWN; direct source inspection covered the two Enter handlers, explicit search button and language re-render caller. File-level results do not establish inline-JavaScript graph coverage. The project wrapper timed out; no reindex was run.
+
+Targeted verification on the local allowlisted preview:
+
+- All 13 tests in `tests/test_harmony_ui.cjs` and `tests/test_language.cjs` passed. These existing checks cover bilingual matching and UI/localization contracts; native key defaults were verified separately in Chromium.
+- Native Enter in **both inputs**, in English (`rib`) and Spanish (`lomo`), left both matching choices visible, focused the first result and opened no dialog. Tab then a separate Enter opened the intended second result; Escape closed it.
+- Both inputs still opened unique English (`tenderloin`) and Spanish alias (`ojo de bife`) matches. Blank and no-match searches retained localized feedback with no result buttons or open dialog, checked across both inputs and languages.
+- Both inline scripts passed JavaScript syntax checks. The browser reported no console errors or warnings, and `git diff --check` passed.
+
+The preview was stopped after verification. This is bounded Chromium/local regression evidence, not a human assistive-technology or device acceptance claim. No full suite, provider refresh, staging, commit, push, deployment or publication was performed. Earlier review artifacts remain preserved.
+
+## October 14 R30–R32 semantic validation correction
+
+Implemented matching v2 semantic validation in Python and the browser, documented in `docs/data-pipeline.md`. Known AR conversions must reconcile with their observation-owned native/FX inputs and source rounding; known INDEC FX must match the observation month. Effective boundaries, source-aware future windows, typed ISO timestamps, enumerated attempt/evidence states, one-level previous observations and bounded nested metadata now validate before promotion or display. Legacy missing/null optional evidence remains unknown, native-only observations remain valid, and neither qualification nor validation invents receipts or dates. An October 15 promotion guard now keeps comparable older price and FX observations from replacing the stored latest values. It reports stale periods and retains the existing record, but it does not archive replayed price payloads or provide append-only revision history; full history remains open.
+
+Pre-edit GitNexus impact was HIGH for `validate_snapshot`, `valid_period` and `validate_sampling`, covering official merges, retail batch validation and final writes. The warning was reported before edits. Browser functions were UNKNOWN/not found; direct source inspection covered the fetch/validate/catch/accept chain and date-display callers. Final structured change analysis reported HIGH across 11 flows, with no payload partial/truncated flags. Its hunk-based symbol mapping includes shifted neighbors; it does not establish coverage of new helpers, inline JavaScript or untracked tests. No reindex was run.
+
+Targeted verification:
+
+- `tests/fixtures/price_contract_v2.json` identifies semantic revision `v2-2026-10-14` and supplies **104 identical cases** to Python and the actual inline browser validator: 25 accepted compatibility cases and 79 malformed/contradictory cases rejected. Cases cover unknown legacy evidence, native-only values, rounding limits, monthly FX lineage, partial/prior/future intervals, offsets, previous evidence, statuses, listings and metadata limits. Both validators leave their inputs unchanged.
+- **28 selected Python tests passed:** new contract cases, atomic rejection/preservation, official-source isolation, retail recovery and organ withholding. **23 selected Node tests passed:** shared contract cases, localization, sampling, organ withholding and existing UI contracts. No full suite or provider calls were run.
+- Chromium loaded all 36 stored rows and withheld exactly three organ rows in English and Spanish; switching left in-memory evidence unchanged. An intercepted local response with a corrupt Lomo conversion produced the localized unavailable-data state in both languages, while the 24-cut directory and bilingual search remained usable. No console errors/warnings were reported.
+- Python/inline-JavaScript syntax and `git diff --check` passed. `data/prices.json` stayed byte-identical: SHA-256 `8456a7dc30742a9d0d1492a0fd44dcb94923df3685e2887364d8bfc14a09db65`. No observation values, dates, FX inputs, legacy unknowns or unit-scale flags were rewritten.
+
+The owned preview was stopped after verification. R01 and prior review artifacts remain preserved. All changes remain unstaged and uncommitted; no push, deployment or publication occurred. Live provider/layout, professional, rights and human assistive-technology/device acceptance remain outside this correction.
+
+## October 15 cut coverage and visual evidence pass
+
+Connected IPCVA's stored Bola de lomo observation to its dossier, keeping the generic U.S. round-roast context explicitly unverified as an exact product match. Expanded chart rows to include the connected cut observations previously omitted. Added a live-from-snapshot 24-cut coverage summary and bilingual table; missing country observations now remain visible in cards/tooltips/dossiers. Retained references have explicit text, hollow chart points, asterisks and dashed connectors; three unresolved organ prices stay withheld. The original Carrefour archive and all observation/FX dates remain intact.
+
+Visible labels distinguish sourced price observations from the anatomical and cut illustrations, fixed-input flow/value models and editorial radar scores. The value chart explicitly states it does not use stored prices. GitNexus file impact reported LOW with one upstream file relationship; inline display functions remained UNKNOWN/not indexed. Direct callers were inspected across cards, map tooltips, modal lifecycle, resize, loading and language switching; UNKNOWN was not treated as a safety guarantee.
+
+Verification: 28 selected Node checks cover coverage, source connections, retained chart styling, missing/native/withheld states, localization, original evidence preservation and modal refresh behavior. Inline JavaScript syntax and `git diff --check` also pass. The production snapshot remains 346,086 bytes with SHA-256 `287d323ab052066369a44280a19fab676f177430558d560c7e38a25d4099177d`; no provider refresh, browser/device/assistive-technology check, full suite, reindex or publication is claimed for this pass.
+
+## October 15 manual price file
+
+Added owner-edited `data/manual-prices.json` with separate `ar`/`us` arrays and six fields per quote: date, item, machine_name, numeric price, currency, unit. At that initial step, the manual file was empty; the later gradual-entry pass below prefills ten drafts. A pure client-side adapter validates entries and selects manual display overrides while preserving the automatic observation and original archive. Manual observations have visible bilingual labels and their own date/unit evidence; ARS/kg is not assigned a guessed exchange rate, and native USD/lb chart points carry a dagger. Missing automatic coverage can be filled for any dossier, including previously unmapped country connections. Invalid manual input falls back to the validated automatic snapshot with a visible message. Scraper-owned data is unchanged.
+
+GitNexus file impact for the page remained LOW (one upstream file relationship); inline functions and the launcher remained unresolved/UNKNOWN. Callers were inspected directly across loading, cards, coverage, map tooltips, chart rendering, dossiers and language switching. This is not a graph all-clear. JavaScript/JSON/shell syntax and whitespace checks were performed; automated tests, provider refreshes, browser/device checks and publication were not run for this addition.
+
+
+### Manual price numeric-field correction
+
+Separated the owner-entered amount, currency and unit: `price` is a positive JSON number; `currency` is `ARS` or `USD`; `unit` is `kg` or `lb`. Supported pairs remain ARS/kg and USD/lb. The adapter rejects numeric strings, booleans, missing fields and unsupported combinations. Display normalization, date selection, source preservation and native-ARS behavior remain unchanged. The live file was empty, so no owner observations needed migration. Updated bilingual errors and all current examples. Syntax and whitespace checks only; no automated tests or browser checks were run for this correction.
+
+### Targeted manual-price verification
+
+Added `tests/test_manual_prices.cjs` and ran its 13 targeted cases together with the 28 neighboring coverage, IPCVA/original-source, modal, localization and organ-withholding checks: **41 passed, 0 failed**. The new cases exercise the production adapter, mocked-fetch file loader and display functions. Coverage includes numeric price/currency/unit validation, latest-date and equal-date selection, native ARS without inherited FX, USD/lb output, both display languages, cards/tooltips/dossiers/coverage/evidence rows, manual chart markers, missing country connections, original organ warnings, removal/restoration, HTML escaping, rejected manual files and rejection of an invalid automatic snapshot.
+
+A full-snapshot case confirms every original Carrefour record, source ledger, source attempt and FX field survives loading and language rerendering unchanged, including the replaced automatic observations and their prior receipts. Both production files remained byte-for-byte unchanged: `data/prices.json` SHA-256 `287d323ab052066369a44280a19fab676f177430558d560c7e38a25d4099177d`; empty `data/manual-prices.json` SHA-256 `123f1dc3b2dd2d2c806685d5311d9bf06d28719762908d1bfde0a08b182add9b`. No application fixes were needed. These are local function/DOM-double/chart-callback checks; browser layout, real D3 rendering, device/assistive-technology behavior and live providers were not checked. No full suite or publication was run.
+
+
+### Gradual entry in the active manual file
+
+Prefilled `data/manual-prices.json` with the ten requested Argentine cuts, ARS and kg, leaving dates/prices null. The adapter now skips rows whose date or price is null, omitted, empty or whitespace-only. Such drafts never mask completed quotes or automatic observations. Once both values are supplied, all six fields and the existing numeric/date/unit/key rules are validated. Zero, false, negative values and numeric strings are not draft blanks; invalid completed rows still reject the manual overlay atomically. Non-object rows and unknown fields still reject.
+
+Five new draft/gradual-completion cases and the prior targeted checks pass together: **46 tests, 0 failures**. Cases cover both markets, completed quotes mixed with drafts, one-field-at-a-time completion, clearing an override, correct error row numbers, strict completed-row validation and preservation of original observations, source ledgers, FX and organ withholding. Tests use in-memory draft worksheets so later owner edits to the active file do not invalidate fixed pending-row expectations. No browser, provider refresh or full suite was run. `data/prices.json` remains unchanged with SHA-256 `287d323ab052066369a44280a19fab676f177430558d560c7e38a25d4099177d`. The active manual file intentionally changed to hold the ten drafts. GitNexus adapter impact remained UNKNOWN/not indexed; the page's sole adapter call site was inspected directly.
+
+
+### Reload-only manual-price edits
+
+`serve.sh` now launches the standard-library `serve_public.py` helper. The public copy still supplies the page, assets and automatic snapshot, while only `/data/manual-prices.json` is opened directly from the project on each GET/HEAD request. Successful manual responses carry `Cache-Control: no-store`; the client already uses `fetch(..., {cache: 'no-store'})`. The route observes saves and atomic file replacement without restart and ignores conditional-cache dates. A server already running the previous launcher requires one restart to adopt this code; subsequent manual-price edits need only saving and reloading. Other public-file changes still need a restart.
+
+The live file is read through non-following file/directory descriptors, checked as a regular file, and bounded to 256 KiB. Missing files return empty manual arrays. Symlink/nonregular replacements are refused, and other project/private paths remain outside the public copy. No source observations or manual drafts were edited by this change. GitNexus launcher impact remained UNKNOWN; its command and documented entry points were inspected directly.
+
+Verification: **7 targeted Python HTTP-handler cases and 18 manual-price integration cases passed**. Handler cases use in-memory HTTP connections, checking successive saves, atomic replacement, cache headers, HEAD/query behavior, missing-file creation/removal, malformed file types, parent/file symlinks, bounded reads/recovery and public-only routes. Existing manual tests cover gradual completion and original source preservation. Shell/Python syntax and whitespace checks pass. Automatic and manual file hashes remain unchanged (`287d323ab052066369a44280a19fab676f177430558d560c7e38a25d4099177d` and `de1e5630b97a4a41e45cdda1815a4f78b8d074c9a65443c919c25824d3aebf94`, respectively). No browser, running-owner-server restart, live-provider request or full suite was performed.
+
+
+### Documentation reconciliation after manual-price reload support
+
+Reviewed all eight active Markdown documents (README, roadmap and the six files under docs). Updated the README, architecture, data pipeline, cut guide, manual entry guide, roadmap and this record to agree on the active ten-cut worksheet, numeric amount/currency/unit fields, draft skipping, original-source preservation, native ARS behavior and save/reload serving. Documented the one-time restart for an already-running old server separately from ongoing manual edits. The README now lists the IPCVA/direct-BCRA source path, source-only refresh commands, relevant files and targeted checks. Architecture and roadmap no longer claim the USDA example is unretained or manual quotes are entirely future work.
+
+Historical report/research scope and dated verification counts/hashes remain historical evidence; the README links each review baseline and the current instructions. The artwork record was reviewed and its dated artwork checks remain applicable to their recorded pass. Documentation impact results were LOW for the resolved files (one to four upstream file relationships, no affected execution processes); the unindexed manual guide and ambiguous README lookup remain graph limitations and were checked directly through their content and links.
+
+Static documentation checks passed: 66 local link targets across the eight active documents, the manual JSON example's numeric/six-field structure, all 25 market-key pairs against the catalog, balanced code fences and whitespace. External links were not re-fetched. No application tests, browser pass or source refresh was rerun for this documentation-only change; the most recent implementation checks remain the separately recorded 18 manual-price plus seven HTTP-handler cases. Both production price files remain unchanged.

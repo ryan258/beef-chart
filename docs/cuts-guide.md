@@ -35,6 +35,7 @@ The core references are [Argentina's SENASA nomenclador, Resolution 1128/1999 an
 | Lomo | Tenderloin | Whole versus portioned, trim, and head/tail inclusion affect comparison |
 | Paleta | Shoulder/clod-region reference | Includes different preparations; flat iron is a particular fabrication, not every paleta |
 | Peceto | Eye-of-round reference | Confirm trim and portioning |
+| Bola de lomo | Sirloin-tip terminology; generic U.S. round-roast price context | IPCVA has a direct Argentine row; the paired U.S. BLS roast category is broader and exact product equivalence remains unverified |
 | Nalga / cuadrada | Round-region references | Country names and survey steak/roast categories are broader than an exact order |
 | Brazuelo / garrón / osobuco | Fore/hind shank or cross-cut shank | Bone, cut thickness, and front/hind origin remain separate fields |
 
@@ -53,4 +54,11 @@ The radar and tenderness/marbling values are editorial heuristics, not measured 
 - **Lengua:** tongue; whole raw tongue and cooked/vinaigrette products are different observations.
 - **Bife de costilla:** retain the bone-in qualification and keep it separate from boneless strip and T-bone.
 
-Achuras are part of many asado traditions; menus and practices vary. These entries do not constitute reviewed offal-safety instructions. Furthermore, stored Carrefour organ observations (*mollejas*, *riñón*, *lengua*) carry unverified unit scales; their comparison prices are withheld while retaining native values as stored evidence only until units and availability are verified. Pecho and Cuadrada dossiers can display their own Argentine catalog observations when those series have evidence; this connection does not establish an exact product match. Prices can be inactive catalog references or missing, and the atlas must not substitute another product's price to fill a gap.
+Achuras are part of many asado traditions; menus and practices vary. These entries do not constitute reviewed offal-safety instructions. Furthermore, stored Carrefour organ observations (*mollejas*, *riñón*, *lengua*) carry unverified unit scales; their comparison prices are withheld while retaining native values as stored evidence only until units and availability are verified. Pecho, Cuadrada and Bola de lomo dossiers use their own connected Argentine series when evidence exists; this connection does not establish an exact product match. Prices can be inactive catalog references or missing, and the atlas must not substitute another product's price to fill a gap.
+
+
+## Reading price coverage and local quotes
+
+The coverage table lists all 24 cuts separately for each country, including missing observations and prices withheld for unresolved unit scales. IPCVA is the primary automatic source for its covered AMBA monthly cuts; other sources retain their own geography, product, date and availability qualifications. Retained retailer observations are dated references, not current offers. The fixed flow/value models and editorial trait radar are illustrations, not measurements calculated from these prices.
+
+You can enter a friend's butcher-shop quote directly in the active manual file using the [manual-price guide](manual-prices.md). Ten Argentine cuts are prefilled; unfinished dates/prices are skipped and valid completed quotes are labeled separately. Save and reload to see an edit. The exact shop wording, city and bone/trim detail can go in `item`; the six-field record does not require extra metadata. Ask for the observation date and an explicit per-kilogram raw-product price, especially for the three organs. A manual quote provides a separate observation; it does not verify the original Carrefour unit scale, gland identity, product equivalence or current stock.

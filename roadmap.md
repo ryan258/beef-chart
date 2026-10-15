@@ -1,6 +1,17 @@
 # Roadmap and evidence status
 
-The October 12 [comprehensive review](reports/Beef%20chart%20comprehensive%20review.md) defines the broader direction. The current implementation is an educational atlas and stored retail-context reference, with low-input exploration. Professional workflows below remain future work.
+Current status reconciled October 15, 2026. The project is a bilingual educational atlas and personal retail-context reference with low-input local quote entry. The October 9, 12 and 14 reports in `reports/` are dated assessments and proposals. They do not make every professional extension below a current requirement or implemented feature.
+
+## October 15 implemented follow-up
+
+- IPCVA is the primary AMBA monthly source for 22 covered beef rows. Matching direct-BCRA USD quote means have separate provenance; original Carrefour observations and their dates/FX remain preserved.
+- USDA's October 9 PDF/text example is retained and its explicit October 3–15 advertisement-ending window parses without the timed-out release-page request. One source-only run accepted 11 observations; unfamiliar future layouts and ongoing provider availability remain unproven.
+- Bola de lomo connects to its own IPCVA observation. All 24 dossiers expose coverage; retained, missing, withheld and manual values are visible, and every visual family labels sourced observations versus illustration. Product equivalence remains qualified.
+- The active manual-price file contains ten prefilled ARS/kg cuts. Fill date and numeric price gradually; unfinished rows are skipped. Valid owner quotes override only display selection while source observations and original organ warnings remain available.
+- Saving manual-price edits and reloading is sufficient through the live, uncached loopback route. Only a server running the older launcher needs one adoption restart; other copied public-file edits still require restarting.
+- Shared automatic semantic validation and same-source stale-input retention are implemented. One previous observation and the separate original-Carrefour archive provide bounded recovery, not a complete immutable history.
+
+The [manual guide](docs/manual-prices.md), [pipeline contract](docs/data-pipeline.md), [architecture](docs/architecture.md) and dated [verification record](docs/TRUTH-HARMONY.md) describe current behavior. Manual/reload checks passed 18 Node integration cases plus seven Python HTTP-handler cases; prior broader display checks and browser evidence remain tied to their earlier passes.
 
 ## Current visual state — October 12–13, 2026
 
@@ -12,7 +23,7 @@ The [artwork record](docs/artwork-prompts.md) contains retained prompts, asset m
 
 Implemented: classified incomplete HTTP-response recovery at retail boundaries; nested catalog shape validation; per-batch catalog/USDA validation before merge; truthful catalog aggregate no-match/partial/error health and nonzero incomplete-refresh results; search that indexes both languages regardless of display language; measured sticky-header anchor offsets; contrasting search-panel focus; loading/ready/unavailable states and active-dossier refresh preserving focus/scroll; Pecho/Cuadrada price mappings; localized chart ticks, legend, percentages, table numbers and new-record geography; matching 600px table-reader behavior; consistent gland-unspecified molleja copy. The final review aligns native amount precision across all evidence views, keeps failed-load recovery distinct from absent observations, and preserves canonical copy for the Other-value dialog when changing language. Focus uses gold on the blue panel and ink inside the white search box.
 
-The bounded follow-up leaves the stored snapshot and artwork untouched. Targeted evidence and residual limits are recorded in [TRUTH-HARMONY.md](docs/TRUTH-HARMONY.md). This correction pass does not implement the later saved-state, butcher-card, source-history or professional-workbench features.
+That October 13 follow-up left the then-stored snapshot and artwork untouched; the later October 15 source refreshes are separate work. Targeted evidence and residual limits are recorded in [TRUTH-HARMONY.md](docs/TRUTH-HARMONY.md). This correction pass does not implement the later saved-state, butcher-card, source-history or professional-workbench features.
 
 ## Phase 1 — Truth and harmony
 
@@ -20,7 +31,7 @@ Implemented: consistent catalog unit/species/form rejection; explicit USDA effec
 
 Also implemented: **C06**, independent BLS/INDEC/monthly-FX attempts with per-source validation, retained observations, native-only INDEC recovery, and one atomic write; **C14**, observation-owned catalog sampling evidence and consistent dossier/table disclosure, with unknown legacy coverage and possible query truncation stated explicitly.
 
-Validation and residual boundaries are recorded in [TRUTH-HARMONY.md](docs/TRUTH-HARMONY.md). Deterministic/local browser checks are not professional, production, real-provider, device/AT, or WCAG acceptance. USDA real-layout acceptance and live official-source compatibility remain unresolved. One previous observation is retained; a complete history store is not implemented. Catalog pagination and delivery-region coverage are not implemented. Source/image rights and specialist crosswalk acceptance remain open. Price values and original observation/FX dates were not refreshed during these changes.
+Validation and residual boundaries are recorded in [TRUTH-HARMONY.md](docs/TRUTH-HARMONY.md). Deterministic/local browser checks are not professional, production, real-provider, device/AT, or WCAG acceptance. One October 9 USDA layout and source-only run are now recorded; acceptance of other layouts and continuing live-source compatibility remains open. One previous observation is retained; a complete history store is not implemented. Catalog pagination and delivery-region coverage are not implemented. Source/image rights and specialist crosswalk acceptance remain open. The original correction passes did not refresh prices; later IPCVA/BCRA and USDA refreshes preserve each observation’s own date and evidence.
 
 ## Phase 2 — Exceptional enthusiast reference
 
@@ -30,7 +41,7 @@ Future work: canonical reviewed catalog expansion; explained substitutes/compari
 
 ## Phase 3 — Practical professional workbench
 
-Reviewed product specifications, private manual supplier quotes, actual or explicitly assumed fabrication yield, usable/portion costing, and reproducible saved/exported scenarios. Exit: a professional compares two real qualified offers and independently reproduces their usable-cost decision.
+Optional extensions build on the implemented owner-entered quote file: reviewed product specifications, qualified private supplier quotes, actual or explicitly assumed fabrication yield, usable/portion costing, and reproducible saved/exported scenarios. Exit: a professional compares two real qualified offers and independently reproduces their usable-cost decision.
 
 ## Phase 4 — Dependable market context
 
