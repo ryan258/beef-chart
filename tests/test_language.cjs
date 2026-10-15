@@ -7,7 +7,7 @@ const vm = require('node:vm');
 const root = path.join(__dirname, '..');
 const translations = fs.readFileSync(path.join(root, 'assets/i18n.js'), 'utf8');
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-const snapshot = JSON.parse(fs.readFileSync(path.join(root, 'data/prices.json'), 'utf8'));
+const snapshot = JSON.parse(fs.readFileSync(path.join(root, 'tests/fixtures/prices_legacy_2026_10_07.json'), 'utf8'));
 const section = (start, end) => html.slice(html.indexOf(start), html.indexOf(end, html.indexOf(start)));
 function setup(search = '', saved = null, blocked = false) {
   const context = vm.createContext({URL, location:{href:'https://example.test/atlas/' + search},

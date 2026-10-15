@@ -14,7 +14,7 @@ const section = (start, end) => {
 function setup() {
   const nodes = new Map(), tables = new Map();
   const context = vm.createContext({URL, location:{href:'https://example.test/?lang=en'},
-    snapshot:JSON.parse(fs.readFileSync(path.join(root, 'data/prices.json'), 'utf8')),
+    snapshot:JSON.parse(fs.readFileSync(path.join(root, 'tests/fixtures/prices_legacy_2026_10_07.json'), 'utf8')),
     document:{querySelector:s => {if (!nodes.has(s)) nodes.set(s, {}); return nodes.get(s);}, querySelectorAll:() => []},
     renderScatter:() => {}, renderTable:(id, caption, headers, rows) => tables.set(id, {caption,headers,rows})});
   vm.runInContext(fs.readFileSync(path.join(root, 'assets/i18n.js'), 'utf8')

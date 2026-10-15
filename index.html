@@ -847,6 +847,13 @@ header.site-header{
 }
 .market-sub{font-size:.78rem;color:var(--mut);margin:-4px 0 10px}
 .cut-card-price .na{color:var(--mut-light);font-size:.8em}
+.evidence-label{display:inline-block;font-size:11px;font-weight:600;line-height:1.5;border:1px solid var(--line-dark);padding:3px 7px;margin:0 0 8px;color:var(--ink)}
+.price-state{display:inline-block;font-size:11px;font-weight:600;line-height:1.5;padding:2px 6px;border:1px solid var(--line-dark);margin:3px 0}
+[data-price-state="retained"] .price-state{border-style:dashed}
+[data-price-state="missing"],[data-price-state="withheld"]{border-left:3px solid var(--mut);padding-left:8px}
+.coverage-summary{white-space:pre-line;font-size:12px;line-height:1.7;margin:8px 0}
+.legend.price-legend{flex-wrap:wrap;gap:8px 16px}
+.cut-card .cut-card-price{font-size:12px}
 .data-note{font-size:.76rem;line-height:1.5;color:var(--mut);margin:-24px 0 40px;max-width:900px}
 .chart-empty{display:flex;align-items:center;justify-content:center;height:240px;color:var(--mut);font-size:.9rem;text-align:center}
 .legend{display:flex;gap:16px;font-family:'Oswald',sans-serif;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin:-4px 0 4px}
@@ -854,6 +861,7 @@ header.site-header{
 </style>
 <link rel="stylesheet" href="assets/bauhaus.css">
 <script src="assets/i18n.js"></script>
+<script src="assets/manual-prices.js"></script>
 </head>
 <body>
 <a class="skip-link" href="#explore" data-i18n>Skip to the cut explorer</a>
@@ -901,7 +909,7 @@ header.site-header{
       <div class="hero-art">
         <div class="art-stripes" aria-hidden="true"></div>
         <div class="cow-disc"><img src="assets/hero_cow.webp" alt="Halftone portrait of a horned, white-faced cow" fetchpriority="high" data-i18n-alt="Halftone portrait of a horned, white-faced cow"></div>
-        <span class="art-caption" data-i18n>Fig. 01 / The starting point</span>
+        <span class="art-caption" data-i18n>Fig. 01 / Editorial illustration</span>
         <span class="art-plus" aria-hidden="true">+</span>
         <div class="art-square" aria-hidden="true"><span>↗</span></div>
       </div>
@@ -920,8 +928,12 @@ header.site-header{
       </div>
       <p class="section-sub" data-i18n>Select a cut to explore its character</p>
 
+      <p class="evidence-label" data-i18n>Anatomical illustration</p>
       <p class="reference-note" data-i18n>Schematic regions, not cutting specifications. Translated names and price pairs require preparation and source qualifications. Hatching marks lomo, entraña and peceto as layered references.</p>
       <details class="reference-directory"><summary data-i18n>Browse all cuts and U.S. primals</summary><div id="cut-directory"></div><div id="primal-directory"></div></details>
+      <p id="coverage-summary" class="coverage-summary" role="status"></p>
+      <p id="manual-price-status" class="reference-note" role="status"></p>
+      <details class="chart-data" id="cut-coverage"><summary data-i18n>See price coverage for all 24 cuts</summary><p class="reference-note" data-i18n>Coverage counts connected observations, not equivalent purchase specifications. Retained references keep their original dates. Missing prices are never substituted.</p><div id="coverage-table"></div></details>
       <div class="cows-compare-grid">
         <!-- Retail Cuts Cow -->
         <div class="cow-column">
@@ -959,10 +971,11 @@ header.site-header{
       <div class="card-box">
         <div class="market-header">
           <h4 data-i18n>Stored Market Snapshot</h4>
-          <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <svg aria-hidden="true" viewBox="0 0 24 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="1 13 8 7 14 11 23 2"/>
           </svg>
         </div>
+        <p class="evidence-label" data-i18n>Sourced observations · stored</p>
         <div class="market-body">
           <div>
             <div class="market-name" data-i18n>Ground beef, US retail</div>
@@ -972,6 +985,7 @@ header.site-header{
           <img class="market-steak-img" src="assets/cut_chuck.webp" alt="">
         </div>
         <div class="market-sub" id="market-sub"></div>
+        <p class="reference-note" data-i18n>Steak image: illustration.</p>
         <a class="card-bottom-link" href="#data-scatter" data-i18n>View Market Data →</a>
       </div>
 
@@ -1009,6 +1023,7 @@ header.site-header{
       <div class="section-tag blue">
         <h3 class="section-title" data-i18n>From Animal To Table</h3>
       </div>
+      <p class="evidence-label" data-i18n>Illustrative model · fixed inputs</p>
       <p class="section-sub" data-i18n>Illustrative allocation of 100 teaching units · not measured carcass yield</p>
 
       <svg id="sankey-chart-svg" aria-hidden="true"></svg><details class="chart-data" id="flow-data"><summary data-i18n>Read the flow as a table</summary><div id="flow-table"></div></details>
@@ -1021,9 +1036,12 @@ header.site-header{
       <div class="section-tag ochre">
         <h3 class="section-title" data-i18n>Cuts In Context</h3>
       </div>
+      <p class="evidence-label" data-i18n>Sourced observations · stored</p>
       <p class="section-sub" data-i18n>Stored retail context in USD/lb · sources, dates, and product specifications differ</p>
 
-      <div class="legend"><span><i style="background:var(--navy)"></i>Argentina</span><span><i style="background:var(--red)"></i><span data-i18n>United States</span></span></div>
+      <div class="legend price-legend"><span><i style="background:var(--navy)"></i>Argentina</span><span><i style="background:var(--red)"></i><span data-i18n>United States</span></span><span data-i18n>○ / * Retained reference</span><span data-i18n>† Manual quote</span></div>
+      <p class="reference-note" data-i18n>Only connected USD/lb observations are plotted. Hollow dots and * mark retained references; dashed lines include a retained price. Native-only, withheld and missing prices appear in the coverage table.</p>
+      <a href="#cut-coverage" data-i18n>Check coverage and missing prices →</a>
       <svg id="scatter-chart-svg" aria-hidden="true"></svg><details class="chart-data" id="price-data"><summary data-i18n>Read every price and qualification</summary><div id="price-table"></div></details>
 
       <a class="card-bottom-link" href="#price-data" data-i18n>See The Data →</a>
@@ -1037,8 +1055,10 @@ header.site-header{
       <div class="section-tag blue">
         <h3 class="section-title" data-i18n>Where Value Lives</h3>
       </div>
+      <p class="evidence-label" data-i18n>Illustrative model · fixed inputs</p>
       <p class="section-sub" data-i18n>Fixed illustrative retail-value shares · not weight, yield, or current valuation</p>
 
+      <p class="reference-note" data-i18n>This illustration does not use the stored cut prices.</p>
       <svg id="treemap-chart-svg" aria-hidden="true"></svg><details class="chart-data"><summary data-i18n>Read the illustrative value shares</summary><div id="value-table"></div></details>
 
       <a class="card-bottom-link" href="#explore" data-i18n>Explore Value →</a>
@@ -1053,6 +1073,7 @@ header.site-header{
           Different stories.<br>
           More understanding.
         </h3>
+        <p class="evidence-label" data-i18n>Editorial illustration</p>
         <div class="quote-rule"></div>
       </div>
       <div class="quote-graphic-bottom">
@@ -1074,7 +1095,9 @@ header.site-header{
           <button style="width:28px;height:28px;border-radius:50%;border:1px solid var(--line-dark);background:#fff;display:flex;align-items:center;justify-content:center;font-size:.8rem" aria-label="Inspect next cut" id="btn-next-cut" data-i18n-aria-label="Inspect next cut">›</button>
         </div>
       </div>
+      <p class="evidence-label" data-i18n>Sourced observations · stored</p>
       <p class="section-sub" data-i18n>Featured cuts · retail price per lb</p>
+      <p class="reference-note" data-i18n>Cut images are illustrations, not photographs of the surveyed products. Prices retain their source, date and status.</p>
 
       <div class="popular-cuts-grid" id="popular-cuts-container">
         <!-- 6 Popular Cut Cards -->
@@ -1101,7 +1124,7 @@ header.site-header{
         <div class="cut-card" role="button" tabindex="0" data-cut="pecho">
           <img src="assets/cut_brisket.webp" alt="Brisket" data-i18n-alt="Brisket">
           <div class="cut-card-name" data-i18n>Brisket</div>
-          <div class="cut-card-price" data-us="brisket_whole"></div>
+          <div class="cut-card-price" data-ar="pecho" data-us="brisket_whole"></div>
         </div>
         <div class="cut-card" role="button" tabindex="0" data-cut="cuadril">
           <img src="assets/cut_sirloin.webp" alt="Sirloin" data-i18n-alt="Sirloin">
@@ -1125,6 +1148,7 @@ header.site-header{
 
   <section class="card-box extra-cuts" aria-labelledby="extra-heading">
     <h2 id="extra-heading" class="section-title" data-i18n>Beyond the usual cuts</h2>
+    <p class="reference-note" data-i18n>Cut images are illustrations, not photographs of the surveyed products. Prices retain their source, date and status.</p>
     <p data-i18n>Bone-in steak, sweetbreads, kidney, and tongue. Argentine retail listings; US prices are not yet connected.</p>
     <div class="extra-price-grid">
       <button class="extra-cut" data-cut="bife-costilla"><img src="assets/cut_bife_costilla.webp" alt="Bife de costilla" class="extra-cut-img"><b>Bife de costilla</b><span data-i18n>Bone-in steak</span><span class="cut-card-price" data-ar="bife_costilla" data-i18n>Not available</span></button>
@@ -1172,7 +1196,7 @@ const RETAIL_CUTS = [
   {id:'tapa',arSeries:'tapa',n:'Tapa de cuadril',eq:'Picanha / Coulotte',us:'sirloin',color:'#e5a93c',p:'756,140 816,145 850,162 847,211 778,200',how:'grill',tenderness:8.2,marbling:3.6,info:'Rump cap with thick fat layer. Brazilian picanha favorite.'},
   {id:'cuadril',arSeries:'cuadril',usSeries:'sirloin_steak',n:'Cuadril',eq:'Top sirloin',us:'sirloin',color:'#d99028',p:'695,137 756,140 778,200 847,211 847,269 766,264 685,251',how:'grill',tenderness:6.8,marbling:2.2,info:'Upper rump. Lean, beefy, excellent for everyday grilling and roasts.'},
   {id:'colita',arSeries:'colita',usSeries:'tri_tip',n:'Colita de cuadril',eq:'Tri-tip',us:'sirloin',color:'#e09b30',p:'685,251 766,264 737,314 714,328',how:'grill',tenderness:7.6,marbling:2.6,info:'Triangular muscle at the bottom of the sirloin. Santa Maria BBQ star.'},
-  {id:'bola',usSeries:'round_roast',n:'Bola de lomo',eq:'Sirloin tip',us:'round',color:'#b84232',p:'714,328 737,314 779,301 781,390 754,428 719,403',how:'roast',tenderness:5.0,marbling:1.4,info:'Front of thigh. Lean everyday steaks, milanesa, and stir-fry.'},
+  {id:'bola',arSeries:'bola_lomo',usSeries:'round_roast',n:'Bola de lomo',eq:'Sirloin tip',us:'round',color:'#b84232',p:'714,328 737,314 779,301 781,390 754,428 719,403',how:'roast',tenderness:5.0,marbling:1.4,info:'Front of thigh. Lean everyday steaks, milanesa, and stir-fry.'},
   {id:'nalga',arSeries:'nalga',usSeries:'round_steak',n:'Nalga',eq:'Top round',us:'round',color:'#a23024',p:'766,264 847,269 846,336 781,340 779,301 737,314',how:'roast',tenderness:4.8,marbling:1.2,info:'Inner thigh. Commonly used for milanesas; traditions and preparation vary.'},
   {id:'cuadrada',arSeries:'cuadrada',usSeries:'bottom_round',n:'Cuadrada',eq:'Bottom round',us:'round',color:'#942820',p:'781,340 846,336 837,428 754,428 781,390',how:'roast',tenderness:3.6,marbling:1.2,info:'Outer rear thigh. Lean, suited for pot roasts or deli roast beef.'},
   {id:'garron',n:'Garrón',eq:'Hind shank',us:'shank',color:'#c46d20',p:'754,428 837,428 840,545 766,545',how:'braise',tenderness:1.5,marbling:2.0,info:'Hind leg shank, rich in gelatin for locro and winter stews.'},
@@ -1201,6 +1225,7 @@ const EXTRA_CUTS = [
 ];
 const ALL_CUTS = [...RETAIL_CUTS, ...EXTRA_CUTS];
 const CUT_RELATIONSHIPS = {
+  bola:{type:'Argentine cut price paired with a generic U.S. round-roast series; exact product equivalence unverified'},
   entrana:{type:'Anatomical reference: outside skirt; generic price identity unresolved', source:'https://usmefsudamerica.org/corte-de-res/'},
   vacio:{type:'Partial anatomical overlap; not an exact flank specification', source:'https://www.argentina.gob.ar/normativa/nacional/resoluci%C3%B3n-1128-1999-60581/texto'},
   matambre:{type:'Superficial-muscle reference; not flank flap', source:'https://www.argentina.gob.ar/normativa/nacional/resoluci%C3%B3n-1128-1999-60581/texto'},
@@ -1242,6 +1267,8 @@ const BY_ID = Object.fromEntries(ALL_CUTS.map(c=>[c.id, c]));
 // 1b. STORED PRICES: mixed-source snapshot written by the explicit refresh pipeline.
 let PRICES = null;
 let priceLoadState = 'loading';
+let manualPriceCount = 0;
+let manualPriceError = null;
 const positiveNumber = n => typeof n === 'number' && Number.isFinite(n) && n > 0;
 const usd = n => positiveNumber(n) ? `${language === 'es-AR' ? 'US$' : '$'}${n.toLocaleString(locale(), {minimumFractionDigits:2, maximumFractionDigits:2})}` : t('Not available');
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -1252,23 +1279,26 @@ const monthLabel = p => {
 };
 // A positive stored conversion is not comparable while its unit scale is unresolved.
 const validPrice = p => p && !p.unit_scale_unverified && positiveNumber(p.usd_lb);
-const priceOf = c => ({ar:c?.arSeries ? PRICES?.ar?.[c.arSeries] ?? null : null, us:c?.usSeries ? PRICES?.us?.[c.usSeries] ?? null : null});
+const priceOf = c => ({ar:c ? PRICES?.ar?.[c.arSeries || c.id] ?? null : null, us:c ? PRICES?.us?.[c.usSeries || c.id] ?? null : null});
 const priceLine = (ar, us, layout = 'compact') => {
   const parts = [];
   for (const [country, p] of [['US',us],['AR',ar]]) {
-    if (!p) continue;
+    if (!p) {
+      parts.push(layout === 'tooltip' ? `<div class="tooltip-price-row" data-price-state="missing"><b>${escapeHtml(t(country === 'US' ? 'United States' : 'Argentina'))}</b><p class="tooltip-note">${t('Missing')} · ${t('No observation in this snapshot')}</p></div>` : `<span data-price-state="missing">${country} · ${t('Missing')}</span>`);
+      continue;
+    }
     const price = p.unit_scale_unverified ? t('Price withheld') : validPrice(p) ? usd(p.usd_lb) + '/lb' : positiveNumber(p.ars_kg) ? formatNumber(p.ars_kg) + t(" ARS/kg; USD unavailable") : t('Not available');
     if (layout === 'tooltip') {
-      parts.push(`<div class="tooltip-price-row"><div class="tooltip-price-heading"><span class="tooltip-market">${escapeHtml(t(country === 'US' ? 'United States' : 'Argentina'))}</span><strong class="tooltip-price">${escapeHtml(price).replace('/lb', '<span class="tooltip-unit"> / lb</span>')}</strong></div><p class="tooltip-note">${escapeHtml(recordStatus(p))}</p><span class="tooltip-date">${escapeHtml(monthLabel(p.period))}</span></div>`);
+      parts.push(`<div class="tooltip-price-row"><div class="tooltip-price-heading"><span class="tooltip-market">${escapeHtml(t(country === 'US' ? 'United States' : 'Argentina'))}</span><strong class="tooltip-price">${escapeHtml(price).replace('/lb', '<span class="tooltip-unit"> / lb</span>')}</strong></div><p class="tooltip-note">${escapeHtml(t(coverageLabel(p)))} · ${escapeHtml(p.source || t('Unknown source'))} · ${escapeHtml(recordStatus(p))}</p><span class="tooltip-date">${escapeHtml(monthLabel(p.period))}</span></div>`);
     } else {
-      parts.push(`${country} ${price}<small>${escapeHtml(recordStatus(p))} · ${escapeHtml(p.period || t('date unknown'))}</small>`);
+      parts.push(`<span data-price-state="${coverageState(p)}">${country} ${price}<small><b>${escapeHtml(t(coverageLabel(p)))}</b> · ${escapeHtml(p.source || t('Unknown source'))} · ${escapeHtml(p.period || t('date unknown'))}<br>${escapeHtml(recordStatus(p))}</small></span>`);
     }
   }
   if (layout === 'tooltip') return parts.length ? `<div class="tooltip-prices">${parts.join('')}</div>` : `<p class="tooltip-note">${t('Not available')}</p>`;
   return parts.join('<br>') || `<span class="na">${t('Not available')}</span>`;
 };
 function validPeriod(value) {
-  if (typeof value !== 'string' || !/^\d{4}-\d{2}(-\d{2})?$/.test(value)) return false;
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}(-\d{2})?$/.test(value) || value.startsWith('0000-')) return false;
   const full = value.length === 7 ? value + '-01' : value;
   const date = new Date(full + 'T12:00:00Z');
   return !Number.isNaN(date.getTime()) && date.toISOString().slice(0,10) === full;
@@ -1288,25 +1318,160 @@ function validateSampling(p) {
   if (s.seller_ids.length > known || Boolean(s.seller_ids.length) !== Boolean(known)) throw new Error('Inconsistent sampling sellers');
   if (!('region' in s) || (s.region !== null && (typeof s.region !== 'string' || !s.region.trim()))) throw new Error('Invalid sampling region');
 }
-function validatePrices(data) {
-  if (!data || data.schema_version !== 2 || typeof data.fx !== 'object' || !data.fx || !data.source_status || Array.isArray(data.source_status) || typeof data.source_status !== 'object') throw new Error('Unsupported snapshot contract');
-  for (const state of Object.values(data.source_status)) if (!state || typeof state !== 'object' || typeof state.status !== 'string') throw new Error('Invalid source attempt state');
-  for (const group of ['us','ar']) {
-    if (!data[group] || typeof data[group] !== 'object' || Array.isArray(data[group])) throw new Error('Missing observation group');
-    for (const p of Object.values(data[group])) {
-      if (!p || !validPeriod(p.period) || !positiveNumber(p[group === 'ar' ? 'ars_kg' : 'usd_lb'])) throw new Error('Invalid native observation');
-      for (const key of ['label','source','method','geography','provenance_status','observation_status','availability','fx_basis','fx_provenance','retrieved_at']) if (p[key] != null && typeof p[key] !== 'string') throw new Error('Invalid evidence text');
-      if ('unit_scale_unverified' in p && typeof p.unit_scale_unverified !== 'boolean') throw new Error('Invalid unit-scale flag');
-      validateSampling(p);
-      for (const key of ['usd_lb','prev_usd_lb','fx_ars_per_usd']) if (p[key] != null && !positiveNumber(p[key])) throw new Error('Invalid price or FX');
-      for (const key of ['fx_date','prev_period','publication_date']) if (p[key] != null && !validPeriod(p[key])) throw new Error('Invalid date');
-      if (p.fx_date && (p.fx_date.slice(0,7) > p.period.slice(0,7) || (p.period.length === 10 && p.fx_date > p.period))) throw new Error('Future FX date');
+// v2 semantic rules mirror price_contract.py; shared fixtures check both runtimes.
+const ATTEMPT_STATUSES = ['legacy_unverified','unknown','not_attempted','ok','no_match','partial','error','partial_error'];
+const EVIDENCE_STATUSES = {
+  provenance_status:['legacy_unverified','parsed_unverified','unknown'],
+  observation_status:['legacy_unverified','observed','reference_only','unverified_layout','retained_no_match','retained_after_error','unknown'],
+  availability:['unknown','in_stock','out_of_stock'],
+  fx_provenance:['unknown','recorded','inferred_from_legacy_snapshot'],
+  adapter_status:['unknown','unresolved_real_layout'],
+  effective_period_status:['unknown','unverified_report_date']
+};
+const evidenceObject = value => value !== null && typeof value === 'object' && !Array.isArray(value);
+function validTimestamp(value) {
+  if (typeof value !== 'string' || value.trim() !== value || !/^\d{4}-\d{2}-\d{2}T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d{1,6})?(?:Z|[+-](?:[01]\d|2[0-3]):[0-5]\d)$/.test(value) || !validPeriod(value.slice(0,10))) return false;
+  const date = new Date(value);
+  return Number.isFinite(date.getTime()) && date.getUTCFullYear() >= 1 && date.getUTCFullYear() <= 9999;
+}
+function validateJsonTree(data) {
+  const ancestors = new Set();
+  let nodes = 0;
+  function visit(value, depth) {
+    if (depth > 12 || ++nodes > 50000) throw new Error('Evidence metadata limit exceeded');
+    if (value === null || typeof value === 'boolean') return;
+    if (typeof value === 'string') {
+      if ([...value].length > 16384) throw new Error('Evidence text limit exceeded');
+      return;
+    }
+    if (typeof value === 'number') {
+      if (!Number.isFinite(value) || (Number.isInteger(value) && !Number.isSafeInteger(value))) throw new Error('Invalid JSON evidence number');
+      return;
+    }
+    if ((!Array.isArray(value) && Object.prototype.toString.call(value) !== '[object Object]') || ancestors.has(value)) throw new Error('Invalid or cyclic evidence metadata');
+    const entries = Object.entries(value);
+    if (entries.length > 1000) throw new Error('Evidence collection limit exceeded');
+    ancestors.add(value);
+    try {
+      for (const [key, child] of entries) {
+        if ([...key].length > 16384) throw new Error('Invalid evidence key');
+        visit(child, depth + 1);
+      }
+    } finally { ancestors.delete(value); }
+  }
+  visit(data, 0);
+}
+function validateTimestamps(obj, fields) {
+  for (const field of fields) if (obj[field] != null && !validTimestamp(obj[field])) throw new Error(`Invalid timestamp ${field}`);
+}
+const timestampDay = value => new Date(value).toISOString().slice(0,10);
+const periodAfter = (left, right) => left.slice(0,7) > right.slice(0,7) || (left.length === 10 && right.length === 10 && left > right);
+function validateAttempt(state) {
+  if (!evidenceObject(state) || !ATTEMPT_STATUSES.includes(state.status)) throw new Error('Invalid source attempt state');
+  validateTimestamps(state, ['attempted_at']);
+  for (const field of ['error_type','note']) if (state[field] != null && typeof state[field] !== 'string') throw new Error('Invalid source attempt text');
+  if (state.observation_date != null && !validPeriod(state.observation_date)) throw new Error('Invalid attempt observation date');
+  if ('coverage' in state && (!evidenceObject(state.coverage) || Object.values(state.coverage).some(v => ![...ATTEMPT_STATUSES,...EVIDENCE_STATUSES.observation_status].includes(v)))) throw new Error('Invalid source coverage');
+  if ('native_only' in state && (!Array.isArray(state.native_only) || state.native_only.some(k => typeof k !== 'string' || !k.trim()) || new Set(state.native_only).size !== state.native_only.length)) throw new Error('Invalid native-only coverage');
+}
+function validatePriceRecord(p, group, today, previous = false) {
+  if (!evidenceObject(p) || !validPeriod(p.period)) throw new Error('Invalid observation period');
+  for (const field of ['label','source','series','method','market_stage','geography','fx_basis','sampling_note','fallback_reason']) if (p[field] != null && typeof p[field] !== 'string') throw new Error(`Invalid evidence text ${field}`);
+  for (const [field, allowed] of Object.entries(EVIDENCE_STATUSES)) if (p[field] != null && !allowed.includes(p[field])) throw new Error(`Invalid evidence status ${field}`);
+  validateTimestamps(p, ['retrieved_at','last_attempt_at','availability_as_of']);
+  if ('unit_scale_unverified' in p && typeof p.unit_scale_unverified !== 'boolean') throw new Error('Invalid unit-scale flag');
+  validateSampling(p);
+  if (p.listings != null) {
+    if (!Array.isArray(p.listings)) throw new Error('Invalid listing evidence');
+    for (const listing of p.listings) {
+      if (!evidenceObject(listing)) throw new Error('Invalid listing evidence');
+      for (const field of ['ars_kg','unit_multiplier']) if (listing[field] != null && !positiveNumber(listing[field])) throw new Error('Invalid listing amount');
+      if (listing.available != null && typeof listing.available !== 'boolean') throw new Error('Invalid listing availability');
+      for (const field of ['name','url','measurement_unit','species','product_form','species_evidence','form_evidence']) if (listing[field] != null && typeof listing[field] !== 'string') throw new Error('Invalid listing text');
+      for (const field of ['product_id','sku_id','seller_id']) if (listing[field] != null && typeof listing[field] !== 'string' && !Number.isSafeInteger(listing[field])) throw new Error('Invalid listing identifier');
     }
   }
-  for (const rate of [data.fx.ars_per_usd, data.fx.latest?.ars_per_usd]) if (rate != null && !positiveNumber(rate)) throw new Error('Invalid top-level FX');
+  for (const field of ['products','stores']) if (p[field] != null && (!Number.isSafeInteger(p[field]) || p[field] < 0)) throw new Error(`Invalid count ${field}`);
+  if (!positiveNumber(p[group === 'ar' ? 'ars_kg' : 'usd_lb'])) throw new Error('Invalid native observation');
+  for (const field of ['usd_lb','prev_usd_lb','fx_ars_per_usd']) if (p[field] != null && !positiveNumber(p[field])) throw new Error(`Invalid price or FX ${field}`);
+  for (const field of ['fx_date','prev_period','publication_date','effective_start','effective_end']) if (p[field] != null && (!validPeriod(p[field]) || (['publication_date','effective_start','effective_end'].includes(field) && p[field].length !== 10))) throw new Error(`Invalid date ${field}`);
+  const {period, effective_start:start, effective_end:end, publication_date:publication} = p;
+  if (start && end && start > end) throw new Error('Reversed effective interval');
+  if (end && (period.length === 10 ? end : end.slice(0,7)) !== period) throw new Error('Observation period differs from effective end');
+  if (start && periodAfter(start, period)) throw new Error('Effective start follows observation period');
+  const retrievedDay = p.retrieved_at ? timestampDay(p.retrieved_at) : today;
+  const knownBy = retrievedDay < today ? retrievedDay : today;
+  if (publication && publication > knownBy) throw new Error('Future publication date');
+  const printedEndWindow = p.interval_basis === 'advertisement_ending_dates_printed_in_pdf';
+  const day = value => Date.parse(value + 'T00:00:00Z') / 86400000;
+  if (printedEndWindow && (group !== 'us' || p.source !== 'USDA ad survey' || !start || !end || !publication || publication < start || publication > end || day(end) - day(start) > 13)) throw new Error('Invalid USDA advertisement ending window');
+  if (periodAfter(period, knownBy)) {
+    const advertised = p.source === 'USDA ad survey' && start && end && publication;
+    if (!advertised || day(end) - day(start) > (printedEndWindow ? 13 : 6) || day(end) - day(publication) > 14) throw new Error('Unsupported future observation period');
+  }
+  if (p.prev_period && periodAfter(p.prev_period, period)) throw new Error('Previous period follows observation');
+  if (p.fx_date && (periodAfter(p.fx_date, period) || periodAfter(p.fx_date, knownBy))) throw new Error('Future FX date');
+  if (group === 'ar') {
+    const rate = p.fx_ars_per_usd, converted = p.usd_lb;
+    if (['INDEC','IPCVA'].includes(p.source) && p.fx_date && p.fx_date.slice(0,7) !== period.slice(0,7)) throw new Error('Monthly FX month differs from observation');
+    if (['recorded','inferred_from_legacy_snapshot'].includes(p.fx_provenance) && (rate == null || !p.fx_date)) throw new Error('Incomplete claimed FX lineage');
+    if (rate != null && converted != null) {
+      const expected = p.ars_kg / rate / 2.2046226;
+      const tolerance = p.source === 'Carrefour AR' ? 0.005 : 1e-9;
+      if (!positiveNumber(expected) || Math.abs(converted - expected) > tolerance + 1e-12 * Math.max(Math.abs(converted), Math.abs(expected))) throw new Error('Inconsistent USD conversion');
+    }
+  }
+  if (p.previous_observation != null) {
+    if (previous) throw new Error('Nested previous observation exceeds one level');
+    validatePriceRecord(p.previous_observation, group, today, true);
+  }
+}
+function validatePrices(data, asOf = null) {
+  validateJsonTree(data);
+  if (!evidenceObject(data) || data.schema_version !== 2 || !evidenceObject(data.fx) || !evidenceObject(data.source_status)) throw new Error('Unsupported snapshot contract');
+  asOf = asOf ?? new Date().toISOString();
+  if (!validTimestamp(asOf)) throw new Error('Invalid validation clock');
+  const today = timestampDay(asOf);
+  validateTimestamps(data, ['fetched','generated_at']);
+  if (data.qualification_note != null && typeof data.qualification_note !== 'string') throw new Error('Invalid qualification note');
+  if ('sources' in data && (!evidenceObject(data.sources) || Object.values(data.sources).some(v => v != null && typeof v !== 'string'))) throw new Error('Invalid source descriptions');
+  if (data.fx.latest != null && !evidenceObject(data.fx.latest)) throw new Error('Invalid latest FX object');
+  for (const [fx, field] of [[data.fx,'period'],[data.fx.latest ?? {},'date']]) {
+    if (fx.ars_per_usd != null && !positiveNumber(fx.ars_per_usd)) throw new Error('Invalid top-level FX rate');
+    if (fx[field] != null && (!validPeriod(fx[field]) || fx[field].length !== (field === 'period' ? 7 : 10) || periodAfter(fx[field], today))) throw new Error('Invalid top-level FX date');
+    validateTimestamps(fx, ['monthly_retrieved_at','retrieved_at']);
+    for (const key of ['series','source','basis']) if (fx[key] != null && typeof fx[key] !== 'string') throw new Error('Invalid FX context');
+  }
+  for (const field of ['source_status','catalog_attempts']) {
+    if (field === 'catalog_attempts' && data[field] == null) continue;
+    if (!evidenceObject(data[field])) throw new Error('Invalid attempt collection');
+    Object.values(data[field]).forEach(validateAttempt);
+  }
+  for (const group of ['us','ar']) {
+    if (!evidenceObject(data[group])) throw new Error('Missing observation group');
+    for (const p of Object.values(data[group])) validatePriceRecord(p, group, today);
+  }
+  if ('ar_sources' in data) {
+    if (!evidenceObject(data.ar_sources)) throw new Error('Invalid Argentine source collection');
+    for (const [source, records] of Object.entries(data.ar_sources)) {
+      if (!source || !evidenceObject(records)) throw new Error('Invalid Argentine source collection');
+      for (const p of Object.values(records)) {
+        validatePriceRecord(p, 'ar', today);
+        if (p.source !== source) throw new Error('Argentine source identity mismatch');
+      }
+    }
+  }
+  if ('carrefour_originals' in data) {
+    if (!evidenceObject(data.carrefour_originals)) throw new Error('Invalid original Carrefour collection');
+    for (const p of Object.values(data.carrefour_originals)) {
+      validatePriceRecord(p, 'ar', today);
+      if (p.source !== 'Carrefour AR') throw new Error('Original Carrefour source identity mismatch');
+    }
+  }
   return data;
 }
 function recordStatus(p) {
+  if (p.manual_entry) return t('Manual quote; entered by owner; availability unverified');
   const status = p.observation_status === 'retained_no_match' ? t('Retained reference; no match in latest attempt')
     : p.observation_status === 'retained_after_error' ? t('Retained reference; latest attempt failed')
     : p.availability === 'out_of_stock' ? t('Out-of-stock catalog reference')
@@ -1316,6 +1481,51 @@ function recordStatus(p) {
     : p.source === 'Carrefour AR' ? t('In stock at observation; not today’s offer') : t('Dated reference observation');
   return (p.unit_scale_unverified ? t('Unverified unit scale; price withheld · ') : '') + status;
 }
+function isRetained(p) {
+  return Boolean(p && ['retained_after_error','retained_no_match'].includes(p.observation_status));
+}
+function coverageState(p) {
+  if (!p) return 'missing';
+  if (p.unit_scale_unverified) return 'withheld';
+  if (p.manual_entry) return 'manual';
+  if (isRetained(p)) return 'retained';
+  if (!validPrice(p)) return positiveNumber(p.ars_kg) ? 'native' : 'withheld';
+  return 'observed';
+}
+function coverageLabel(p) {
+  if (p?.manual_entry) return positiveNumber(p.ars_kg) ? 'Manual quote · native ARS/kg' : 'Manual quote · native USD/lb';
+  return ({missing:'Missing',withheld:'Price withheld',retained:'Retained reference',native:'Native only · USD unavailable',observed:'Dated observation'})[coverageState(p)];
+}
+function missingCoverage(series) {
+  return t(series ? 'No observation in this snapshot' : 'No connected price series');
+}
+function coverageText(p, series) {
+  if (!p) return `${t('Missing')} · ${missingCoverage(series)}`;
+  const price = p.unit_scale_unverified ? '' : validPrice(p) ? `${usd(p.usd_lb)}/lb · ` : positiveNumber(p.ars_kg) ? `${formatNumber(p.ars_kg)} ARS/kg · ` : '';
+  return `${t(coverageLabel(p))} · ${price}${recordContext(p)}`;
+}
+function renderCoverage() {
+  const summary = $('#coverage-summary');
+  if (!PRICES) {
+    const message = t(priceLoadState === 'loading' ? 'Loading stored prices…' : 'Price data unavailable');
+    summary.textContent = message;
+    renderTable('coverage-table',t('Cut price coverage'),[t('Status')],[[message]]);
+    return;
+  }
+  const lines = ['ar','us'].map(country => {
+    const counts = {observed:0,native:0,retained:0,withheld:0,missing:0,manual:0};
+    ALL_CUTS.forEach(c => counts[coverageState(priceOf(c)[country])]++);
+    const name = t(country === 'ar' ? 'Argentina' : 'United States');
+    return t`${name}: ${counts.observed + counts.native} dated observations · ${counts.retained} retained references · ${counts.withheld} withheld · ${counts.missing} missing.` + (counts.manual ? ' ' + t`${counts.manual} manual quotes.` : '');
+  });
+  const paired = ALL_CUTS.filter(c => { const p = priceOf(c); return validPrice(p.ar) && validPrice(p.us); }).length;
+  lines.push(t`${paired} of ${ALL_CUTS.length} cuts have USD/lb observations on both sides; this does not establish product equivalence.`);
+  summary.textContent = lines.join('\n');
+  renderTable('coverage-table',t('Cut price coverage'),[t('Cut'),t('Argentina'),t('United States')],ALL_CUTS.map(c => {
+    const p = priceOf(c);
+    return [c.n, coverageText(p.ar,c.arSeries), coverageText(p.us,c.usSeries)];
+  }));
+}
 function retainedPriceEvidence(p) {
   const native = positiveNumber(p.ars_kg) ? t`${formatNumber(p.ars_kg)} recorded as ARS/kg; ` : '';
   const converted = positiveNumber(p.usd_lb) ? t`${usd(p.usd_lb)}/lb recorded conversion` : t('USD conversion unavailable');
@@ -1324,7 +1534,8 @@ function retainedPriceEvidence(p) {
 function recordContext(p) {
   if (!p) return t('No observation in this snapshot');
   const period = p.effective_period_status === 'unverified_report_date' ? t`Stored report label ${p.period}; feature interval unverified` : t`Observation ${p.period}`;
-  return `${p.source || t('Unknown source')} · ${t(p.method || 'method unknown')} · ${t(p.geography || 'region unknown')} · ${period} · ${recordStatus(p)}`;
+  const endingWindow = p.interval_basis === 'advertisement_ending_dates_printed_in_pdf' ? t` · Advertisement ending dates ${p.effective_start}–${p.effective_end}; individual offer dates vary` : '';
+  return `${p.source || t('Unknown source')} · ${t(p.method || 'method unknown')} · ${t(p.geography || 'region unknown')} · ${period} · ${recordStatus(p)}${endingWindow}`;
 }
 function samplingContext(p) {
   if (p.source !== 'Carrefour AR') return '';
@@ -1345,9 +1556,16 @@ const PRICE_ROWS = [
   {label:'Flank / Vacío (partial)', ar:'vacio', us:'flank'},
   {label:'Tri-tip / Colita', ar:'colita', us:'tri_tip'},
   {label:'Round steak / Nalga', ar:'nalga', us:'round_steak'},
+  {label:'Bola de lomo / Generic round roast', ar:'bola_lomo', us:'round_roast'},
+  {label:'Bottom round / Cuadrada', ar:'cuadrada', us:'bottom_round'},
   {label:'Eye round / Peceto', ar:'peceto', us:'eye_round'},
   {label:'Short rib / Asado', ar:'asado', us:'short_ribs'},
   {label:'Chuck roast / Aguja', ar:'aguja', us:'chuck_roast'},
+  {label:'Paleta', ar:'paleta'},
+  {label:'Brazuelo / Osobuco', ar:'osobuco'},
+  {label:'Matambre', ar:'matambre'},
+  {label:'Tapa de cuadril', ar:'tapa'},
+  {label:'Brisket / Pecho', ar:'pecho', us:'brisket_whole'},
   {label:'Ground beef', ar:'ground_beef', us:'ground_beef'}
 ];
 
@@ -1562,7 +1780,15 @@ function renderScatter() {
   svg.selectAll('*').remove();
 
   const width = Math.max(580, $('#scatter-chart-svg').clientWidth || 460);
-  const height = PRICES ? PRICE_ROWS.length * 27 + 34 : 260;
+  const definitions = PRICE_ROWS.map(r => ({...r}));
+  for (const cut of ALL_CUTS) {
+    const ar = cut.arSeries || cut.id, us = cut.usSeries || cut.id;
+    const row = definitions.find(r => r.ar === ar || r.us === us);
+    if (row) { row.ar ||= ar; row.us ||= us; }
+    else definitions.push({label:cut.n, ar, us});
+  }
+  const rows = PRICES ? definitions.map(r => ({...r, ar:validPrice(PRICES.ar[r.ar]) ? PRICES.ar[r.ar] : null, us:validPrice(PRICES.us[r.us]) ? PRICES.us[r.us] : null})).filter(r => r.ar || r.us) : [];
+  const height = PRICES ? Math.max(1,rows.length) * 27 + 34 : 260;
   svg.attr('viewBox', `0 0 ${width} ${height}`).style('height', `${height}px`);
 
   if (!PRICES) {
@@ -1571,9 +1797,8 @@ function renderScatter() {
     return;
   }
 
-  const rows = PRICE_ROWS.map(r => ({...r, ar: validPrice(PRICES.ar[r.ar]) ? PRICES.ar[r.ar] : null, us: validPrice(PRICES.us[r.us]) ? PRICES.us[r.us] : null})).filter(r => r.ar || r.us);
   if (!rows.length) { showChartFallback('scatter-chart-svg','No converted prices; read native values in the table.'); return; }
-  const m = {top: 14, right: 30, bottom: 26, left: language === 'es-AR' ? 245 : 128};
+  const m = {top: 14, right: 30, bottom: 26, left: language === 'es-AR' ? 245 : 220};
   const x = d3.scaleLinear()
     .domain([0, d3.max(rows, r => Math.max(r.ar?.usd_lb ?? 0, r.us?.usd_lb ?? 0)) * 1.1])
     .nice().range([m.left, width - m.right]);
@@ -1594,18 +1819,21 @@ function renderScatter() {
 
   row.filter(d => d.ar && d.us).append('line')
     .attr('x1', d => x(Math.min(d.ar.usd_lb, d.us.usd_lb))).attr('x2', d => x(Math.max(d.ar.usd_lb, d.us.usd_lb)))
-    .attr('stroke', '#cfc4af').attr('stroke-width', 3).attr('stroke-linecap', 'round');
+    .attr('stroke', '#cfc4af').attr('stroke-width', 3).attr('stroke-linecap', 'round')
+    .attr('stroke-dasharray', d => isRetained(d.ar) || isRetained(d.us) ? '5 4' : null);
 
   [['ar', 'var(--navy)', 'Argentina'], ['us', 'var(--red)', 'United States']].forEach(([k, color, name]) => {
     const pts = row.filter(d => d[k]);
     pts.append('circle').attr('cx', d => x(d[k].usd_lb)).attr('r', 5.5)
-      .attr('fill', color).attr('stroke', '#fff').attr('stroke-width', 1.5)
+      .attr('fill', d => isRetained(d[k]) ? 'var(--bg)' : color).attr('stroke', color).attr('stroke-width', 1.5)
+      .attr('data-price-state', d => coverageState(d[k]))
+      .attr('stroke-dasharray', d => d[k].manual_entry ? '2 2' : null)
       .on('mouseover', (e, d) => showTooltip(e, `<div class="tooltip-title">${escapeHtml(t(name))}</div><div class="tooltip-description">${escapeHtml(t(d[k].label))}</div><div class="tooltip-prices"><div class="tooltip-price">${usd(d[k].usd_lb)}<span class="tooltip-unit"> / lb</span></div></div><p class="tooltip-note">${escapeHtml(recordContext(d[k]))}</p>`))
       .on('mousemove', moveTooltip)
       .on('mouseout', hideTooltip);
     const close = d => k === 'ar' && d.us && Math.abs(d.us.usd_lb - d.ar.usd_lb) < 1.2; // sit left of the dot so labels don't collide
     pts.append('text').attr('x', d => x(d[k].usd_lb) - (close(d) ? 10 : 0)).attr('y', d => close(d) ? 3 : -9).attr('text-anchor', d => close(d) ? 'end' : 'middle')
-      .attr('font-family', 'Oswald').attr('font-size', '10px').attr('fill', color).text(d => usd(d[k].usd_lb));
+      .attr('font-family', 'Oswald').attr('font-size', '10px').attr('fill', color).text(d => usd(d[k].usd_lb) + (d[k].manual_entry ? ' †' : isRetained(d[k]) ? ' *' : ''));
   });
 }
 
@@ -1701,6 +1929,7 @@ const modalContent = $('#modal-content');
 
 function fxLine(p) {
   if (!p) return '';
+  if (p.manual_entry) return '<br>' + t(p.native_currency === 'USD' ? 'Native USD; no FX' : 'Native ARS/kg; no USD conversion supplied');
   if (!positiveNumber(p.fx_ars_per_usd)) return t("<br>USD conversion unavailable; FX provenance unknown");
   const date = p.fx_date || t('unknown date');
   const age = validPeriod(date) && date.length === 10 ? Math.floor((Date.now() - new Date(date + 'T00:00:00Z')) / 86400000) : null;
@@ -1713,8 +1942,19 @@ function priceBlock(cut) {
     return `<p>${message}</p>`;
   }
   const {ar, us} = priceOf(cut);
-  const one = (country, p) => !p ? '' : `<div class="price-evidence"><b>${country}</b><div class="price-value">${p.unit_scale_unverified ? t('Price withheld') : validPrice(p) ? usd(p.usd_lb) + ' /lb' : t('USD unavailable')}</div>${p.unit_scale_unverified ? `<p class="reference-note">${escapeHtml(retainedPriceEvidence(p))}</p>` : positiveNumber(p.ars_kg) ? `<div>${t("Native")} ${formatNumber(p.ars_kg)} ARS/kg</div>` : ''}<p>${escapeHtml(recordContext(p))}${country === 'Argentina' ? fxLine(p) : ''}<br>${t("Retrieved:")} ${escapeHtml(p.retrieved_at || t('unknown; legacy receipt absent'))}<br>${t("Publication:")} ${escapeHtml(p.publication_date || t('unknown'))}${samplingContext(p) ? '<br>' + escapeHtml(samplingContext(p)) : ''}</p></div>`;
-  return one('Argentina',ar) + one(t('United States'),us) || `<p>${t('No verified price in this snapshot; another cut’s price is never substituted.')}</p>`;
+  const one = (country, p, series, archived = false) => {
+    if (!p) return `<div class="price-evidence" data-price-state="missing"><b>${t(country)}</b><div class="price-state">${t('Missing')}</div><p>${missingCoverage(series)}</p></div>`;
+    return `<div class="price-evidence" data-price-state="${coverageState(p)}"><b>${t(country)}</b><br><span class="price-state">${t(p.unit_scale_unverified ? 'Price withheld' : archived ? 'Original Carrefour observation' : coverageLabel(p))}</span><div class="price-value">${p.unit_scale_unverified ? t('Price withheld') : validPrice(p) ? usd(p.usd_lb) + ' /lb' : p.manual_entry && positiveNumber(p.ars_kg) ? formatNumber(p.ars_kg) + ' ARS/kg' : t('USD unavailable')}</div>${p.manual_entry ? `<p>${escapeHtml(p.label)}</p>` : ''}${p.unit_scale_unverified ? `<p class="reference-note">${escapeHtml(retainedPriceEvidence(p))}</p>` : positiveNumber(p.ars_kg) ? `<div>${t("Native")} ${formatNumber(p.ars_kg)} ARS/kg</div>` : ''}<p>${escapeHtml(recordContext(p))}${country === 'Argentina' ? fxLine(p) : ''}<br>${t("Retrieved:")} ${escapeHtml(p.manual_entry ? t('Owner entry; date is the observation date') : p.retrieved_at || t('unknown; legacy receipt absent'))}<br>${t("Publication:")} ${escapeHtml(p.publication_date || t('unknown'))}${samplingContext(p) ? '<br>' + escapeHtml(samplingContext(p)) : ''}</p></div>`;
+  };
+  const key = cut.arSeries || cut.id;
+  const original = PRICES.carrefour_originals?.[key];
+  const retained = original ? `<details class="retained-source"><summary>${t('Original Carrefour observation')}</summary>${one('Argentina',original,key,true)}</details>` : '';
+  const automatic = ['ar','us'].map(country => {
+    const key = cut[country === 'ar' ? 'arSeries' : 'usSeries'] || cut.id;
+    const p = PRICES.manual_originals?.[country]?.[key];
+    return p ? `<details class="retained-source"><summary>${t('Automatic observation beneath manual quote')}</summary>${one(country === 'ar' ? 'Argentina' : 'United States',p,key)}</details>` : '';
+  }).join('');
+  return (!ar && !us ? `<p>${t('No verified price in this snapshot; another cut’s price is never substituted.')}</p>` : '') + one('Argentina',ar,cut.arSeries) + one('United States',us,cut.usSeries) + automatic + retained;
 }
 
 let lastFocusedBeforeModal = null;
@@ -1742,9 +1982,9 @@ function openCutModal(cut) {
   activeModal = () => openCutModal(cut);
   if (typeof cutList !== "undefined" && cutList.includes(cut.id)) cutIndex = cutList.indexOf(cut.id);
   const cutImg = CUT_IMAGE_MAP[cut.id];
-  const heroHtml = cutImg ? `<div class="modal-cut-hero"><img src="${cutImg}" alt="${escapeHtml(cut.n)}" class="modal-cut-illustration"></div>` : '';
+  const heroHtml = cutImg ? `<div class="modal-cut-hero"><img src="${cutImg}" alt="${escapeHtml(cut.n)}" class="modal-cut-illustration"><p class="reference-note">${t("Cut illustration · product specification unverified")}</p></div>` : '';
   if (EXTRA_CUTS.includes(cut)) {
-    modalContent.innerHTML = `${heroHtml}<h2 id="modal-cut-title">${escapeHtml(cut.n)}</h2><p>${escapeHtml(t(cut.eq))}</p><p>${escapeHtml(t(cut.info))}</p><p class="reference-note">${escapeHtml(t(cut.relationship.type))}</p>${priceBlock(cut)}<p>${t("US price is not connected for this entry. Argentine catalog observations retain their original availability and FX dates; they do not establish a current offer.")}</p>`;
+    modalContent.innerHTML = `${heroHtml}<h2 id="modal-cut-title">${escapeHtml(cut.n)}</h2><p>${escapeHtml(t(cut.eq))}</p><p>${escapeHtml(t(cut.info))}</p><p class="reference-note">${escapeHtml(t(cut.relationship.type))}</p>${priceBlock(cut)}<p>${t(priceOf(cut).us ? "Manual observations keep their own dates and units; availability and product specifications are unverified." : "US price is not connected for this entry. Argentine catalog observations retain their original availability and FX dates; they do not establish a current offer.")}</p>`;
     focusModal();
     return;
   }
@@ -1918,10 +2158,16 @@ $$('.cut-card').forEach(card => card.addEventListener('keydown', e => { if (e.ke
 
 $('#quick-cut-btn').addEventListener('click', () => filterAndOpenCut($('#quick-cut-input').value));
 $('#quick-cut-input').addEventListener('keydown', e => {
-  if (e.key === 'Enter') filterAndOpenCut(e.target.value);
+  if (e.key === 'Enter') {
+    e.preventDefault(); // Search may move focus to a result; do not activate it with this Enter.
+    filterAndOpenCut(e.target.value);
+  }
 });
 $('#nav-search-input').addEventListener('keydown', e => {
-  if (e.key === 'Enter') filterAndOpenCut(e.target.value);
+  if (e.key === 'Enter') {
+    e.preventDefault(); // Search may move focus to a result; do not activate it with this Enter.
+    filterAndOpenCut(e.target.value);
+  }
 });
 
 $$('.extra-cut').forEach(button => button.addEventListener('click', () => openCutModal(BY_ID[button.dataset.cut])));
@@ -1986,6 +2232,10 @@ function renderReferenceTables() {
   renderTable('value-table',t('Fixed illustrative value allocation; no current price calculation'),[t('Region'),t('Value share %')],VALUE_MODEL.children.map(d => [d.name,d.value]));
 }
 function renderPrices() {
+  renderCoverage();
+  const manualStatus = $('#manual-price-status');
+  manualStatus.textContent = PRICES && manualPriceError ? t('Manual price file rejected or unavailable; automatic observations are shown.') + ' ' + (manualPriceError.row || '') + ': ' + t(manualPriceError.message)
+    : PRICES && manualPriceCount ? t`${manualPriceCount} manual quotes selected from data/manual-prices.json. Their own dates and native units are preserved; automatic observations remain in the evidence table.` : '';
   if (!PRICES) {
     if (priceLoadState === 'loading') {
       $$('.cut-card-price').forEach(el => { el.textContent = t('Loading stored prices…'); });
@@ -2003,15 +2253,36 @@ function renderPrices() {
     renderScatter(); return;
   }
   const us = PRICES.us.ground_beef; const ar = PRICES.ar.ground_beef;
-  $('#market-price').innerHTML = `${safeUsd(us)} <span>/ lb</span>`;
+  $('#market-price').innerHTML = !validPrice(us) && positiveNumber(us?.ars_kg) && !us.unit_scale_unverified ? `${formatNumber(us.ars_kg)} <span>ARS/kg</span>` : `${safeUsd(us)} <span>/ lb</span>`;
   $('#market-change').textContent = validPrice(us) && positiveNumber(us.prev_usd_lb) ? t`${formatNumber((us.usd_lb/us.prev_usd_lb-1)*100, {minimumFractionDigits:1, maximumFractionDigits:1})}% vs previous available observation (${us.prev_period || t('date unknown')})` : t('Previous observation unavailable');
-  $('#market-sub').textContent = t`US ${safePeriod(us)} · Argentina ${safeUsd(ar)}/lb, ${safePeriod(ar)} · survey context, different geography`;
-  $$('.cut-card-price').forEach(el => { el.innerHTML = priceLine(PRICES.ar[el.dataset.ar], PRICES.us[el.dataset.us]); });
+  const arBenchmark = !validPrice(ar) && positiveNumber(ar?.ars_kg) && !ar.unit_scale_unverified ? `${formatNumber(ar.ars_kg)} ARS/kg` : `${safeUsd(ar)}/lb`;
+  $('#market-sub').textContent = t`US ${safePeriod(us)} · Argentina ${arBenchmark}, ${safePeriod(ar)} · survey context, different geography` + ' · ' + [us, ar].filter(Boolean).map(p => `${p.source || t('Unknown source')}: ${t(coverageLabel(p))}`).join(' · ');
+  $$('.cut-card-price').forEach(el => {
+    const cut = BY_ID[el.closest?.('[data-cut]')?.dataset?.cut];
+    const p = cut ? priceOf(cut) : {ar:PRICES.ar[el.dataset.ar],us:PRICES.us[el.dataset.us]};
+    el.innerHTML = priceLine(p.ar,p.us);
+  });
   const rows = [];
-  for (const [region, records] of [['US',PRICES.us],['AR',PRICES.ar]]) for (const p of Object.values(records)) rows.push([`${region}: ${t(p.label || 'Unnamed')}`,p.unit_scale_unverified ? t('Price withheld') : validPrice(p) ? usd(p.usd_lb) + '/lb' : t('USD unavailable'),p.unit_scale_unverified ? retainedPriceEvidence(p) : positiveNumber(p.ars_kg) ? formatNumber(p.ars_kg) + ' ARS/kg' : t('USD/lb native'),[recordContext(p),samplingContext(p)].filter(Boolean).join(' · '),region === 'AR' ? `${formatNumber(p.fx_ars_per_usd)} ARS/USD · ${p.fx_date || t('unknown date')} · ${t(p.fx_basis || 'unknown basis')} · ${t((p.fx_provenance || 'unknown').replaceAll('_',' '))}` : t('Native USD; no FX'),p.retrieved_at || t('Retrieval unknown')]);
+  const storedGroups = [['US',PRICES.us],['AR',PRICES.ar]];
+  for (const [source,records] of Object.entries(PRICES.ar_sources || {})) {
+    storedGroups.push(['AR',Object.fromEntries(Object.entries(records).filter(([key]) => PRICES.ar[key]?.source !== source))]);
+  }
+  for (const [country,records] of Object.entries(PRICES.manual_originals || {})) {
+    const region = country === 'ar' ? 'AR' : 'US';
+    storedGroups.push([region,Object.fromEntries(Object.entries(records).filter(([key,p]) => !storedGroups.some(([market,group]) => market === region && group[key] === p)))]);
+  }
+  for (const [region, records] of storedGroups) for (const p of Object.values(records)) rows.push([`${region}: ${t(p.label || 'Unnamed')}`,p.unit_scale_unverified ? t('Price withheld') : validPrice(p) ? usd(p.usd_lb) + '/lb' : t('USD unavailable'),p.unit_scale_unverified ? retainedPriceEvidence(p) : positiveNumber(p.ars_kg) ? formatNumber(p.ars_kg) + ' ARS/kg' : t('USD/lb native'),[recordContext(p),samplingContext(p)].filter(Boolean).join(' · '),p.manual_entry ? t(p.native_currency === 'USD' ? 'Native USD; no FX' : 'Native ARS/kg; no USD conversion supplied') : region === 'AR' ? `${formatNumber(p.fx_ars_per_usd)} ARS/USD · ${p.fx_date || t('unknown date')} · ${t(p.fx_basis || 'unknown basis')} · ${t((p.fx_provenance || 'unknown').replaceAll('_',' '))}` : t('Native USD; no FX'),p.manual_entry ? t('Owner entry; date is the observation date') : p.retrieved_at || t('Retrieval unknown')]);
+  for (const [key,p] of Object.entries(PRICES.carrefour_originals || {})) rows.push([
+    `${t('Original Carrefour observation')}: ${t(p.label || key)}`,
+    p.unit_scale_unverified ? t('Price withheld') : validPrice(p) ? usd(p.usd_lb) + '/lb' : t('USD unavailable'),
+    p.unit_scale_unverified ? retainedPriceEvidence(p) : `${formatNumber(p.ars_kg)} ARS/kg`,
+    [recordContext(p), samplingContext(p)].filter(Boolean).join(' · '),
+    `${formatNumber(p.fx_ars_per_usd)} ARS/USD · ${p.fx_date || t('unknown date')} · ${t(p.fx_basis || 'unknown basis')}`,
+    p.retrieved_at || t('Retrieval unknown')]);
   renderTable('price-table',t('All stored observations; unverified unit scales are withheld from comparisons. Other comparisons require product, geography, method and interval qualifications.'),[t('Observation'),t('USD/lb'),t('Native / retained evidence'),t('Source and status'),t('FX lineage'),t('Retrieval')],rows);
   const attempts = Object.entries(PRICES.source_status || {}).map(([name,p]) => t`${name}: ${t(String(p.status || 'unknown').replaceAll('_',' '))}, attempt ${p.attempted_at || t('unknown')}`).join('; ');
   $('#data-note').textContent = t`Stored snapshot, legacy fetched label ${PRICES.fetched || t('unknown')}; metadata generated ${PRICES.generated_at || t('unknown')}. Generation is not retrieval. BLS monthly U.S. averages, INDEC GBA monthly averages, USDA advertised features and sampled Carrefour catalog offers differ in product, method, interval and geography. Read every qualification in the price table. Latest returned FX ${PRICES.fx.latest?.date || t('unknown date')} can lag. Inferred legacy FX is not original receipt proof. ${attempts}. Schematics, trait scores and value shares are illustrative. No current purchasing or conformance claim.`;
+  if (PRICES.ar_sources) $('#data-note').textContent += ' ' + t('IPCVA AMBA monthly survey is primary for covered cuts. Original Carrefour observations keep their own dates and remain available in the table and cut details.');
   renderScatter();
 }
 renderReferenceTables();
@@ -2034,6 +2305,35 @@ function acceptPrices(prices) {
   priceLoadState = prices ? 'ready' : 'unavailable';
   renderPrices();
   refreshActiveModal();
+}
+async function readPriceFile(path) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 8000);
+  try {
+    const response = await fetch(path,{cache:'no-store',signal:controller.signal});
+    if (!response.ok) throw new Error('File could not be loaded');
+    const text = await response.text();
+    if (path.includes('manual-prices') && text.length > 262144) throw new Error('Manual price file exceeds 256 KiB');
+    try { return JSON.parse(text); } catch { throw new Error('Invalid JSON; check commas and quotation marks'); }
+  } finally { clearTimeout(timer); }
+}
+async function loadPriceFiles() {
+  const [automatic,manual] = await Promise.allSettled([
+    readPriceFile('data/prices.json').then(validatePrices),
+    readPriceFile('data/manual-prices.json')
+  ]);
+  let prices = automatic.status === 'fulfilled' ? automatic.value : null;
+  manualPriceCount = 0;
+  manualPriceError = null;
+  if (manual.status === 'rejected') manualPriceError = {message:manual.reason.message};
+  else if (prices) {
+    try {
+      const result = ManualPrices.apply(prices,manual.value,ALL_CUTS);
+      prices = result.prices;
+      manualPriceCount = result.count;
+    } catch (error) { manualPriceError = {message:error.message,row:error.manualRow}; }
+  }
+  acceptPrices(prices);
 }
 function updateHeaderOffset() {
   const height = $('.site-header').getBoundingClientRect().height;
@@ -2075,7 +2375,7 @@ function setLanguage(next) {
 }
 $$('[data-language]').forEach(button => button.addEventListener('click', () => setLanguage(button.dataset.language)));
 renderPrices();
-fetch('data/prices.json').then(r => { if (!r.ok) throw new Error('Snapshot unavailable'); return r.json(); }).then(validatePrices).catch(() => null).then(acceptPrices);
+loadPriceFiles();
 </script>
 </body>
 </html>
