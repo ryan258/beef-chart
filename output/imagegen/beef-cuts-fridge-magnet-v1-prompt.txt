@@ -1,0 +1,16 @@
+Generated with the built-in image generation tool.
+
+Use case: infographic-diagram.
+Asset type: flat artwork for a personal kitchen refrigerator magnet, landscape 3:2 aspect ratio, intended 6 by 4 inches. Generate the actual full rectangular artwork, not a photograph or mockup of a magnet.
+Primary request: a beautiful, highly legible American beef cuts chart. Classic butcher-shop reference aesthetic with crisp, restrained modern typography. Warm ivory background, near-black ink, muted brick-red accent. Flat solid colors, very subtle paper character only, no distressed lettering. Strong contrast and large text appropriate for a small fridge magnet.
+Composition: title across top reading exactly "BEEF CUTS", small subtitle "A KITCHEN GUIDE". Main central area a large accurate side-profile beef steer facing LEFT, natural stocky cattle proportions, head and tail in near-black. Divide body into nine standard American butcher-chart regions with clear thick ivory separator lines and alternating dark red and pale warm tan fills. Put each bold uppercase label centrally inside its region using black on pale fill and ivory on dark red.
+Anatomical layout is essential: CHUCK at front shoulder behind neck; RIB along upper mid back behind chuck; SHORT LOIN along upper back behind rib; SIRLOIN behind short loin, ahead of hip; ROUND at rear rump and upper hind leg; BRISKET at lower front chest beneath chuck; PLATE along lower mid belly directly beneath rib; FLANK along lower rear abdomen behind plate and beneath loin; SHANK on lower foreleg. Shank can use one short leader line if needed for legibility. Exactly one occurrence of each region label.
+Lower portion: a clean 3-column by 2-row text guide, with generous column separation, no extra graphics, exact six entries, one on each line:
+"CHUCK · Pot roast"
+"RIB · Ribeye"
+"SHORT LOIN · Strip & T-bone"
+"SIRLOIN · Top sirloin"
+"ROUND · Top & bottom round"
+"PLATE · Skirt steak"
+Arrange column 1 CHUCK then SIRLOIN; column 2 RIB then ROUND; column 3 SHORT LOIN then PLATE.
+Fine single-line rectangular border inset well away from edges. Keep all labels and title large; lower guide secondary but comfortably readable. Keep critical artwork inside a generous 5% safe margin. No cooking temperatures, no prices, no branding, no source logos, no website, no watermark, no photographic food, no utensils, no decorative flourishes, no drop shadows, no dimensional magnet effect. Educational diagram is stylized, boundaries approximate but anatomical arrangement correct. Prioritize spelling, readability, and clean spacing.
