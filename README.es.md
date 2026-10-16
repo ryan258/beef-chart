@@ -10,7 +10,7 @@ El asado argentino y la parrilla de steakhouse norteamericana reparten el mismo 
 
 ## Qué podés hacer
 
-La **v1 de referencia personal está completa al 16 de octubre de 2026** para el recorrido local de consulta, nota/enlace, reanudación y precios manuales que describe la hoja de ruta. Las extensiones profesionales y la aceptación más amplia tienen un alcance separado.
+La **versión oficial v1 al 16 de octubre de 2026** establece el atlas completo de referencia personal para el recorrido local de consulta, nota/enlace, reanudación y precios manuales que describe la hoja de ruta. Las extensiones profesionales y la aceptación más amplia tienen un alcance separado.
 
 - **Recorrer dos mapas de una misma vaca.** Veinte controles de cortes argentinos y nueve de regiones de EE. UU. comparten el resaltado al pasar el mouse o enfocar, muestran el nombre completo y funcionan con teclado. Si el mapa no te sirve, hay un directorio completo. El rayado marca al lomo, la entraña y el peceto como referencias superpuestas.
 - **Abrir la ficha de cualquiera de los 24 cortes.** Cada una trae su ilustración en media tinta, el contexto de cocción y los precios guardados con su evidencia. Hay tarjetas para seis cortes populares y cuatro especiales (*bife de costilla*, *mollejas*, *riñón*, *lengua*).
@@ -218,6 +218,8 @@ Hay diez cortes argentinos precargados con fecha y precio en null; una fila se i
 ---
 
 ## Estado y registros
+
+**Versión oficial v1 al 16 de octubre de 2026**, que establece el atlas completo de referencia personal dentro del recorrido local de consulta, nota/enlace, reanudación y precios manuales que describe la hoja de ruta. Las extensiones profesionales y la aceptación más amplia tienen un alcance separado.
 
 El [registro de correcciones](docs/TRUTH-HARMONY.md) conserva el alcance y los resultados con fecha; la [hoja de ruta](roadmap.es.md) separa lo implementado de las extensiones opcionales. Hasta ahora está implementado: el aislamiento de fuentes y el muestreo del catálogo (C06/C14), la validación semántica compartida, la incorporación de IPCVA y BCRA, la reparación del PDF del USDA, la cobertura de cortes calificada por fuente y los precios manuales. Quedan registrados un fixture PDF/texto del USDA del 9 de octubre y una actualización exitosa de una sola fuente con 11 filas. Eso confirma un formato verificado, no que el proveedor siga disponible ni que se acepte cualquier informe.
 

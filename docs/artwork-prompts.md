@@ -178,7 +178,7 @@ Verified at 1280 × 900 desktop, 390 × 844 mobile, and 320 × 740 narrow mobile
 Redrew the existing native SVG maps in a Saul Bass-inspired cut-paper style. No raster generation was used: the regions remain interactive SVG paths.
 
 - Angular shared cow silhouette with a horn, eye, offset far legs and a kinked tail; irregular regional polygons and wider cream seams replace fine white/dashed dividers.
-- Retail map uses terracotta, oxblood, ochre and tan; U.S. map uses navy, muted blue and ochre. Display inks are separate from the market charts' existing data colors.
+- Argentine cuts map uses slate, teal, muted blue, and ochre; U.S. primals map uses terracotta, oxblood, ochre, and tan. Display inks are separate from the market charts' existing data colors.
 - Hatched overlays identify lomo, entraña and peceto. The map note explains that these are layered references. The shapes are an educational interpretation, not cutting or purchasing specifications.
 - The U.S. map has permanent region labels. Both maps have country captions, region counts and a full-name readout on hover or keyboard focus. Both maps highlight related regions together.
 - Twenty retail regions and nine U.S. region controls remain available, including the compound two-leg shank region. The existing full-name directory remains available for small targets.

@@ -217,7 +217,7 @@ Ten Argentine cuts are prefilled with null dates and prices; a row is skipped un
 
 ## Status and records
 
-**Personal-reference v1 is complete as of October 16, 2026**, within the local lookup, note/link, resume and manual-quote workflow recorded in the roadmap. Professional extensions and broader acceptance remain optional and separately scoped.
+**Official v1 release as of October 16, 2026**, establishing the complete personal-reference atlas within the local lookup, note/link, resume and manual-quote workflow recorded in the roadmap. Professional extensions and broader acceptance remain optional and separately scoped.
 
 The [correction record](docs/TRUTH-HARMONY.md) preserves dated scope and results; the [roadmap](roadmap.md) separates what is implemented from optional extensions. Implemented so far: C06/C14 source isolation and catalog sampling, shared semantic validation, IPCVA/BCRA ingestion, the USDA PDF repair, source-qualified cut coverage, and manual quotes. One October 9 USDA PDF/text fixture and one successful 11-row source-only refresh are recorded. That establishes one checked layout, not continuing provider availability or acceptance of every report.
 

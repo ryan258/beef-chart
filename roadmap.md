@@ -2,16 +2,17 @@
 
 **English** · [Español (Argentina)](roadmap.es.md)
 
-Status reconciled October 16, 2026. **Personal-reference v1 is complete within the bounded local scope below.** The project is a bilingual educational atlas and a personal retail-context reference, with low-effort entry of local quotes. The October 9, 12, and 14 reports in `reports/` are dated assessments and proposals. They do not make every professional extension below a requirement or an implemented feature.
+Status reconciled October 16, 2026. **Official v1 release.** The project is a bilingual educational atlas and a personal retail-context reference, with low-effort entry of local quotes. The October 9, 12, and 14 reports in `reports/` are dated assessments and proposals. They do not make every professional extension below a requirement or an implemented feature.
 
-## Personal-reference v1 finish — October 16
+## Official v1 release — October 16, 2026
 
+- **Schematic clarity and naming:** cow compare cards and direct navigation actions are explicitly labeled **Argentine Cuts** (20 cuts) and **U.S. Primals** (9 regions), replacing generic retail/wholesale headers. `RETAIL_MAP_INKS` and `PRIMAL_MAP_INKS` map slate/blue/ochre to Argentine cuts and terracotta/oxblood/tan to U.S. primals, harmonizing diagram contrast.
 - **Return:** stable cut/language URLs, Copy cut link, and an explicit Resume last cut button. Unknown IDs recover to search; blocked storage does not prevent lookup.
 - **Take away:** every dossier has a selectable, copyable butcher note with both reference names, existing relationship/preparation context and any selected valid manual quote in its original amount, unit and date. Clipboard denial selects the text for ordinary copying.
 - **Understand:** Compare reaches prices, Read Value Shares opens its table, and the snapshot card summarizes source-owned periods independently of assembly. Detailed source/attempt qualifications remain available under Sources and methods.
 - **Accepted local path:** bilingual search → dossier → note/link → close/reopen/resume; native keyboard focus and tab wrapping; desktop and 320px reader layout; temporary manual quote save/reload/clear through the real handler using an isolated file. Targeted checks passed; the [dated record](docs/TRUTH-HARMONY.md) names their scope and browser-tool limitations.
 
-This closes the personal-reference implementation. Complete price coverage, verified original organ units, professional specifications/costing, full history, additional species and classroom modules are optional future work. Human assistive-technology/device, specialist and public-release acceptance remain distinct from this bounded local completion. Changes remain uncommitted; no publication is implied.
+This closes the personal-reference implementation for the official v1 release. Complete price coverage, verified original organ units, professional specifications/costing, full history, additional species and classroom modules are optional future work. Human assistive-technology/device, specialist and public-release acceptance remain distinct from this bounded local completion. Changes remain uncommitted; no publication is implied.
 
 ## October 15 follow-up (implemented)
 

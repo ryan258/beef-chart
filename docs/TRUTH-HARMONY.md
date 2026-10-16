@@ -314,3 +314,12 @@ The authorized focused browser pass began in isolated Chromium and continued in 
 A clearly labeled synthetic ARS/kg quote was saved to an isolated temporary file served through the production HTTP handler. Reloading showed `18.500 ARS/kg (2026-10-15)` in the Spanish note with its manual qualification; clearing the temporary file and reloading restored automatic evidence and removed the quote from the note. The fixture initially used macOS's symlink `/tmp` parent and was correctly refused by the existing non-following opener; using its canonical `/private/tmp` path corrected the fixture. Production data was never edited. Both hashes remain unchanged: `data/prices.json` SHA-256 `287d323ab052066369a44280a19fab676f177430558d560c7e38a25d4099177d`; `data/manual-prices.json` SHA-256 `de1e5630b97a4a41e45cdda1815a4f78b8d074c9a65443c919c25824d3aebf94`.
 
 This closes the bounded personal-reference v1 scope recorded in the bilingual roadmap. Human assistive-technology/device, specialist, source-rights and public-release acceptance remain separate. Existing provider/organ/history limitations stay explicit. No source refresh, staging, commit, push, deployment or publication occurred. Owned local previews were stopped and app-browser test tabs closed.
+
+## Official v1 release — October 16, 2026
+
+Completed the official v1 release refinements:
+
+- **Map labeling and terminology:** Cow compare cards and direct navigation actions are explicitly labeled **Argentine Cuts** (20 cuts) and **U.S. Primals** (9 regions), replacing generic retail/wholesale labels. The header buttons use **Inspect Argentine Cuts** and **Inspect U.S. Primals**, with accessible action labels **Browse all Argentine cuts** and **Browse all U.S. primals**.
+- **Localization:** Corresponding Argentine Spanish translations in `assets/i18n.js` render **Cortes argentinos** and **Cortes primarios de EE. UU.**, with matching action titles and aria labels.
+- **Diagram palette refinement:** `RETAIL_MAP_INKS` now assigns the slate, teal, muted blue, and ochre ink set to the Argentine cuts map, while `PRIMAL_MAP_INKS` assigns the terracotta, oxblood, ochre, and tan ink set to the U.S. primals map, with the hatched layer stroke updated to `#1b3f52`.
+- **Integrity:** All 92 Python unit tests (252 subtests) and all Node integration suites pass. Markdown documentation cross-links and code fences remain verified. Tagged as the official v1 release.

@@ -62,7 +62,7 @@ The active manual file has ten prefilled ARS/kg rows; only date and numeric pric
 
 ## Scope and remaining acceptance
 
-The October 16 v1 finishing pass exercised the bounded lookup/copy/link/resume path in Chromium and the app browser, with desktop and 320px geometry, keyboard focus/trap checks, copy denial, source summaries and temporary manual quote save/reload/removal. Its targeted checks and browser-tool recovery are recorded in TRUTH-HARMONY. This completes that local personal-reference scope; it does not establish human assistive-technology, specialist or release acceptance.
+The October 16 v1 finishing pass exercised the bounded lookup/copy/link/resume path in Chromium and the app browser, with desktop and 320px geometry, keyboard focus/trap checks, copy denial, source summaries and temporary manual quote save/reload/removal. Its targeted checks and browser-tool recovery are recorded in TRUTH-HARMONY. This completes that local personal-reference scope as the official v1 release; it does not establish human assistive-technology, specialist or commercial distribution acceptance.
 
 Local deterministic checks and earlier bounded Chromium behavior are recorded in [TRUTH-HARMONY.md](TRUTH-HARMONY.md). The current reload/manual-price update passed seven HTTP-handler cases and 18 manual-price cases, using in-memory HTTP connections, DOM doubles and chart callbacks. Earlier 46-case coverage/localization results and browser checks are revision-specific. They do not establish current browser layout, specialist anatomy, full WCAG conformance, native-speaker review, Safari/Firefox/device behavior, real screen-reader access, cold offline use, print quality, rights or production acceptance.
 

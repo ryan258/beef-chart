@@ -2,16 +2,17 @@
 
 [English](roadmap.md) · **Español (Argentina)**
 
-Estado reconciliado al 16 de octubre de 2026. **La v1 de referencia personal está completa dentro del alcance local acotado de abajo.** El proyecto es un atlas educativo bilingüe y una referencia personal de contexto minorista, con carga sencilla de precios locales. Los informes del 9, el 12 y el 14 de octubre en `reports/` son evaluaciones y propuestas con fecha. No convierten en requisito ni en función implementada cada extensión profesional de más abajo.
+Estado reconciliado al 16 de octubre de 2026. **Versión oficial v1.** El proyecto es un atlas educativo bilingüe y una referencia personal de contexto minorista, con carga sencilla de precios locales. Los informes del 9, el 12 y el 14 de octubre en `reports/` son evaluaciones y propuestas con fecha. No convierten en requisito ni en función implementada cada extensión profesional de más abajo.
 
-## Cierre de la v1 personal — 16 de octubre
+## Versión oficial v1 — 16 de octubre de 2026
 
+- **Claridad de los esquemas y nombres:** las tarjetas de comparación y los botones de acción rotulan de forma explícita **Cortes argentinos** (20 cortes) y **Cortes primarios de EE. UU.** (9 regiones), en reemplazo de los encabezados genéricos. `RETAIL_MAP_INKS` y `PRIMAL_MAP_INKS` asignan pizarra/azul/ocre a los cortes argentinos y terracota/bordo/tostado a las regiones primarias de EE. UU., armonizando el contraste de los diagramas.
 - **Retomar:** enlaces estables de corte e idioma, copia del enlace y un botón explícito para retomar el último corte. Un ID desconocido permite seguir buscando; el almacenamiento bloqueado no impide consultar.
 - **Llevar una nota:** las 24 fichas tienen una nota seleccionable y copiable con ambos nombres, las aclaraciones y el contexto de preparación existentes, y los precios manuales válidos seleccionados con monto, unidad y fecha originales. Si falla el portapapeles, el texto queda seleccionado.
 - **Entender:** Compará lleva a los precios y Leé las proporciones de valor abre su tabla. El resumen separa los períodos de las fuentes de la fecha de compilación; Fuentes y métodos conserva el detalle.
 - **Recorrido local verificado:** búsqueda bilingüe, ficha, nota/enlace, cierre y reanudación; foco y recorrido por teclado; escritorio y 320 px; carga, recarga y borrado de un precio sintético mediante el manejador real y un archivo temporal aislado. El [registro con fecha](docs/TRUTH-HARMONY.md) detalla las verificaciones y los límites de las herramientas del navegador.
 
-Esto cierra la implementación de referencia personal. La cobertura completa, las unidades originales de achuras verificadas, las especificaciones y el costeo profesional, el historial completo, otras especies y los módulos de enseñanza quedan como opciones. La aceptación humana con tecnologías de asistencia o dispositivos, la revisión especializada y la publicación son alcances separados. Los cambios quedan sin commit.
+Esto cierra la implementación de referencia personal para la versión oficial v1. La cobertura completa, las unidades originales de achuras verificadas, las especificaciones y el costeo profesional, el historial completo, otras especies y los módulos de enseñanza quedan como opciones. La aceptación humana con tecnologías de asistencia o dispositivos, la revisión especializada y la publicación son alcances separados. Los cambios quedan sin commit.
 
 ## Seguimiento del 15 de octubre (implementado)
 
