@@ -1,5 +1,7 @@
 # Architecture and current behavior
 
+**English** · [Español (Argentina)](architecture.es.md)
+
 Beef Chart is a zero-build static page combining a Bauhaus layout, vintage halftone artwork, interactive cut-paper cow maps, and D3 charts. It is an educational atlas and stored retail-context reference. Most frontend logic remains inline in `index.html`; `assets/bauhaus.css` supplies the active palette, layout, diagram styling, and responsive reader rules.
 
 ## Runtime boundaries
@@ -19,6 +21,10 @@ Beef Chart is a zero-build static page combining a Bauhaus layout, vintage halft
 12. Retained chart points are hollow and labeled with an asterisk, with dashed connecting lines. Manual USD/lb points carry a dagger; manual ARS/kg quotes stay native and are omitted from USD-only points. Maps and images are labeled as illustrations; flow/value inputs are fixed teaching allocations and radar traits are editorial scores.
 
 Search is accent-insensitive and operates on names, aliases, and IDs. `CUT_SEARCH_INDEX` includes English and Spanish equivalents independently of the display language, so toggling the interface does not change the result set for an unchanged query. One result opens; ambiguous matches show choices; missing/empty queries explain recovery. Primal actions open an actual primal explanation rather than an arbitrary retail cut. Popular-card previous/next actions synchronize with the selected featured cut.
+
+The v1 reference helpers in `assets/reference-tools.js` create `?cut=<catalog-id>&lang=<language>` links, validate optional `beef-chart-last-cut` browser storage and format plain-text butcher notes. Opening a dossier replaces the URL's cut state; closing it clears that parameter. A direct valid link opens the cut, while an unknown ID leaves search available with feedback. Resume is an explicit button, and denied storage leaves current-session lookup and copyable links usable. Notes reuse catalog guidance and selected valid manual quote amounts/units/dates without conversion; automatic observations and withheld organ evidence are not copied as quotes. Readonly text fields use `.value`; clipboard denial selects the text for ordinary copying. Dossier refresh preserves focus and scroll, including its note field.
+
+`assets/snapshot-summary.js` derives the compact snapshot card summary from selected automatic observations and automatic originals beneath manual overrides. Source periods and USDA window conventions remain distinct from metadata assembly. The detailed source/attempt explanation lives under Sources and methods. Compare navigates to prices, and Read Value Shares opens its actual table.
 
 ## Languages
 
@@ -55,6 +61,8 @@ The USDA adapter parses the October 9 report's explicit advertisement-ending win
 The active manual file has ten prefilled ARS/kg rows; only date and numeric price need to be filled. Null, omitted or blank date/price fields are drafts and do not displace automatic observations. Completed invalid rows and malformed structures reject the overlay with a visible warning. Latest date wins per canonical market/key; later rows revise equal-date entries. Manual ARS prices get no inherited FX. See [the entry guide](manual-prices.md). `fetch-beef.sh` remains optional archival enrichment, not a visible glossary dependency.
 
 ## Scope and remaining acceptance
+
+The October 16 v1 finishing pass exercised the bounded lookup/copy/link/resume path in Chromium and the app browser, with desktop and 320px geometry, keyboard focus/trap checks, copy denial, source summaries and temporary manual quote save/reload/removal. Its targeted checks and browser-tool recovery are recorded in TRUTH-HARMONY. This completes that local personal-reference scope; it does not establish human assistive-technology, specialist or release acceptance.
 
 Local deterministic checks and earlier bounded Chromium behavior are recorded in [TRUTH-HARMONY.md](TRUTH-HARMONY.md). The current reload/manual-price update passed seven HTTP-handler cases and 18 manual-price cases, using in-memory HTTP connections, DOM doubles and chart callbacks. Earlier 46-case coverage/localization results and browser checks are revision-specific. They do not establish current browser layout, specialist anatomy, full WCAG conformance, native-speaker review, Safari/Firefox/device behavior, real screen-reader access, cold offline use, print quality, rights or production acceptance.
 

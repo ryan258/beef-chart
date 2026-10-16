@@ -1,5 +1,7 @@
 # Price evidence and refresh contract
 
+**English** · [Español (Argentina)](data-pipeline.es.md)
+
 The page loads a stored automatic snapshot and optional owner-entered quotes; it does not stream live market prices. Sources measure different populations, product forms, geographies, and intervals. USD/lb normalization does not make them identical products or purchasing opportunities.
 
 ## Sources
