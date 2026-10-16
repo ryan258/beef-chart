@@ -937,31 +937,31 @@ header.site-header{
       <p id="manual-price-status" class="reference-note" role="status"></p>
       <details class="chart-data" id="cut-coverage"><summary data-i18n>See price coverage for all 24 cuts</summary><p class="reference-note" data-i18n>Coverage counts connected observations, not equivalent purchase specifications. Retained references keep their original dates. Missing prices are never substituted.</p><div id="coverage-table"></div></details>
       <div class="cows-compare-grid">
-        <!-- Retail Cuts Cow -->
+        <!-- Argentine Cuts Cow -->
         <div class="cow-column">
           <div class="cow-map-kicker"><span>01 / Argentina</span><span data-i18n>20 cuts</span></div>
           <svg class="cow-stage-svg" id="retail-cow-svg" viewBox="15 100 885 465" aria-label="Schematic Argentine cut map" data-i18n-aria-label="Schematic Argentine cut map"></svg>
           <p class="cow-map-readout" id="retail-map-label" aria-hidden="true" data-i18n>Explore the Argentine cuts</p>
           <div class="cow-col-footer">
             <div class="cow-col-info">
-              <h4 data-i18n>Retail Cuts</h4>
+              <h4 data-i18n>Argentine Cuts</h4>
               <p data-i18n>What you buy at the counter.</p>
             </div>
-            <button class="cow-btn-action" id="btn-retail-cow" title="Inspect Retail Cuts" data-i18n-title="Inspect Retail Cuts">→</button>
+            <button class="cow-btn-action" id="btn-retail-cow" title="Inspect Argentine Cuts" data-i18n-title="Inspect Argentine Cuts">→</button>
           </div>
         </div>
 
-        <!-- Wholesale Cuts Cow -->
+        <!-- U.S. Primals Cow -->
         <div class="cow-column">
           <div class="cow-map-kicker"><span data-i18n>02 / United States</span><span data-i18n>9 regions</span></div>
           <svg class="cow-stage-svg" id="wholesale-cow-svg" viewBox="15 100 885 465" aria-label="Schematic U.S. primal map" data-i18n-aria-label="Schematic U.S. primal map"></svg>
           <p class="cow-map-readout" id="wholesale-map-label" aria-hidden="true" data-i18n>Explore the U.S. regions</p>
           <div class="cow-col-footer">
             <div class="cow-col-info">
-              <h4 data-i18n>Wholesale Cuts</h4>
+              <h4 data-i18n>U.S. Primals</h4>
               <p data-i18n>How the industry sees it.</p>
             </div>
-            <button class="cow-btn-action blue" id="btn-wholesale-cow" title="Inspect Wholesale Cuts" data-i18n-title="Inspect Wholesale Cuts">→</button>
+            <button class="cow-btn-action blue" id="btn-wholesale-cow" title="Inspect U.S. Primals" data-i18n-title="Inspect U.S. Primals">→</button>
           </div>
         </div>
       </div>
@@ -1577,14 +1577,14 @@ const PRICE_ROWS = [
 // 2. COW VISUALIZATIONS RENDERER
 // Display inks are independent of the market charts' data colors.
 const RETAIL_MAP_INKS = {
-  cogote:'#b78851', aguja:'#bb3827', paleta:'#7b2c22', pecho:'#d39b35', brazuelo:'#b78851',
-  'bife-ancho':'#bb3827', costillar:'#d39b35', matambre:'#b78851', 'bife-angosto':'#7b2c22',
-  vacio:'#bb3827', tapa:'#e2bd77', cuadril:'#d39b35', colita:'#b78851', bola:'#e2bd77',
-  nalga:'#7b2c22', cuadrada:'#bb3827', garron:'#d39b35'
+  cogote:'#3f6b7d', aguja:'#1b3f52', paleta:'#a8bec0', pecho:'#d39b35', brazuelo:'#a8bec0',
+  'bife-ancho':'#1b3f52', costillar:'#d39b35', matambre:'#3f6b7d', 'bife-angosto':'#a8bec0',
+  vacio:'#1b3f52', tapa:'#a8bec0', cuadril:'#d39b35', colita:'#3f6b7d', bola:'#a8bec0',
+  nalga:'#a8bec0', cuadrada:'#1b3f52', garron:'#d39b35'
 };
 const PRIMAL_MAP_INKS = {
-  chuck:'#1b3f52', rib:'#a8bec0', shortloin:'#3f6b7d', sirloin:'#d39b35', round:'#1b3f52',
-  plate:'#3f6b7d', flank:'#a8bec0', brisket:'#d39b35', shank:'#a8bec0'
+  chuck:'#7b2c22', rib:'#e2bd77', shortloin:'#bb3827', sirloin:'#d39b35', round:'#7b2c22',
+  plate:'#bb3827', flank:'#e2bd77', brisket:'#d39b35', shank:'#b78851'
 };
 function renderCowSilhouette(svgSelection, clipId) {
   const defs = svgSelection.append('defs');
@@ -1592,7 +1592,7 @@ function renderCowSilhouette(svgSelection, clipId) {
   const hatch = defs.append('pattern').attr('id', `${clipId}-hatch`)
     .attr('patternUnits','userSpaceOnUse').attr('width',12).attr('height',12).attr('patternTransform','rotate(-30)');
   hatch.append('rect').attr('width',12).attr('height',12).attr('fill','#f5f0e6');
-  hatch.append('path').attr('d','M 0,0 L 0,12').attr('stroke','#7b2c22').attr('stroke-width',4);
+  hatch.append('path').attr('d','M 0,0 L 0,12').attr('stroke','#1b3f52').attr('stroke-width',4);
   const underlay = svgSelection.append('g').attr('aria-hidden','true').attr('pointer-events','none');
   // Offset far legs and a crooked tail retain the cut-paper character.
   underlay.append('path').attr('d','M 374,379 L 425,391 L 416,456 L 425,525 L 402,535 L 388,479 Z M 700,380 L 756,387 L 747,449 L 759,522 L 732,532 L 716,446 Z').attr('fill','#25231f');
@@ -2293,8 +2293,8 @@ $$('.cut-card').forEach(card => card.addEventListener('click', e => {
   openCutModal(cut);
 }));
 
-$('#btn-retail-cow').setAttribute('data-i18n-aria-label','Browse all retail cuts');
-$('#btn-retail-cow').setAttribute('aria-label',t('Browse all retail cuts'));
+$('#btn-retail-cow').setAttribute('data-i18n-aria-label','Browse all Argentine cuts');
+$('#btn-retail-cow').setAttribute('aria-label',t('Browse all Argentine cuts'));
 $('#btn-retail-cow').addEventListener('click', () => { $('.reference-directory').open = true; $('#cut-directory button').focus(); });
 $('#btn-wholesale-cow').setAttribute('data-i18n-aria-label','Browse all U.S. primals');
 $('#btn-wholesale-cow').setAttribute('aria-label',t('Browse all U.S. primals'));
