@@ -862,6 +862,8 @@ header.site-header{
 <link rel="stylesheet" href="assets/bauhaus.css">
 <script src="assets/i18n.js"></script>
 <script src="assets/manual-prices.js"></script>
+<script src="assets/reference-tools.js"></script>
+<script src="assets/snapshot-summary.js"></script>
 </head>
 <body>
 <a class="skip-link" href="#explore" data-i18n>Skip to the cut explorer</a>
@@ -877,7 +879,7 @@ header.site-header{
     </a>
     <nav class="nav-links">
       <a href="#explore" data-i18n>Explore</a>
-      <a href="#explore" data-i18n>Compare</a>
+      <a href="#data-scatter" data-i18n>Compare</a>
       <a href="#data-sankey" data-i18n>Data</a>
       <a href="#data-scatter" data-i18n>Insights</a>
       <a href="#about" data-i18n>About</a>
@@ -976,6 +978,7 @@ header.site-header{
           </svg>
         </div>
         <p class="evidence-label" data-i18n>Sourced observations · stored</p>
+        <p id="snapshot-summary" class="reference-note snapshot-summary" role="status"></p>
         <div class="market-body">
           <div>
             <div class="market-name" data-i18n>Ground beef, US retail</div>
@@ -1003,6 +1006,8 @@ header.site-header{
           </button>
         </div>
         <p id="search-status" role="status"></p><div id="cut-results"></div>
+        <button id="resume-cut" class="directory-cut resume-cut" type="button" hidden></button>
+        <p id="cut-link-status" class="reference-note" role="status"></p>
         <div class="cut-chips">
           <button class="cut-chip" data-cut="bife-ancho" data-i18n>Ribeye</button>
           <button class="cut-chip" data-cut="pecho" data-i18n>Brisket</button>
@@ -1059,9 +1064,9 @@ header.site-header{
       <p class="section-sub" data-i18n>Fixed illustrative retail-value shares · not weight, yield, or current valuation</p>
 
       <p class="reference-note" data-i18n>This illustration does not use the stored cut prices.</p>
-      <svg id="treemap-chart-svg" aria-hidden="true"></svg><details class="chart-data"><summary data-i18n>Read the illustrative value shares</summary><div id="value-table"></div></details>
+      <svg id="treemap-chart-svg" aria-hidden="true"></svg><details class="chart-data" id="value-data"><summary data-i18n>Read the illustrative value shares</summary><div id="value-table"></div></details>
 
-      <a class="card-bottom-link" href="#explore" data-i18n>Explore Value →</a>
+      <a class="card-bottom-link" id="read-value-shares" href="#value-data" data-i18n>Read Value Shares →</a>
     </div>
 
     <!-- Right Card: Editorial Quote Card -->
@@ -1158,7 +1163,7 @@ header.site-header{
     </div>
     <p class="extra-price-note" data-i18n>Stored catalog references in USD/lb. Availability and conversion dates belong to the observation; they do not establish today's offer. Missing prices are never borrowed from another cut.</p>
   </section>
-  <p class="data-note" id="data-note" role="status" data-i18n>Loading stored price evidence. The atlas does not stream live prices.</p>
+  <details class="chart-data source-methods"><summary data-i18n>Sources and methods</summary><p class="data-note" id="data-note" role="status" data-i18n>Loading stored price evidence. The atlas does not stream live prices.</p></details>
 </main>
 <footer class="site-footer"><a href="#hero" data-i18n>The cow.<br>Two ways.</a><p data-i18n>Same animal.<br>Different perspective.</p><div class="footer-shapes" aria-hidden="true"><i></i><i></i><i></i></div><a class="back-top" href="#hero" data-i18n>Back to top ↑</a></footer>
 
@@ -1959,6 +1964,8 @@ function priceBlock(cut) {
 
 let lastFocusedBeforeModal = null;
 let activeModal = null;
+let activeCutId = null;
+let rememberedCut = null;
 function focusModal() {
   if (!modalOverlay.open) { lastFocusedBeforeModal = document.activeElement; modalOverlay.showModal(); }
   modalOverlay.classList.add('open');
@@ -1967,7 +1974,102 @@ function focusModal() {
 function closeCutModal() {
   if (modalOverlay.open) modalOverlay.close();
 }
+// A cut URL is explicit state; resuming a previous cut is always an owner action.
+function cutStorage() {
+  try { return localStorage; } catch { return null; }
+}
+function updateCutLocation(id) {
+  try {
+    const url = new URL(location.href);
+    if (id) {
+      const link = ReferenceTools.cutUrl(url.href, id, language);
+      if (link) history.replaceState(null, '', link);
+    } else if (url.searchParams.has('cut')) {
+      url.searchParams.delete('cut');
+      history.replaceState(null, '', url);
+    }
+  } catch { /* Lookup still works when browser history is restricted. */ }
+}
+function renderResumeCut() {
+  const button = $('#resume-cut');
+  const cut = rememberedCut && Object.hasOwn(BY_ID, rememberedCut.id) ? BY_ID[rememberedCut.id] : null;
+  button.hidden = !cut;
+  button.textContent = cut ? t`Resume last cut: ${cut.n}` : '';
+}
+function rememberOpenCut(cut) {
+  activeCutId = cut.id;
+  rememberedCut = {id:cut.id, language};
+  ReferenceTools.rememberCut(cutStorage(), cut.id, language);
+  updateCutLocation(cut.id);
+  $('#cut-link-status').textContent = '';
+  renderResumeCut();
+}
+function butcherNoteFor(cut) {
+  const quotes = Object.entries(priceOf(cut)).flatMap(([market,p]) => p?.manual_entry && !p.unit_scale_unverified ? [{
+    manual:true, market, amount:p.manual_price, currency:p.native_currency,
+    unit:p.native_unit, date:p.period
+  }] : []);
+  return ReferenceTools.butcherNote({name:cut.n, usName:cut.eq,
+    relationship:t(cut.relationship.type),
+    preparation:[cut.how ? t(cut.how) : '', t(cut.info)].filter(Boolean).join(' · '), quotes}, language);
+}
+function renderCutTools(cut) {
+  const panel = document.createElement('section');
+  panel.className = 'cut-takeaway';
+  panel.setAttribute('aria-labelledby', 'butcher-note-heading');
+  panel.innerHTML = `<h3 id="butcher-note-heading">${t('Butcher note')}</h3>
+    <p class="reference-note">${t('Names and preparation context to discuss with your butcher. Confirm bone, trim and portioning.')}</p>
+    <label class="sr-only" for="butcher-note">${t('Butcher note')}</label>
+    <textarea id="butcher-note" class="copy-text" readonly rows="7"></textarea>
+    <div class="cut-copy-actions"><button id="copy-butcher-note" class="directory-cut" type="button">${t('Copy note')}</button>
+    <button id="copy-cut-link" class="directory-cut" type="button">${t('Copy cut link')}</button></div>
+    <label id="cut-link-fallback-label" for="cut-link-fallback" hidden>${t('Cut link')}</label>
+    <textarea id="cut-link-fallback" class="copy-text" readonly rows="2" hidden></textarea>
+    <p id="cut-copy-status" class="reference-note" role="status"></p>`;
+  // Values are text, including owner-entered evidence; never interpreted as markup.
+  const note = $('#butcher-note',panel);
+  note.value = butcherNoteFor(cut);
+  $('#cut-link-fallback',panel).value = ReferenceTools.cutUrl(location.href,cut.id,language) || '';
+  async function copyText(value, field, success) {
+    const status = $('#cut-copy-status',panel);
+    try {
+      if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable');
+      await navigator.clipboard.writeText(value);
+      if (status.isConnected) { status.dataset.message = success; status.textContent = t(success); }
+    } catch {
+      if (!status.isConnected) return;
+      field.hidden = false;
+      if (field.id === 'cut-link-fallback') $('#cut-link-fallback-label',panel).hidden = false;
+      field.value = value; field.focus(); field.select();
+      status.dataset.message = 'Clipboard unavailable. Text selected; use your usual copy command.';
+      status.textContent = t(status.dataset.message);
+    }
+  }
+  $('#copy-butcher-note',panel).addEventListener('click', () => copyText(note.value, note, 'Note copied.'));
+  $('#copy-cut-link',panel).addEventListener('click', () => {
+    const link = ReferenceTools.cutUrl(location.href,cut.id,language);
+    if (link) copyText(link, $('#cut-link-fallback',panel), 'Cut link copied.');
+  });
+  // Keep the practical takeaway near the name, before detailed price evidence.
+  $('#modal-cut-title').insertAdjacentElement('afterend',panel);
+}
+function syncCutFromLocation() {
+  let requested = null;
+  let requestedLanguage = null;
+  try {
+    const url = new URL(location.href);
+    requested = url.searchParams.get('cut');
+    requestedLanguage = url.searchParams.get('lang');
+  } catch { /* No URL state. */ }
+  const known = requested && Object.hasOwn(BY_ID,requested);
+  $('#cut-link-status').textContent = requested && !known ? t('That cut link is unknown. Search or browse the directory.') : '';
+  if (['en','es-AR'].includes(requestedLanguage) && requestedLanguage !== language) setLanguage(requestedLanguage);
+  if (known) openCutModal(BY_ID[requested]);
+  else if (activeCutId && modalOverlay.open) closeCutModal();
+}
 function openReferenceModal(title, explanation, cuts = []) {
+  activeCutId = null;
+  updateCutLocation(null);
   activeModal = () => openReferenceModal(title, explanation, cuts);
   modalContent.innerHTML = `<h2 id="modal-cut-title">${escapeHtml(t(title))}</h2><p>${escapeHtml(t(explanation))}</p><div id="primal-cut-list"></div>`;
   for (const cut of cuts) $('#primal-cut-list').append(cutButton(cut));
@@ -1979,12 +2081,14 @@ function openPrimalModal(primal) {
 }
 function openCutModal(cut) {
   if (!cut) return;
+  rememberOpenCut(cut);
   activeModal = () => openCutModal(cut);
   if (typeof cutList !== "undefined" && cutList.includes(cut.id)) cutIndex = cutList.indexOf(cut.id);
   const cutImg = CUT_IMAGE_MAP[cut.id];
   const heroHtml = cutImg ? `<div class="modal-cut-hero"><img src="${cutImg}" alt="${escapeHtml(cut.n)}" class="modal-cut-illustration"><p class="reference-note">${t("Cut illustration · product specification unverified")}</p></div>` : '';
   if (EXTRA_CUTS.includes(cut)) {
     modalContent.innerHTML = `${heroHtml}<h2 id="modal-cut-title">${escapeHtml(cut.n)}</h2><p>${escapeHtml(t(cut.eq))}</p><p>${escapeHtml(t(cut.info))}</p><p class="reference-note">${escapeHtml(t(cut.relationship.type))}</p>${priceBlock(cut)}<p>${t(priceOf(cut).us ? "Manual observations keep their own dates and units; availability and product specifications are unverified." : "US price is not connected for this entry. Argentine catalog observations retain their original availability and FX dates; they do not establish a current offer.")}</p>`;
+    renderCutTools(cut);
     focusModal();
     return;
   }
@@ -2026,6 +2130,7 @@ function openCutModal(cut) {
     </a>
   `;
 
+  renderCutTools(cut);
   focusModal();
   renderModalRadar(cut);
 }
@@ -2099,12 +2204,14 @@ modalOverlay.addEventListener('cancel', e => { e.preventDefault(); closeCutModal
 modalOverlay.addEventListener('close', () => {
   modalOverlay.classList.remove('open');
   activeModal = null;
+  activeCutId = null;
+  updateCutLocation(null);
   if (lastFocusedBeforeModal?.isConnected) lastFocusedBeforeModal.focus();
 });
 modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeCutModal(); });
 document.addEventListener('keydown', e => {
   if (e.key !== 'Tab' || !modalOverlay.open) return;
-  const controls = [...modalOverlay.querySelectorAll('button, a[href], input, [tabindex]:not([tabindex="-1"])')].filter(el => !el.disabled && el.getClientRects().length);
+  const controls = [...modalOverlay.querySelectorAll('button, a[href], input, textarea, [tabindex]:not([tabindex="-1"])')].filter(el => !el.disabled && el.getClientRects().length);
   const first = controls[0], last = controls[controls.length - 1];
   if (!first) return;
   if (!modalOverlay.contains(document.activeElement) || (e.shiftKey && document.activeElement === first) || (!e.shiftKey && document.activeElement === last)) {
@@ -2233,6 +2340,8 @@ function renderReferenceTables() {
 }
 function renderPrices() {
   renderCoverage();
+  $('#snapshot-summary').textContent = PRICES && typeof SnapshotSummary !== 'undefined' ? SnapshotSummary.summarize(PRICES,language)
+    : t(priceLoadState === 'loading' ? 'Loading stored prices…' : 'Stored price data could not be validated or loaded.');
   const manualStatus = $('#manual-price-status');
   manualStatus.textContent = PRICES && manualPriceError ? t('Manual price file rejected or unavailable; automatic observations are shown.') + ' ' + (manualPriceError.row || '') + ': ' + t(manualPriceError.message)
     : PRICES && manualPriceCount ? t`${manualPriceCount} manual quotes selected from data/manual-prices.json. Their own dates and native units are preserved; automatic observations remain in the evidence table.` : '';
@@ -2281,23 +2390,36 @@ function renderPrices() {
     p.retrieved_at || t('Retrieval unknown')]);
   renderTable('price-table',t('All stored observations; unverified unit scales are withheld from comparisons. Other comparisons require product, geography, method and interval qualifications.'),[t('Observation'),t('USD/lb'),t('Native / retained evidence'),t('Source and status'),t('FX lineage'),t('Retrieval')],rows);
   const attempts = Object.entries(PRICES.source_status || {}).map(([name,p]) => t`${name}: ${t(String(p.status || 'unknown').replaceAll('_',' '))}, attempt ${p.attempted_at || t('unknown')}`).join('; ');
-  $('#data-note').textContent = t`Stored snapshot, legacy fetched label ${PRICES.fetched || t('unknown')}; metadata generated ${PRICES.generated_at || t('unknown')}. Generation is not retrieval. BLS monthly U.S. averages, INDEC GBA monthly averages, USDA advertised features and sampled Carrefour catalog offers differ in product, method, interval and geography. Read every qualification in the price table. Latest returned FX ${PRICES.fx.latest?.date || t('unknown date')} can lag. Inferred legacy FX is not original receipt proof. ${attempts}. Schematics, trait scores and value shares are illustrative. No current purchasing or conformance claim.`;
-  if (PRICES.ar_sources) $('#data-note').textContent += ' ' + t('IPCVA AMBA monthly survey is primary for covered cuts. Original Carrefour observations keep their own dates and remain available in the table and cut details.');
+  $('#data-note').textContent = t`IPCVA AMBA survey prices, BLS U.S. monthly averages, INDEC GBA averages, USDA advertised features and sampled Carrefour references differ in product, method, interval and geography. IPCVA is primary for the Argentine cuts it covers. Read the observation dates and qualifications in the price table. Snapshot assembly is not source retrieval. Latest returned valuation FX: ${PRICES.fx.latest?.date || t('unknown date')}; IPCVA uses its own matching monthly quote mean. Inferred legacy FX is not original receipt proof. Source attempts: ${attempts}. Illustrations, trait scores and value shares are explanatory references. Prices do not establish current availability or interchangeable products.`;
   renderScatter();
 }
 renderReferenceTables();
 function refreshActiveModal() {
   if (!modalOverlay.open || !activeModal) return;
   const focused = document.activeElement;
-  const controls = [...modalOverlay.querySelectorAll('button, a[href]')];
+  const controls = [...modalOverlay.querySelectorAll('button, a[href], textarea')];
   const identity = {id:focused?.id, cut:focused?.dataset?.cut, href:focused?.getAttribute('href')};
+  const selection = typeof focused?.selectionStart === 'number' ? [focused.selectionStart,focused.selectionEnd] : null;
+  const fallbackOpen = $('#cut-link-fallback')?.hidden === false;
+  const copyMessage = $('#cut-copy-status')?.dataset?.message;
   const card = $('#cut-modal-card');
   const scrollTop = card.scrollTop;
   activeModal();
-  const replacement = [...modalOverlay.querySelectorAll('button, a[href]')].find(el =>
+  if (fallbackOpen && $('#cut-link-fallback')) {
+    $('#cut-link-fallback').hidden = false;
+    $('#cut-link-fallback-label').hidden = false;
+  }
+  if (copyMessage && $('#cut-copy-status')) {
+    $('#cut-copy-status').dataset.message = copyMessage;
+    $('#cut-copy-status').textContent = t(copyMessage);
+  }
+  const replacement = [...modalOverlay.querySelectorAll('button, a[href], textarea')].find(el =>
     (identity.id && el.id === identity.id) || (identity.cut && el.dataset.cut === identity.cut)
     || (identity.href && el.getAttribute('href') === identity.href));
-  if (controls.includes(focused) && replacement) replacement.focus({preventScroll:true});
+  if (controls.includes(focused) && replacement) {
+    replacement.focus({preventScroll:true});
+    if (selection && replacement.setSelectionRange) replacement.setSelectionRange(...selection);
+  }
   card.scrollTop = scrollTop;
 }
 function acceptPrices(prices) {
@@ -2371,11 +2493,29 @@ function setLanguage(next) {
   renderPrices();
   if (lastSearch !== null) filterAndOpenCut(lastSearch, false);
   refreshActiveModal();
+  renderResumeCut();
+  if (!activeCutId) {
+    try {
+      const requested = new URL(location.href).searchParams.get('cut');
+      $('#cut-link-status').textContent = requested && !Object.hasOwn(BY_ID,requested) ? t('That cut link is unknown. Search or browse the directory.') : '';
+    } catch { /* URL feedback is optional outside HTTP previews. */ }
+  }
   if (focused?.isConnected) focused.focus({preventScroll:true});
 }
 $$('[data-language]').forEach(button => button.addEventListener('click', () => setLanguage(button.dataset.language)));
+rememberedCut = ReferenceTools.savedCut(cutStorage(),ALL_CUTS.map(cut => cut.id));
+renderResumeCut();
+$('#resume-cut').addEventListener('click', () => {
+  if (!rememberedCut || !Object.hasOwn(BY_ID,rememberedCut.id)) return;
+  const saved = rememberedCut;
+  setLanguage(saved.language);
+  openCutModal(BY_ID[saved.id]);
+});
+$('#read-value-shares').addEventListener('click', () => { $('#value-data').open = true; });
+window.addEventListener('popstate', syncCutFromLocation);
 renderPrices();
 loadPriceFiles();
+syncCutFromLocation();
 </script>
 </body>
 </html>

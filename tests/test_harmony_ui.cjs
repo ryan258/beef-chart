@@ -108,6 +108,7 @@ test('the treemap Other dialog rerenders from canonical copy when Spanish switch
   context.d3Available = () => true;
   context.moveTooltip = context.hideTooltip = () => {};
   context.focusModal = () => {};
+  context.updateCutLocation = () => {};
   context.modalContent = {innerHTML:''};
   context.activeModal = null;
   vm.runInContext(section('const VALUE_MODEL =', '// 6. FLOATING TOOLTIP')

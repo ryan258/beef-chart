@@ -4,6 +4,7 @@ body{font-family:Inter,sans-serif;background:var(--bg)}
 .wrap{max-width:1600px;padding:0 48px}
 a,button,input,[tabindex]{-webkit-tap-highlight-color:transparent}
 a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--navy);outline-offset:5px}
+textarea:focus-visible{outline:3px solid var(--navy);outline-offset:3px}
 [id]{scroll-margin-top:var(--header-offset,200px)}
 .skip-link{position:fixed;top:-80px;left:20px;background:var(--ink);color:white;z-index:3000;padding:14px}.skip-link:focus{top:10px}
 header.site-header{background:var(--bg);backdrop-filter:none;border-bottom:1px solid var(--ink)}
@@ -73,6 +74,18 @@ dialog.modal-overlay{margin:0;width:100%;max-width:none;max-height:none;border:0
 .cut-traits{display:flex;flex-wrap:wrap;gap:16px;font-size:13px;margin-top:10px}
 .price-evidence{font-size:12px;line-height:1.6;margin-bottom:12px;overflow-wrap:anywhere}
 .price-value{font:700 22px 'Space Grotesk',sans-serif}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+.resume-cut{display:block;margin-top:16px}
+.cut-takeaway{padding:14px;margin:14px 0 20px;border:1px solid var(--line-dark);background:var(--bg);min-width:0}
+.cut-takeaway h3{font:600 16px 'Space Grotesk',sans-serif;margin:0 0 8px}
+.copy-text{display:block;box-sizing:border-box;width:100%;max-width:100%;padding:10px;border:1px solid var(--ink);border-radius:0;background:#fff;color:var(--ink);font:12px/1.6 'Space Grotesk',sans-serif;resize:vertical;overflow-wrap:anywhere}
+.cut-copy-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.cut-takeaway [hidden],.resume-cut[hidden]{display:none}
+.cut-takeaway label:not(.sr-only):not([hidden]){display:block;margin:12px 0 6px;font-size:12px}
+.cut-takeaway #cut-copy-status{min-height:1.6em;margin-bottom:0}
+.snapshot-summary{line-height:1.7}
+.source-methods{padding:0 12px}
+.source-methods .data-note{margin:8px 0 20px}
 @media(max-width:600px){
   #sankey-chart-svg,#scatter-chart-svg{display:none!important}
   .chart-data table,.chart-data thead,.chart-data tbody,.chart-data tr,.chart-data th,.chart-data td{display:block;width:100%}

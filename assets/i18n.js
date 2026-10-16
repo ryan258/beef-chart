@@ -382,6 +382,22 @@ Object.assign(SPANISH, {
   'Hind shank': 'Garrón trasero / Hind shank'
 });
 
+Object.assign(SPANISH, {
+  'Resume last cut: {0}': 'Retomá el último corte: {0}',
+  'Butcher note': 'Nota para la carnicería',
+  'Names and preparation context to discuss with your butcher. Confirm bone, trim and portioning.': 'Nombres y contexto de preparación para conversar en la carnicería. Confirmá hueso, recorte y porciones.',
+  'Copy note': 'Copiá la nota',
+  'Copy cut link': 'Copiá el enlace del corte',
+  'Cut link': 'Enlace del corte',
+  'Note copied.': 'Nota copiada.',
+  'Cut link copied.': 'Enlace del corte copiado.',
+  'Clipboard unavailable. Text selected; use your usual copy command.': 'El portapapeles no está disponible. El texto quedó seleccionado; usá tu comando habitual para copiar.',
+  'That cut link is unknown. Search or browse the directory.': 'Ese enlace no corresponde a un corte. Buscá por nombre o recorré el directorio.',
+  'Read Value Shares →': 'Leé las proporciones de valor →',
+  'Sources and methods': 'Fuentes y métodos',
+  'IPCVA AMBA survey prices, BLS U.S. monthly averages, INDEC GBA averages, USDA advertised features and sampled Carrefour references differ in product, method, interval and geography. IPCVA is primary for the Argentine cuts it covers. Read the observation dates and qualifications in the price table. Snapshot assembly is not source retrieval. Latest returned valuation FX: {0}; IPCVA uses its own matching monthly quote mean. Inferred legacy FX is not original receipt proof. Source attempts: {1}. Illustrations, trait scores and value shares are explanatory references. Prices do not establish current availability or interchangeable products.': 'Los precios relevados por el IPCVA en el AMBA, los promedios mensuales del BLS de EE. UU., los del INDEC para el GBA, las ofertas anunciadas del USDA y la muestra de referencias de Carrefour difieren en producto, método, período y región. El IPCVA es la fuente principal para los cortes argentinos que cubre. Leé las fechas y aclaraciones de cada observación en la tabla. Armar el conjunto de datos no equivale a consultar las fuentes. Último tipo de cambio de valuación devuelto: {0}; el IPCVA usa su propio promedio mensual de cotizaciones del mismo mes. Un tipo de cambio histórico inferido no prueba el registro original. Intentos de consulta: {1}. Las ilustraciones, los puntajes y las proporciones de valor son referencias explicativas. Los precios no confirman disponibilidad actual ni productos intercambiables.'
+});
+
 let language = 'en';
 try {
   const requested = new URL(location.href).searchParams.get('lang');
